@@ -1,14 +1,8 @@
 export const theme = {
     colors: {
-        // green: '#18611c',
-        // greenTransparent: '#18611cdb',
-        // greenDark: '#005800',
-        // box: 'rgba(63,40,64,85%)',
-        // white: 'rgb(255, 255, 255)',
-        // gray: '#3e3e3e',
-        // grayLight: '#636363',
-        // orange: '#ff9a00',
-        // grayMenu: '#1f2021',
+        background: '#dadbd3',
+        primary: '#ededed',
+        secondary: '#f6f6f6',
 
         menu: {
             navBackground: '#eff1f8',
