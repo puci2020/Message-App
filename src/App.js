@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Chat from "./components/Chat";
 import Sidebar from "./components/Sidebar";
 
 const Wrapper = styled.div`
@@ -25,6 +26,7 @@ const App = () => (
   <Wrapper>
     <Container>
         <Sidebar/>
+        <Chat/>
     </Container>
   </Wrapper>
 );

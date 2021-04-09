@@ -4,15 +4,20 @@ import { Avatar } from "@material-ui/core";
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 70px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.secondary};
+  height: ${(props) => (props.chat ? "70px" : "auto")};
+  border-bottom: ${(props) => (props.chat ? "1px solid #f6f6f6" : "")};
+  /* border-bottom: 1px solid ${({ theme }) => theme.colors.secondary}; */
   display: flex;
   align-items: center;
-  padding: 10px 20px;
+  padding: ${(props) => (props.chat ? "10px 20px" : "")};
+  /* position: ${(props) => (props.chat ? "static" : "relative")}; */
+  /* top: ${(props) => (props.chat ? "" : "0")}; */
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.secondary};
+    background-color: ${(props) => (props.chat ? "#f6f6f6" : "")};
+    cursor: ${(props) => (props.chat ? "pointer" : "default")};
+    /* background-color: ${({ theme }) => theme.colors.secondary}; */
   }
 `;
 
@@ -20,27 +25,30 @@ const Info = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 10px;
+  p {
+    color: ${(props) => (props.chat ? "black" : "gray")};
+  }
 `;
 
-const ChatItem = ({ newChat }) => {
+const ChatItem = ({ newChat, chat, avatar, name, info }) => {
   const createNewChat = () => {
-      const roomName = prompt("Podaj nazwę czatu!");
+    const roomName = prompt("Podaj nazwę czatu!");
 
-    //   if(rootName){
+    // if(rootName){
 
-    //   }
+    // }
   };
 
   return !newChat ? (
-    <Wrapper>
-      <Avatar>PA</Avatar>
+    <Wrapper chat={chat}>
+      <Avatar>{avatar}</Avatar>
       <Info>
-        <h3>Nazwa</h3>
-        <p>Ostatnia wiadomość...</p>
+        <h3>{name}</h3>
+        <p>{info}</p>
       </Info>
     </Wrapper>
   ) : (
-    <Wrapper onClick={createNewChat}>
+    <Wrapper chat={chat} onClick={createNewChat}>
       <h3>Stwórz czat</h3>
     </Wrapper>
   );

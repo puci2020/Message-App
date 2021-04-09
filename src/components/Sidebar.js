@@ -6,6 +6,7 @@ import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { SearchOutlined } from "@material-ui/icons";
 import ChatItem from "./ChatItem";
+import Header from "./Header";
 
 const Wrapper = styled.div`
   display: flex;
@@ -13,26 +14,26 @@ const Wrapper = styled.div`
   flex: 0.35;
 `;
 
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  border: 1px solid lightgray;
-  overflow: hidden;
-`;
+// const Header = styled.div`
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   padding: 20px;
+//   border: 1px solid lightgray;
+//   overflow: hidden;
+// `;
 
-const RightHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-width: 10vw;
+// const RightHeader = styled.div`
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   min-width: 10vw;
 
-  /* .MuiSvgIcon-root{
-      margin-right: 2vw;
-      font-size: 24px;
-  } */
-`;
+//   /* .MuiSvgIcon-root{
+//       margin-right: 2vw;
+//       font-size: 24px;
+//   } */
+// `;
 
 const Search = styled.div`
   display: flex;
@@ -49,7 +50,6 @@ const Search = styled.div`
     margin-left: 10px;
     width: 100%;
     height: 100%;
-    
   }
 
   .inputField {
@@ -61,22 +61,41 @@ const Search = styled.div`
     border-radius: 20px;
     padding-left: 10px;
 
-    svg{
-        color: gray;
+    svg {
+      color: gray;
     }
   }
 `;
 
 const Chats = styled.div`
-    overflow-y: auto;
-    overflow-x: hidden;
-    background-color: white;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: white;
 `;
 
 const Sidebar = () => {
   return (
     <Wrapper>
-      <Header>
+      <Header
+      left={
+        <ChatItem/>
+      }
+        right={
+          <>
+            <IconButton>
+              <DonutLargeIcon />
+            </IconButton>
+            <IconButton>
+              <ChatIcon />
+            </IconButton>
+            <IconButton>
+              <MoreVertIcon />
+            </IconButton>
+          </>
+        }
+      />
+
+      {/* <Header>
         <Avatar />
         <RightHeader>
           <IconButton>
@@ -89,7 +108,7 @@ const Sidebar = () => {
             <MoreVertIcon />
           </IconButton>
         </RightHeader>
-      </Header>
+      </Header> */}
       <Search>
         <div className="inputField">
           <SearchOutlined />
@@ -100,9 +119,32 @@ const Sidebar = () => {
         </div>
       </Search>
       <Chats>
-          <ChatItem newChat/>
-          <ChatItem/>
-
+        <ChatItem newChat chat />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
       </Chats>
     </Wrapper>
   );
