@@ -4,6 +4,11 @@ export const theme = {
         primary: '#ededed',
         secondary: '#f6f6f6',
 
+        message: {
+            primary: 'white',
+            secondary: '#3aecdc7d',
+        },
+
         menu: {
             navBackground: '#eff1f8',
             shadow: 'rgba(0,0,0, .2)',

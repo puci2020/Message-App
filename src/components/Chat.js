@@ -5,6 +5,7 @@ import { IconButton } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { AttachFile, SearchOutlined } from "@material-ui/icons";
 import ChatItem from "./ChatItem";
+import Message from "./Message";
 
 const Wrapper = styled.div`
   flex: 0.65;
@@ -15,13 +16,15 @@ const Wrapper = styled.div`
 `;
 
 const Body = styled.div`
-    background-color: darkgray;
-    /* height: auto; */
-    flex: 1;
-    overflow-y: auto;
-    div{
-        height: 100px;
-    }
+  /* background-color: darkgray; */
+  background-image: url("https://images.unsplash.com/photo-1533628635777-112b2239b1c7?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
+  /* height: auto; */
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px;
+  /* position: relative;
+  display: flex;
+  flex-direction: column; */
 `;
 
 const Footer = styled.div``;
@@ -30,10 +33,7 @@ const Chat = () => {
   return (
     <Wrapper>
       <Header
-        
-        left={
-            <ChatItem name={'Nazwa'} info={'Ostatnio widziana...'}/>
-        }
+        left={<ChatItem name={"Nazwa"} info={"Ostatnio widziana..."} />}
         right={
           <>
             <IconButton>
@@ -49,18 +49,21 @@ const Chat = () => {
         }
       />
       <Body>
-          <div>asdasd</div>
-          <div>asdasd</div>
-          <div>asdasd</div>
-          <div>asdasd</div>
-          <div>asdasd</div>
-          <div>asdasd</div>
-          <div>asdasd</div>
-          <div>asdasd</div>
-          <div>asdasd</div>
-          <div>asdasd</div>
-          <div>asdasd</div>
-          <div>asdasd</div>
+        <Message text={'asdasdasd'}/>
+        <Message text={'asdasdasd'}/>
+        <Message text={'asdasdasd'}/>
+        <Message text={'asdasdasd'}/>
+        <Message text={'asdasdasd'}/>
+        <Message own user={'Adam P'} date={'12:36'} text={'asda asda asd dfg sdasd'}/>
+        <Message text={'asdasdasd'}/>
+        <Message own user={'Piotr'} date={'12:37'} text={'asda asd asd as dasd sssssssssss sd as da s d asd a sd asd skjsdhf skjdfh skdjfhksjdfh skdj  lskdfjhlskdf dasd'}/>
+        <Message text={'asdasdasd'}/>
+        <Message text={'asdasdasd'}/>
+        <Message text={'asdasdasd'}/>
+        <Message text={'asdasdasd'}/>
+        <Message text={'asdasdasd'}/>
+        <Message text={'asdasdasd'}/>
+        <Message text={'asdasdasd'}/>
       </Body>
     </Wrapper>
   );

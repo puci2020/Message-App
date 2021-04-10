@@ -5,6 +5,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  min-height: 90px;
   padding: 20px;
   border: 1px solid lightgray;
   overflow: hidden;
