@@ -6,6 +6,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { AttachFile, SearchOutlined } from "@material-ui/icons";
 import ChatItem from "./ChatItem";
 import Message from "./Message";
+import MessageForm from "./MessageForm";
 
 const Wrapper = styled.div`
   flex: 0.65;
@@ -52,9 +53,9 @@ const Chat = () => {
         <Message text={'asdasdasd'}/>
         <Message text={'asdasdasd'}/>
         <Message text={'asdasdasd'}/>
+        <Message date={'12:33'} text={'asdasdasd'}/>
         <Message text={'asdasdasd'}/>
-        <Message text={'asdasdasd'}/>
-        <Message own user={'Adam P'} date={'12:36'} text={'asda asda asd dfg sdasd'}/>
+        <Message own user={true ? '' : 'Adam P'} date={'12:36'} text={'asda asda asd dfg sdasd'}/>
         <Message text={'asdasdasd'}/>
         <Message own user={'Piotr'} date={'12:37'} text={'asda asd asd as dasd sssssssssss sd as da s d asd a sd asd skjsdhf skjdfh skdjfhksjdfh skdj  lskdfjhlskdf dasd'}/>
         <Message text={'asdasdasd'}/>
@@ -64,7 +65,9 @@ const Chat = () => {
         <Message text={'asdasdasd'}/>
         <Message text={'asdasdasd'}/>
         <Message text={'asdasdasd'}/>
+        <Message text={'koko'}/>
       </Body>
+        <MessageForm/>
     </Wrapper>
   );
 };

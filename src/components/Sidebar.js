@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Avatar, IconButton } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import DonutLargeIcon from "@material-ui/icons/DonutLarge";
 import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { SearchOutlined } from "@material-ui/icons";
 import ChatItem from "./ChatItem";
 import Header from "./Header";
+import db from "../services/Firebase";
 
 const Wrapper = styled.div`
   display: flex;
@@ -74,6 +75,19 @@ const Chats = styled.div`
 `;
 
 const Sidebar = () => {
+
+  const [rooms, setRooms] = useState([]);
+
+  useEffect(() => {
+    db.collection('rooms').onSnapshot(snapshot => (
+      setRooms(snapshot.docs.map(doc => ({
+        id: doc.id,
+        data: doc.data()
+      })))
+    ))
+    
+  }, [])
+
   return (
     <Wrapper>
       <Header
@@ -120,31 +134,11 @@ const Sidebar = () => {
       </Search>
       <Chats>
         <ChatItem newChat chat />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
-        <ChatItem chat avatar={'PA'} name={'Nazwa'} info={'Ostatnia wiadomość...'} />
+        {rooms.map(room => (
+        <ChatItem chat key={room.id} avatar={'PA'} name={room.data.name} info={'Ostatnia wiadomość...'} />
+        ))}
+        
+        
       </Chats>
     </Wrapper>
   );
