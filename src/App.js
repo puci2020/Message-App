@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import styled from "styled-components";
 import Chat from "./components/Chat";
+import Login from "./components/Login";
 import Sidebar from "./components/Sidebar";
 
 const Wrapper = styled.div`
@@ -22,13 +24,27 @@ const Container = styled.div`
   box-shadow: -1px 4px 20px -6px rgba(0, 0, 0, 0.7);
 `;
 
-const App = () => (
-  <Wrapper>
-    <Container>
-        <Sidebar/>
-        <Chat/>
-    </Container>
-  </Wrapper>
-);
+const App = () => {
+  const [user, setUser] = useState(null);
+  return (
+    <Wrapper>
+      {!user ? (
+        <Login/>
+      ) : (
+        <Router>
+          <Switch>
+            <Container>
+              <Sidebar />
+              <Route path="/room/:id">
+                <Chat />
+              </Route>
+              <Route path="/">{/* <Chat /> */}</Route>
+            </Container>
+          </Switch>
+        </Router>
+      )}
+    </Wrapper>
+  );
+};
 
 export default App;

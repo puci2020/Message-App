@@ -79,12 +79,16 @@ const Sidebar = () => {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    db.collection('rooms').onSnapshot(snapshot => (
+    const unsubscribe = db.collection('rooms').onSnapshot(snapshot => (
       setRooms(snapshot.docs.map(doc => ({
         id: doc.id,
         data: doc.data()
       })))
-    ))
+    ));
+
+    return () => {
+      unsubscribe();
+    }
     
   }, [])
 
@@ -128,14 +132,14 @@ const Sidebar = () => {
           <SearchOutlined />
           <input
             type="text"
-            placeholder="Wyszukaj lub rozpocznij nowy czat!"
+            placeholder="Wyszukaj czat!"
           ></input>
         </div>
       </Search>
       <Chats>
         <ChatItem newChat chat />
         {rooms.map(room => (
-        <ChatItem chat key={room.id} avatar={'PA'} name={room.data.name} info={'Ostatnia wiadomość...'} />
+        <ChatItem chat key={room.id} id={room.id} name={room.data.name} info={'Ostatnia wiadomość...'} />
         ))}
         
         

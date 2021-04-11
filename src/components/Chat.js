@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Header from "./Header";
 import { IconButton } from "@material-ui/core";
@@ -7,6 +7,8 @@ import { AttachFile, SearchOutlined } from "@material-ui/icons";
 import ChatItem from "./ChatItem";
 import Message from "./Message";
 import MessageForm from "./MessageForm";
+import { useParams } from "react-router-dom";
+import db from "../services/Firebase";
 
 const Wrapper = styled.div`
   flex: 0.65;
@@ -28,13 +30,24 @@ const Body = styled.div`
   flex-direction: column; */
 `;
 
-const Footer = styled.div``;
+// const Footer = styled.div``;
 
 const Chat = () => {
+  const { id } = useParams();
+  const [roomName, setRoomName] = useState("");
+
+  useEffect(() => {
+    if (id) {
+      db.collection("rooms")
+        .doc(id)
+        .onSnapshot((snapschot) => setRoomName(snapschot.data().name));
+    }
+  }, [id]);
+
   return (
     <Wrapper>
       <Header
-        left={<ChatItem name={"Nazwa"} info={"Ostatnio widziana..."} />}
+        left={<ChatItem name={roomName} info={"Ostatnio widziana..."} />}
         right={
           <>
             <IconButton>
@@ -50,24 +63,36 @@ const Chat = () => {
         }
       />
       <Body>
-        <Message text={'asdasdasd'}/>
-        <Message text={'asdasdasd'}/>
-        <Message text={'asdasdasd'}/>
-        <Message date={'12:33'} text={'asdasdasd'}/>
-        <Message text={'asdasdasd'}/>
-        <Message own user={true ? '' : 'Adam P'} date={'12:36'} text={'asda asda asd dfg sdasd'}/>
-        <Message text={'asdasdasd'}/>
-        <Message own user={'Piotr'} date={'12:37'} text={'asda asd asd as dasd sssssssssss sd as da s d asd a sd asd skjsdhf skjdfh skdjfhksjdfh skdj  lskdfjhlskdf dasd'}/>
-        <Message text={'asdasdasd'}/>
-        <Message text={'asdasdasd'}/>
-        <Message text={'asdasdasd'}/>
-        <Message text={'asdasdasd'}/>
-        <Message text={'asdasdasd'}/>
-        <Message text={'asdasdasd'}/>
-        <Message text={'asdasdasd'}/>
-        <Message text={'koko'}/>
+        <Message text={"asdasdasd"} />
+        <Message text={"asdasdasd"} />
+        <Message text={"asdasdasd"} />
+        <Message date={"12:33"} text={"asdasdasd"} />
+        <Message text={"asdasdasd"} />
+        <Message
+          own
+          user={true ? "" : "Adam P"}
+          date={"12:36"}
+          text={"asda asda asd dfg sdasd"}
+        />
+        <Message text={"asdasdasd"} />
+        <Message
+          own
+          user={"Piotr"}
+          date={"12:37"}
+          text={
+            "asda asd asd as dasd sssssssssss sd as da s d asd a sd asd skjsdhf skjdfh skdjfhksjdfh skdj  lskdfjhlskdf dasd"
+          }
+        />
+        <Message text={"asdasdasd"} />
+        <Message text={"asdasdasd"} />
+        <Message text={"asdasdasd"} />
+        <Message text={"asdasdasd"} />
+        <Message text={"asdasdasd"} />
+        <Message text={"asdasdasd"} />
+        <Message text={"asdasdasd"} />
+        <Message text={"koko"} />
       </Body>
-        <MessageForm/>
+      <MessageForm />
     </Wrapper>
   );
 };
