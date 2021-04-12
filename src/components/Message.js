@@ -34,6 +34,7 @@ const Date = styled.div`
 `;
 
 const Author = styled.span`
+margin-bottom: 10px;
   font-weight: ${({ theme }) => theme.font.weight.bold};
   font-size: ${({ theme }) => theme.font.size.xxs};
 `;

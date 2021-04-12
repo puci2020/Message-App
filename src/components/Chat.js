@@ -9,6 +9,7 @@ import Message from "./Message";
 import MessageForm from "./MessageForm";
 import { useParams } from "react-router-dom";
 import db from "../services/Firebase";
+import { useStateValue } from "../services/StateProvider";
 
 const Wrapper = styled.div`
   flex: 0.65;
@@ -35,12 +36,22 @@ const Body = styled.div`
 const Chat = () => {
   const { id } = useParams();
   const [roomName, setRoomName] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [{user}, dispatch] = useStateValue();
 
   useEffect(() => {
     if (id) {
       db.collection("rooms")
         .doc(id)
         .onSnapshot((snapschot) => setRoomName(snapschot.data().name));
+
+      db.collection("rooms")
+        .doc(id)
+        .collection("messages")
+        .orderBy("timestamp", "asc")
+        .onSnapshot((snapshot) =>
+          setMessages(snapshot.docs.map((doc) => doc.data()))
+        );
     }
   }, [id]);
 
@@ -63,7 +74,16 @@ const Chat = () => {
         }
       />
       <Body>
-        <Message text={"asdasdasd"} />
+        {messages.map((message) => (
+          <Message
+          own={message.name === user?.displayName}
+          user={message.name === user?.displayName ? '' : message.name}
+          date={new Date(message.timestamp?.toDate()).toUTCString()}
+          text={message.message}
+          key={message.timestamp}
+        />
+        ))}
+        {/* <Message text={"asdasdasd"} />
         <Message text={"asdasdasd"} />
         <Message text={"asdasdasd"} />
         <Message date={"12:33"} text={"asdasdasd"} />
@@ -90,9 +110,9 @@ const Chat = () => {
         <Message text={"asdasdasd"} />
         <Message text={"asdasdasd"} />
         <Message text={"asdasdasd"} />
-        <Message text={"koko"} />
+        <Message text={"koko"} /> */}
       </Body>
-      <MessageForm />
+      <MessageForm id={id} />
     </Wrapper>
   );
 };

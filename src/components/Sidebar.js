@@ -8,33 +8,14 @@ import { SearchOutlined } from "@material-ui/icons";
 import ChatItem from "./ChatItem";
 import Header from "./Header";
 import db from "../services/Firebase";
+import { useStateValue } from "../services/StateProvider";
+import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 0.35;
 `;
-
-// const Header = styled.div`
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   padding: 20px;
-//   border: 1px solid lightgray;
-//   overflow: hidden;
-// `;
-
-// const RightHeader = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-//   min-width: 10vw;
-
-//   /* .MuiSvgIcon-root{
-//       margin-right: 2vw;
-//       font-size: 24px;
-//   } */
-// `;
 
 const Search = styled.div`
   display: flex;
@@ -75,29 +56,28 @@ const Chats = styled.div`
 `;
 
 const Sidebar = () => {
-
+  const [{ user }, dispatch] = useStateValue();
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = db.collection('rooms').onSnapshot(snapshot => (
-      setRooms(snapshot.docs.map(doc => ({
-        id: doc.id,
-        data: doc.data()
-      })))
-    ));
+    const unsubscribe = db.collection("rooms").onSnapshot((snapshot) =>
+      setRooms(
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }))
+      )
+    );
 
     return () => {
       unsubscribe();
-    }
-    
-  }, [])
+    };
+  }, []);
 
   return (
     <Wrapper>
       <Header
-      left={
-        <ChatItem/>
-      }
+        left={<ChatItem avatar={user?.photoURL} name={user?.displayName} />}
         right={
           <>
             <IconButton>
@@ -112,37 +92,28 @@ const Sidebar = () => {
           </>
         }
       />
-
-      {/* <Header>
-        <Avatar />
-        <RightHeader>
-          <IconButton>
-            <DonutLargeIcon />
-          </IconButton>
-          <IconButton>
-            <ChatIcon />
-          </IconButton>
-          <IconButton>
-            <MoreVertIcon />
-          </IconButton>
-        </RightHeader>
-      </Header> */}
       <Search>
         <div className="inputField">
           <SearchOutlined />
-          <input
-            type="text"
-            placeholder="Wyszukaj czat!"
-          ></input>
+          <input type="text" placeholder="Wyszukaj czat!"></input>
         </div>
       </Search>
       <Chats>
         <ChatItem newChat chat />
-        {rooms.map(room => (
-        <ChatItem chat key={room.id} id={room.id} name={room.data.name} info={'Ostatnia wiadomość...'} />
+        {rooms.map((room) => (
+          <Link
+            key={room.id}
+            to={`/room/${room.id}`}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <ChatItem
+              chat
+              id={room.id}
+              name={room.data.name}
+              info={"Ostatnia wiadomość..."}
+            />
+          </Link>
         ))}
-        
-        
       </Chats>
     </Wrapper>
   );

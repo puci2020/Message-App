@@ -3,12 +3,16 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Layout from "./theme/Layout";
+import reducer, {initialState} from "./services/reducer"
+import {StateProvider} from "./services/StateProvider"
 
 ReactDOM.render(
   <React.StrictMode>
+    <StateProvider initialState={initialState} reducer={reducer}>
     <Layout>
       <App />
     </Layout>
+    </StateProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

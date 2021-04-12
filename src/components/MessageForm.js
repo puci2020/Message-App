@@ -4,6 +4,9 @@ import { IconButton } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import MicNoneIcon from '@material-ui/icons/MicNone';
+import db from "../services/Firebase";
+import { useStateValue } from "../services/StateProvider";
+import firebase from 'firebase'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -32,13 +35,18 @@ const Wrapper = styled.div`
   }
 `;
 
-const MessageForm = () => {
+const MessageForm = ({id}) => {
 
     const [message, setMessage] = useState('');
+    const [{user}, dispatch] = useStateValue();
 
     const sendMessage = (e) => {
         e.preventDefault();
-        console.log(message);
+        db.collection("rooms").doc(id).collection("messages").add({
+          message: message,
+          name: user?.displayName,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
         setMessage('');
     }
 

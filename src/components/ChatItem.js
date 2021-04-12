@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { Avatar } from "@material-ui/core";
 import db from "../services/Firebase";
-import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
 
@@ -45,15 +44,13 @@ const ChatItem = ({ id, newChat, chat, avatar, name, info }) => {
   };
 
   return !newChat ? (
-    <Link to={`/room/${id}`}>
       <Wrapper chat={chat}>
-        <Avatar>{avatar}</Avatar>
+        <Avatar src={avatar}/>
         <Info>
           <h3>{name}</h3>
           <p>{info}</p>
         </Info>
       </Wrapper>
-    </Link>
   ) : (
     <Wrapper chat={chat} onClick={createNewChat}>
       <h3>Stwórz czat</h3>

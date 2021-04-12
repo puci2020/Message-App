@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Chat from "./components/Chat";
 import Login from "./components/Login";
 import Sidebar from "./components/Sidebar";
+import { useStateValue } from "./services/StateProvider";
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
@@ -25,7 +26,8 @@ const Container = styled.div`
 `;
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const [{user}, dispatch] = useStateValue();
+
   return (
     <Wrapper>
       {!user ? (
@@ -38,7 +40,7 @@ const App = () => {
               <Route path="/room/:id">
                 <Chat />
               </Route>
-              <Route path="/">{/* <Chat /> */}</Route>
+              <Route exact path="/"><Chat /></Route>
             </Container>
           </Switch>
         </Router>
