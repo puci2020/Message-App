@@ -18,6 +18,7 @@ const Login = () => {
           dispatch({
             type: actionTypes.SET_USER,
             user: result.user,
+            // isNewUser: result.isNewUser,
           });
         })
         .catch((error) => alert(error.message))

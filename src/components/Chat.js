@@ -57,6 +57,7 @@ const Chat = () => {
 
   return (
     <Wrapper>
+      {/* {isNewUser} */}
       <Header
         left={<ChatItem name={roomName} info={"Ostatnio widziana..."} />}
         right={
