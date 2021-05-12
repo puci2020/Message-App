@@ -1,17 +1,16 @@
-import React, {useState, useEffect} from "react";
-import styled from "styled-components";
-import {IconButton} from "@material-ui/core";
-import DonutLargeIcon
-    from "@material-ui/icons/DonutLarge";
-import ChatIcon from "@material-ui/icons/Chat";
-import MoreVertIcon
-    from "@material-ui/icons/MoreVert";
-import {SearchOutlined} from "@material-ui/icons";
-import ChatItem from "./ChatItem";
-import Header from "./Header";
-import db from "../services/Firebase";
-import {useStateValue} from "../services/StateProvider";
-import {Link} from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { IconButton } from '@material-ui/core';
+import DonutLargeIcon from '@material-ui/icons/DonutLarge';
+import ChatIcon from '@material-ui/icons/Chat';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { SearchOutlined } from '@material-ui/icons';
+import ChatItem from './ChatItem';
+import Header from './Header';
+import db from '../services/Firebase';
+import { useStateValue } from '../services/StateProvider';
+import { Link } from 'react-router-dom';
+import Input from './Input';
 
 const Wrapper = styled.div`
     display: flex;
@@ -22,7 +21,7 @@ const Wrapper = styled.div`
 const Search = styled.div`
     display: flex;
     align-items: center;
-    background-color: ${({theme}) => theme.colors.secondary};
+    background-color: ${({ theme }) => theme.colors.secondary};
     height: 90px;
     padding: 20px;
     border-bottom: 1px solid lightgray;
@@ -58,19 +57,18 @@ const Chats = styled.div`
 `;
 
 const Sidebar = () => {
-    const [{user}, dispatch] = useStateValue();
+    const [{ user }, dispatch] = useStateValue();
     const [rooms, setRooms] = useState([]);
 
     useEffect(() => {
-        const unsubscribe = db.collection("rooms")
-            .onSnapshot((snapshot) =>
-                setRooms(
-                    snapshot.docs.map((doc) => ({
-                        id: doc.id,
-                        data: doc.data(),
-                    }))
-                )
-            );
+        const unsubscribe = db.collection('rooms').onSnapshot((snapshot) =>
+            setRooms(
+                snapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    data: doc.data(),
+                })),
+            ),
+        );
 
         return () => {
             unsubscribe();
@@ -81,47 +79,52 @@ const Sidebar = () => {
         <Wrapper>
             <Header
                 left={
-                    <ChatItem avatar={user?.photoURL}
-                              name={user?.displayName}/>}
+                    <ChatItem
+                        avatar={user?.photoURL}
+                        name={user?.displayName}
+                    />
+                }
                 right={
                     <>
                         <IconButton>
-                            <DonutLargeIcon/>
+                            <DonutLargeIcon />
                         </IconButton>
                         <IconButton>
-                            <ChatIcon/>
+                            <ChatIcon />
                         </IconButton>
                         <IconButton>
-                            <MoreVertIcon/>
+                            <MoreVertIcon />
                         </IconButton>
                     </>
                 }
             />
             <Search>
-                <div className="inputField">
-                    <SearchOutlined/>
-                    <input type="text"
-                           alt='asd'
-                           placeholder="Wyszukaj czat!"/>
-                </div>
+                {/* <div className='inputField'>
+                    <SearchOutlined />
+                    <input type='text' placeholder='Wyszukaj czat!' />
+                </div> */}
+                <Input
+                    icon={<SearchOutlined />}
+                    type={'text'}
+                    placeholder={'Wyszukaj czat!'}
+                />
             </Search>
             <Chats>
-                <ChatItem newChat
-                          chat/>
+                <ChatItem newChat chat />
                 {rooms.map((room) => (
                     <Link
                         key={room.id}
                         to={`/room/${room.id}`}
                         style={{
-                            textDecoration: "none",
-                            color: "black"
+                            textDecoration: 'none',
+                            color: 'black',
                         }}
                     >
                         <ChatItem
                             chat
                             id={room.id}
                             name={room.data.name}
-                            info={"Ostatnia wiadomość..."}
+                            info={'Ostatnia wiadomość...'}
                         />
                     </Link>
                 ))}
@@ -131,4 +134,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
