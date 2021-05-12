@@ -2,11 +2,16 @@ import { Button } from '@material-ui/core';
 import { Email, Lock } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
-import { auth, provider, facebookProvider } from '../services/Firebase';
+import {
+    auth,
+    provider,
+    facebookProvider,
+    githubProvider,
+} from '../services/Firebase';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import Input from './Input';
-import { FaFacebook, FaFacebookF, FaGoogle } from 'react-icons/fa';
+import { FaFacebookF, FaGithub, FaGoogle } from 'react-icons/fa';
 
 const Wrapper = styled.div`
     width: 600px;
@@ -51,7 +56,7 @@ const RoundButton = styled.div`
 
     &:hover {
         cursor: pointer;
-        filter: grayscale(0.2);
+        box-shadow: -1px 4px 20px -6px rgba(0, 0, 0, 0.7);
     }
 `;
 
@@ -68,6 +73,31 @@ const Login = () => {
                 });
             })
             .catch((error) => alert(error.message));
+        // switch () {
+        //     case 'google':
+        //         auth.signInWithPopup(provider)
+        //             .then((result) => {
+        //                 dispatch({
+        //                     type: actionTypes.SET_USER,
+        //                     user: result.user,
+        //                     // isNewUser: result.isNewUser,
+        //                 });
+        //             })
+        //             .catch((error) => alert(error.message));
+        //         break;
+        //     case 'facebook':
+        //         auth.signInWithPopup(facebookProvider)
+        //             .then((result) => {
+        //                 dispatch({
+        //                     type: actionTypes.SET_USER,
+        //                     user: result.user,
+        //                 });
+        //             })
+        //             .catch((error) => alert(error.message));
+        //         break;
+        //     default:
+        //         console.log(`Błąd logowania`);
+        // }
     };
 
     const facebook = () => {
@@ -77,6 +107,18 @@ const Login = () => {
                     type: actionTypes.SET_USER,
                     user: result.user,
                 });
+            })
+            .catch((error) => alert(error.message));
+    };
+
+    const github = () => {
+        auth.signInWithPopup(githubProvider)
+            .then((result) => {
+                dispatch({
+                    type: actionTypes.SET_USER,
+                    user: result.user,
+                });
+                console.log(result);
             })
             .catch((error) => alert(error.message));
     };
@@ -107,9 +149,12 @@ const Login = () => {
             <ButtonsWraper>
                 <RoundButton color={'red'} onClick={login}>
                     <FaGoogle />
-                </RoundButton>{' '}
+                </RoundButton>
                 <RoundButton color={'#3b5998'} onClick={facebook}>
                     <FaFacebookF />
+                </RoundButton>
+                <RoundButton color={'#24292e'} onClick={github}>
+                    <FaGithub />
                 </RoundButton>
             </ButtonsWraper>
         </Wrapper>

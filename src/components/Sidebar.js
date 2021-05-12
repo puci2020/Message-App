@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { IconButton } from '@material-ui/core';
-import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import ChatIcon from '@material-ui/icons/Chat';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { SearchOutlined } from '@material-ui/icons';
+import { ExitToApp, SearchOutlined } from '@material-ui/icons';
 import ChatItem from './ChatItem';
 import Header from './Header';
-import db from '../services/Firebase';
+import db, { auth } from '../services/Firebase';
 import { useStateValue } from '../services/StateProvider';
 import { Link } from 'react-router-dom';
 import Input from './Input';
+import { actionTypes } from '../services/reducer';
 
 const Wrapper = styled.div`
     display: flex;
@@ -75,6 +75,18 @@ const Sidebar = () => {
         };
     }, []);
 
+    const logOut = () => {
+        auth.signOut()
+            .then((result) => {
+                dispatch({
+                    type: actionTypes.SET_USER,
+                    user: null,
+                });
+                alert(`Wylogowano pomyślnie!`);
+            })
+            .catch((error) => alert(error));
+    };
+
     return (
         <Wrapper>
             <Header
@@ -87,13 +99,13 @@ const Sidebar = () => {
                 right={
                     <>
                         <IconButton>
-                            <DonutLargeIcon />
-                        </IconButton>
-                        <IconButton>
                             <ChatIcon />
                         </IconButton>
                         <IconButton>
                             <MoreVertIcon />
+                        </IconButton>
+                        <IconButton onClick={logOut}>
+                            <ExitToApp />
                         </IconButton>
                     </>
                 }
