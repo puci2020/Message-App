@@ -32,27 +32,29 @@ const InputWrapper = styled.div`
     .error {
         border: 1px solid red;
     }
+    input {
+        border: none;
+        outline: none;
+        margin-left: 10px;
+        width: 100%;
+        height: 100%;
+    }
 `;
 
-const InputField = styled.input`
-    border: none;
-    outline: none;
-    margin-left: 10px;
-    width: 100%;
-    height: 100%;
-`;
-
-const Input = ({ type, icon, placeholder, value, onChange, error }) => {
+const Input = ({
+    type,
+    icon,
+    placeholder,
+    value,
+    onChange,
+    error,
+    children,
+}) => {
     return (
         <Wrapper>
             <InputWrapper error={error}>
                 {icon}
-                <InputField
-                    type={type}
-                    placeholder={placeholder}
-                    value={value}
-                    onChange={onChange}
-                />
+                {children}
             </InputWrapper>
             {error ? <span>{error}</span> : ''}
         </Wrapper>

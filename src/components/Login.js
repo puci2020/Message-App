@@ -1,6 +1,5 @@
 import { Button } from '@material-ui/core';
 import { Email, Lock } from '@material-ui/icons';
-import PersonIcon from '@material-ui/icons/Person';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
@@ -13,6 +12,10 @@ import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import Input from './Input';
 import { FaFacebookF, FaGithub, FaGoogle } from 'react-icons/fa';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { Link } from 'react-router-dom';
 
 const Wrapper = styled.div`
     width: 600px;
@@ -61,15 +64,35 @@ const RoundButton = styled.div`
     }
 `;
 
+const schema = yup.object().shape({
+    email: yup
+        .string()
+        .required('E-mail jest wymagany')
+        .email('Podany adres jest niepoprawny'),
+    password: yup
+        .string()
+        .required('Hasło jest wymagane')
+        .min(8, 'Hasło musi zawierać przynajmniej 8 znaków'),
+    // passwordConfirm: yup
+    //     .string()
+    //     .required('Potwierdź hasło')
+    //     .min(8, 'Hasło musi zawierać przynajmniej 8 znaków')
+    //     .oneOf([yup.ref('password'), null], 'Hasła muszą być takie same'),
+    // firstName: yup.string().required('Imię jest wymagane'),
+    // lastName: yup.string().required('Nazwisko jest wymagane'),
+});
+
 const Login = () => {
     const [{}, dispatch] = useStateValue();
     const [signUp, setSignUp] = useState(false);
-    const [email, setEmail] = useState('');
-    const [emailValid, setEmailValid] = useState(null);
-    const [password, setPassword] = useState('');
-    const [passwordValid, setPasswordValid] = useState(null);
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm({ resolver: yupResolver(schema) });
 
-    const login = () => {
+    const google = () => {
         auth.signInWithPopup(provider)
             .then((result) => {
                 dispatch({
@@ -104,68 +127,64 @@ const Login = () => {
             .catch((error) => alert(error.message));
     };
 
-    function validateEmail(email) {
-        const re =
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(String(email).toLowerCase());
-    }
-
-    const signInValidation = () => {
-        if (email === '') {
-            setEmailValid('Podaj adres e-mail');
-        } else if (!validateEmail(email)) {
-            setEmailValid('Podany adres jest nieprawidłowy');
-        } else {
-            setEmailValid(null);
-        }
-
-        if (password === '') {
-            setPasswordValid('Podaj hasło');
-        } else if (password.length < 8) {
-            setPasswordValid('Hasło powinno mieć więcej niż 8 znaków');
-        } else {
-            setPasswordValid(null);
-        }
-
-        if (emailValid === null && passwordValid === null) {
-            console.log(emailValid);
-            console.log(passwordValid);
-            return true;
-        } else {
-            console.log(emailValid);
-            console.log(passwordValid);
-            return false;
-        }
-        // setEmailValid(null);
-        // setPasswordValid(null);
-        // return true;
+    const signIn = (data) => {
+        console.log(data);
     };
 
-    const signIn = (e) => {
-        const isValid = signInValidation();
-        e.preventDefault();
-
-        console.log(signInValidation());
-
-        if (isValid) {
-            console.log('działa');
-        } else {
-            console.log('nie');
-        }
+    const signOn = (data) => {
+        console.log(data);
     };
-
     return (
         <Wrapper>
-            {signUp ? <h1>Zarejestruj się!</h1> : <h1>Zaloguj się!</h1>}
+            <h1>Zaloguj się!</h1>
             {/* <h1>Zaloguj się!</h1> */}
 
-            {signUp ? (
-                <Form>
-                    <Input icon={<Email />} placeholder='E-mail' />
-                    <Input icon={<PersonIcon />} placeholder='Imię' />
-                    <Input icon={<PersonIcon />} placeholder='Nazwisko' />
-                    <Input icon={<Lock />} placeholder='Hasło' />
-                    <Input icon={<Lock />} placeholder='Powtórz hasło' />
+            {/* {signUp ? (
+                <Form key={1} onSubmit={handleSubmit(signOn)}>
+                    <Input icon={<Email />} error={errors.email?.message}>
+                        <input
+                            type='text'
+                            placeholder='E-mail'
+                            {...register('email')}
+                        />
+                    </Input>
+                    <Input
+                        icon={<PersonIcon />}
+                        error={errors.firstName?.message}
+                    >
+                        <input
+                            type='text'
+                            placeholder='Imię'
+                            {...register('firstName')}
+                        />
+                    </Input>
+                    <Input
+                        icon={<PersonIcon />}
+                        error={errors.lastName?.message}
+                    >
+                        <input
+                            type='text'
+                            placeholder='Nazwisko'
+                            {...register('lastName')}
+                        />
+                    </Input>
+                    <Input icon={<Lock />} error={errors.password?.message}>
+                        <input
+                            type='password'
+                            placeholder='Hasło'
+                            {...register('password')}
+                        />
+                    </Input>
+                    <Input
+                        icon={<Lock />}
+                        error={errors.passwordConfirm?.message}
+                    >
+                        <input
+                            type='password'
+                            placeholder='Powtórz hasło'
+                            {...register('passwordConfirm')}
+                        />
+                    </Input>
                     <div className='button__group'>
                         <Button
                             style={{ marginTop: '10px', marginRight: '20px' }}
@@ -182,6 +201,7 @@ const Login = () => {
                             type='button'
                             onClick={() => {
                                 setSignUp(!signUp);
+                                reset();
                             }}
                         >
                             Zaloguj się
@@ -189,65 +209,62 @@ const Login = () => {
                     </div>
                 </Form>
             ) : (
-                <>
-                    <Form>
-                        <Input
-                            icon={<Email />}
-                            placeholder='E-mail'
-                            error={emailValid}
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <Input
-                            icon={<Lock />}
-                            placeholder='Hasło'
-                            type='password'
-                            error={passwordValid}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <div className='button__group'>
-                            <Button
-                                style={{
-                                    marginTop: '10px',
-                                    marginRight: '20px',
-                                }}
-                                color='primary'
-                                variant='contained'
-                                type='submit'
-                                onClick={(e) => signIn(e)}
-                            >
-                                Zaloguj się
-                            </Button>
-                            <Button
-                                style={{ marginTop: '10px' }}
-                                color='primary'
-                                variant='contained'
-                                type='button'
-                                onClick={() => {
-                                    setSignUp(!signUp);
-                                }}
-                            >
-                                {signUp
-                                    ? 'Powrót do logowania'
-                                    : 'Zarejestruj się'}
-                                {/* Zarejestruj się */}
-                            </Button>
-                        </div>
-                    </Form>
-                    <ButtonsWraper>
-                        <RoundButton color={'red'} onClick={login}>
-                            <FaGoogle />
-                        </RoundButton>
-                        <RoundButton color={'#3b5998'} onClick={facebook}>
-                            <FaFacebookF />
-                        </RoundButton>
-                        <RoundButton color={'#24292e'} onClick={github}>
-                            <FaGithub />
-                        </RoundButton>
-                    </ButtonsWraper>
-                </>
-            )}
+                <> */}
+            <Form key={2} onSubmit={handleSubmit(signIn)}>
+                <Input icon={<Email />} error={errors.email?.message}>
+                    <input
+                        type='text'
+                        placeholder='E-mail'
+                        {...register('email')}
+                    />
+                </Input>
+                <Input icon={<Lock />} error={errors.password?.message}>
+                    <input
+                        placeholder='Hasło'
+                        type='password'
+                        {...register('password')}
+                    />
+                </Input>
+                <div className='button__group'>
+                    <Button
+                        style={{
+                            marginTop: '10px',
+                            marginRight: '20px',
+                        }}
+                        color='primary'
+                        variant='contained'
+                        type='submit'
+                    >
+                        Zaloguj się
+                    </Button>
+                    <Link to='/registration'>
+                        <Button
+                            style={{ marginTop: '10px' }}
+                            color='primary'
+                            variant='contained'
+                            type='button'
+                            onClick={() => {
+                                reset();
+                            }}
+                        >
+                            Zarejestruj się
+                        </Button>
+                    </Link>
+                </div>
+            </Form>
+            <ButtonsWraper>
+                <RoundButton color={'red'} onClick={google}>
+                    <FaGoogle />
+                </RoundButton>
+                <RoundButton color={'#3b5998'} onClick={facebook}>
+                    <FaFacebookF />
+                </RoundButton>
+                <RoundButton color={'#24292e'} onClick={github}>
+                    <FaGithub />
+                </RoundButton>
+            </ButtonsWraper>
+            {/* </> */}
+            {/* )} */}
             {/* <Button
                 color='primary'
                 variant='contained'

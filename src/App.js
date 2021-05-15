@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import Chat from './components/Chat';
 import Login from './components/Login';
+import Registration from './components/Registration';
 import Sidebar from './components/Sidebar';
 import { useStateValue } from './services/StateProvider';
 
@@ -31,7 +32,16 @@ const App = () => {
     return (
         <Wrapper>
             {!user ? (
-                <Login />
+                <Router>
+                    <Switch>
+                        <Route path='/login'>
+                            <Login />
+                        </Route>
+                        <Route path='/registration'>
+                            <Registration />
+                        </Route>
+                    </Switch>
+                </Router>
             ) : (
                 <Router>
                     <Switch>
@@ -42,6 +52,12 @@ const App = () => {
                             </Route>
                             <Route exact path='/'>
                                 <Chat />
+                            </Route>
+                            <Route path='/login'>
+                                <Login />
+                            </Route>
+                            <Route path='/registration'>
+                                <Registration />
                             </Route>
                         </Container>
                     </Switch>
