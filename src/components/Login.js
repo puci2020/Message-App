@@ -39,10 +39,6 @@ const Form = styled.form`
         .button__group {
             display: flex;
             justify-content: center;
-
-            a {
-                text-decoration: none;
-            }
         }
     } ;
 `;
@@ -222,7 +218,7 @@ const Login = () => {
                     >
                         Zaloguj się
                     </Button>
-                    <Link to='/registration'>
+                    <Link to='/registration' style={{ textDecoration: 'none' }}>
                         <Button
                             style={{ marginTop: '10px' }}
                             color='primary'
@@ -241,7 +237,7 @@ const Login = () => {
                 <RoundButton color={'red'} onClick={google}>
                     <FaGoogle />
                 </RoundButton>
-                <RoundButton color={'#3b5998'} onClick={facebook}>
+                <RoundButton color={'#4267B2'} onClick={facebook}>
                     <FaFacebookF />
                 </RoundButton>
                 {/* <RoundButton color={'#24292e'} onClick={github}>

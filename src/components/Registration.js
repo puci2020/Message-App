@@ -37,10 +37,6 @@ const Form = styled.form`
         .button__group {
             display: flex;
             justify-content: center;
-
-            a {
-                text-decoration: none;
-            }
         }
     } ;
 `;
@@ -135,7 +131,7 @@ const Registration = () => {
                     >
                         Zarejestruj się
                     </Button>
-                    <Link to='/'>
+                    <Link to='/' style={{ textDecoration: 'none' }}>
                         <Button
                             style={{ marginTop: '10px' }}
                             color='primary'
