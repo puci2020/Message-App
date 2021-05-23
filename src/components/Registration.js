@@ -10,6 +10,7 @@ import { Email, Lock } from '@material-ui/icons';
 import PersonIcon from '@material-ui/icons/Person';
 import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import { auth } from '../services/Firebase';
 
 const Wrapper = styled.div`
     width: 600px;
@@ -61,6 +62,18 @@ const Registration = () => {
 
     const signOn = (data) => {
         console.log(data);
+        auth.createUserWithEmailAndPassword(data.email, data.password)
+            .then((authUser) => {
+                authUser.user.sendEmailVerification();
+                alert(
+                    `Potwierdź rejestrację klikając w link aktywacyjny wysłany na Twoją skrzynkę`,
+                );
+                reset();
+                return authUser.user.updateProfile({
+                    displayName: `${data.firstName} ${data.lastName}`,
+                });
+            })
+            .catch((err) => alert(err.message));
     };
     return (
         <Wrapper>
@@ -110,7 +123,7 @@ const Registration = () => {
                     >
                         Zarejestruj się
                     </Button>
-                    <Link to='/login'>
+                    <Link to='/'>
                         <Button
                             style={{ marginTop: '10px' }}
                             color='primary'

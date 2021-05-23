@@ -8,7 +8,7 @@ import ChatItem from './ChatItem';
 import Header from './Header';
 import db, { auth } from '../services/Firebase';
 import { useStateValue } from '../services/StateProvider';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Input from './Input';
 import { actionTypes } from '../services/reducer';
 
@@ -59,6 +59,7 @@ const Chats = styled.div`
 const Sidebar = () => {
     const [{ user }, dispatch] = useStateValue();
     const [rooms, setRooms] = useState([]);
+    const history = useHistory();
 
     useEffect(() => {
         const unsubscribe = db.collection('rooms').onSnapshot((snapshot) =>
@@ -82,6 +83,7 @@ const Sidebar = () => {
                     type: actionTypes.SET_USER,
                     user: null,
                 });
+                history.push('/');
                 alert(`Wylogowano pomyślnie!`);
             })
             .catch((error) => alert(error));

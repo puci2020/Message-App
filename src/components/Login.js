@@ -1,6 +1,6 @@
 import { Button } from '@material-ui/core';
 import { Email, Lock } from '@material-ui/icons';
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {
     auth,
@@ -15,7 +15,7 @@ import { FaFacebookF, FaGithub, FaGoogle } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const Wrapper = styled.div`
     width: 600px;
@@ -73,18 +73,11 @@ const schema = yup.object().shape({
         .string()
         .required('Hasło jest wymagane')
         .min(8, 'Hasło musi zawierać przynajmniej 8 znaków'),
-    // passwordConfirm: yup
-    //     .string()
-    //     .required('Potwierdź hasło')
-    //     .min(8, 'Hasło musi zawierać przynajmniej 8 znaków')
-    //     .oneOf([yup.ref('password'), null], 'Hasła muszą być takie same'),
-    // firstName: yup.string().required('Imię jest wymagane'),
-    // lastName: yup.string().required('Nazwisko jest wymagane'),
 });
 
 const Login = () => {
     const [{}, dispatch] = useStateValue();
-    const [signUp, setSignUp] = useState(false);
+    const history = useHistory();
     const {
         register,
         handleSubmit,
@@ -100,6 +93,7 @@ const Login = () => {
                     user: result.user,
                     // isNewUser: result.isNewUser,
                 });
+                history.push('/room');
             })
             .catch((error) => alert(error.message));
     };
@@ -111,6 +105,7 @@ const Login = () => {
                     type: actionTypes.SET_USER,
                     user: result.user,
                 });
+                history.push('/room');
             })
             .catch((error) => alert(error.message));
     };
@@ -122,94 +117,35 @@ const Login = () => {
                     type: actionTypes.SET_USER,
                     user: result.user,
                 });
-                console.log(result);
             })
             .catch((error) => alert(error.message));
     };
 
     const signIn = (data) => {
-        console.log(data);
+        auth.signInWithEmailAndPassword(data.email, data.password)
+            .then((result) => {
+                if (result.user.emailVerified) {
+                    dispatch({
+                        type: actionTypes.SET_USER,
+                        user: result.user,
+                    });
+                    history.push('/room');
+                } else {
+                    if (
+                        window.confirm(
+                            `Zweryfikuj adres email. Jeśli nie dostałeś wiadomości kliknij 'OK', aby wysłać ponownie.`,
+                        )
+                    ) {
+                        result.user.sendEmailVerification();
+                    }
+                }
+            })
+            .catch((error) => alert(error.message));
     };
 
-    const signOn = (data) => {
-        console.log(data);
-    };
     return (
         <Wrapper>
             <h1>Zaloguj się!</h1>
-            {/* <h1>Zaloguj się!</h1> */}
-
-            {/* {signUp ? (
-                <Form key={1} onSubmit={handleSubmit(signOn)}>
-                    <Input icon={<Email />} error={errors.email?.message}>
-                        <input
-                            type='text'
-                            placeholder='E-mail'
-                            {...register('email')}
-                        />
-                    </Input>
-                    <Input
-                        icon={<PersonIcon />}
-                        error={errors.firstName?.message}
-                    >
-                        <input
-                            type='text'
-                            placeholder='Imię'
-                            {...register('firstName')}
-                        />
-                    </Input>
-                    <Input
-                        icon={<PersonIcon />}
-                        error={errors.lastName?.message}
-                    >
-                        <input
-                            type='text'
-                            placeholder='Nazwisko'
-                            {...register('lastName')}
-                        />
-                    </Input>
-                    <Input icon={<Lock />} error={errors.password?.message}>
-                        <input
-                            type='password'
-                            placeholder='Hasło'
-                            {...register('password')}
-                        />
-                    </Input>
-                    <Input
-                        icon={<Lock />}
-                        error={errors.passwordConfirm?.message}
-                    >
-                        <input
-                            type='password'
-                            placeholder='Powtórz hasło'
-                            {...register('passwordConfirm')}
-                        />
-                    </Input>
-                    <div className='button__group'>
-                        <Button
-                            style={{ marginTop: '10px', marginRight: '20px' }}
-                            color='primary'
-                            variant='contained'
-                            type='submit'
-                        >
-                            Zarejestruj się
-                        </Button>
-                        <Button
-                            style={{ marginTop: '10px' }}
-                            color='primary'
-                            variant='contained'
-                            type='button'
-                            onClick={() => {
-                                setSignUp(!signUp);
-                                reset();
-                            }}
-                        >
-                            Zaloguj się
-                        </Button>
-                    </div>
-                </Form>
-            ) : (
-                <> */}
             <Form key={2} onSubmit={handleSubmit(signIn)}>
                 <Input icon={<Email />} error={errors.email?.message}>
                     <input
@@ -263,16 +199,6 @@ const Login = () => {
                     <FaGithub />
                 </RoundButton>
             </ButtonsWraper>
-            {/* </> */}
-            {/* )} */}
-            {/* <Button
-                color='primary'
-                variant='contained'
-                type='submit'
-                onClick={login}
-            >
-                Zaloguj się z Google
-            </Button> */}
         </Wrapper>
     );
 };

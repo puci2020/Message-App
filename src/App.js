@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Registration from './components/Registration';
 import Sidebar from './components/Sidebar';
 import { useStateValue } from './services/StateProvider';
+import ProtectedRouter from './utils/ProtectedRouter';
 
 const Wrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.background};
@@ -34,7 +35,7 @@ const App = () => {
             {!user ? (
                 <Router>
                     <Switch>
-                        <Route path='/login'>
+                        <Route exact path='/'>
                             <Login />
                         </Route>
                         <Route path='/registration'>
@@ -45,21 +46,23 @@ const App = () => {
             ) : (
                 <Router>
                     <Switch>
-                        <Container>
-                            <Sidebar />
-                            <Route path='/room/:id'>
-                                <Chat />
-                            </Route>
-                            <Route exact path='/'>
-                                <Chat />
-                            </Route>
-                            <Route path='/login'>
-                                <Login />
-                            </Route>
-                            <Route path='/registration'>
-                                <Registration />
-                            </Route>
-                        </Container>
+                        {/* <Container> */}
+                        {/* <Sidebar /> */}
+                        {/* <ProtectedRouter path='/room' component={Chat} />
+                    <ProtectedRouter path='/room/:id' component={Chat} /> */}
+                        <Route path='/room/:id'>
+                            <Chat />
+                        </Route>
+                        <Route path='/room'>
+                            <Chat />
+                        </Route>
+                        <Route exatc path='/'>
+                            <Login />
+                        </Route>
+                        <Route path='/registration'>
+                            <Registration />
+                        </Route>
+                        {/* </Container> */}
                     </Switch>
                 </Router>
             )}
