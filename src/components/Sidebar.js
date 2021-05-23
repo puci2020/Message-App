@@ -11,6 +11,7 @@ import { useStateValue } from '../services/StateProvider';
 import { Link, useHistory } from 'react-router-dom';
 import Input from './Input';
 import { actionTypes } from '../services/reducer';
+import alertify from 'alertifyjs';
 
 const Wrapper = styled.div`
     display: flex;
@@ -84,9 +85,9 @@ const Sidebar = () => {
                     user: null,
                 });
                 history.push('/');
-                alert(`Wylogowano pomyślnie!`);
+                alertify.success(`Wylogowano pomyślnie!`);
             })
-            .catch((error) => alert(error));
+            .catch((error) => alertify.alert('Błąd', error.message));
     };
 
     return (

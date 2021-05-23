@@ -2,25 +2,21 @@ import { Button } from '@material-ui/core';
 import { Email, Lock } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
-import {
-    auth,
-    provider,
-    facebookProvider,
-    githubProvider,
-} from '../services/Firebase';
+import { auth, provider, facebookProvider } from '../services/Firebase';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import Input from './Input';
-import { FaFacebookF, FaGithub, FaGoogle } from 'react-icons/fa';
+import { FaFacebookF, FaGoogle } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
-import { useState } from 'react';
 import PasswordResetModal from './PasswordResetModal';
+import alertify from 'alertifyjs';
 
 const Wrapper = styled.div`
     width: 600px;
+    max-width: 90vw;
     height: 600px;
     background-color: ${({ theme }) => theme.colors.primary};
     border: 1px solid ${({ theme }) => theme.colors.border};
@@ -37,6 +33,18 @@ const Form = styled.form`
     width: 60%;
     display: grid;
     place-items: center;
+    ${({ theme }) => theme.media.phone} {
+        width: 90%;
+
+        .button__group {
+            display: flex;
+            justify-content: center;
+
+            a {
+                text-decoration: none;
+            }
+        }
+    } ;
 `;
 
 const ButtonsWraper = styled.div`
@@ -102,7 +110,6 @@ const schema = yup.object().shape({
 const Login = () => {
     const [{}, dispatch] = useStateValue();
     const history = useHistory();
-    // const [passwordReset, setpasswordReset] = useState(false);
     const {
         register,
         handleSubmit,
@@ -119,8 +126,9 @@ const Login = () => {
                     // isNewUser: result.isNewUser,
                 });
                 history.push('/room');
+                alertify.success('Zalogowano pomyślnie!');
             })
-            .catch((error) => alert(error.message));
+            .catch((error) => alertify.alert(`Błąd`, error.message));
     };
 
     const facebook = () => {
@@ -131,20 +139,21 @@ const Login = () => {
                     user: result.user,
                 });
                 history.push('/room');
+                alertify.success('Zalogowano pomyślnie!');
             })
-            .catch((error) => alert(error.message));
+            .catch((error) => alertify.alert(`Błąd`, error.message));
     };
 
-    const github = () => {
-        auth.signInWithPopup(githubProvider)
-            .then((result) => {
-                dispatch({
-                    type: actionTypes.SET_USER,
-                    user: result.user,
-                });
-            })
-            .catch((error) => alert(error.message));
-    };
+    // const github = () => {
+    //     auth.signInWithPopup(githubProvider)
+    //         .then((result) => {
+    //             dispatch({
+    //                 type: actionTypes.SET_USER,
+    //                 user: result.user,
+    //             });
+    //         })
+    //         .catch((error) => alertify.alert(`Błąd`, error.message));
+    // };
 
     const signIn = (data) => {
         auth.signInWithEmailAndPassword(data.email, data.password)
@@ -155,17 +164,22 @@ const Login = () => {
                         user: result.user,
                     });
                     history.push('/room');
+                    alertify.success('Zalogowano pomyślnie!');
                 } else {
-                    if (
-                        window.confirm(
-                            `Zweryfikuj adres email. Jeśli nie dostałeś wiadomości kliknij 'OK', aby wysłać ponownie.`,
-                        )
-                    ) {
-                        result.user.sendEmailVerification();
-                    }
+                    alertify.confirm(
+                        'Weryfikacja adresu e-mail',
+                        'Zweryfikuj adres email. Jeśli nie dostałeś wiadomości kliknij OK, aby wysłać ponownie.',
+                        () => {
+                            result.user.sendEmailVerification();
+                            alertify.success('Wiadomość wysłano');
+                        },
+                        function () {
+                            alertify.error('Ponowna weryfikacja anulowana');
+                        },
+                    );
                 }
             })
-            .catch((error) => alert(error.message));
+            .catch((error) => alertify.alert(`Błąd`, error.message));
     };
 
     const openPasswordReset = () => {
@@ -230,9 +244,9 @@ const Login = () => {
                 <RoundButton color={'#3b5998'} onClick={facebook}>
                     <FaFacebookF />
                 </RoundButton>
-                <RoundButton color={'#24292e'} onClick={github}>
+                {/* <RoundButton color={'#24292e'} onClick={github}>
                     <FaGithub />
-                </RoundButton>
+                </RoundButton> */}
             </ButtonsWraper>
             <PasswordResetModal />
         </Wrapper>

@@ -3,17 +3,17 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { actionTypes } from '../services/reducer';
-import { useStateValue } from '../services/StateProvider';
 import Input from './Input';
 import { Email, Lock } from '@material-ui/icons';
 import PersonIcon from '@material-ui/icons/Person';
 import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { auth } from '../services/Firebase';
+import alertify from 'alertifyjs';
 
 const Wrapper = styled.div`
     width: 600px;
+    max-width: 90vw;
     height: 600px;
     background-color: ${({ theme }) => theme.colors.primary};
     border: 1px solid ${({ theme }) => theme.colors.border};
@@ -30,6 +30,19 @@ const Form = styled.form`
     width: 60%;
     display: grid;
     place-items: center;
+
+    ${({ theme }) => theme.media.phone} {
+        width: 90%;
+
+        .button__group {
+            display: flex;
+            justify-content: center;
+
+            a {
+                text-decoration: none;
+            }
+        }
+    } ;
 `;
 
 const schema = yup.object().shape({
@@ -51,8 +64,6 @@ const schema = yup.object().shape({
 });
 
 const Registration = () => {
-    const [{}, dispatch] = useStateValue();
-
     const {
         register,
         handleSubmit,
@@ -65,15 +76,16 @@ const Registration = () => {
         auth.createUserWithEmailAndPassword(data.email, data.password)
             .then((authUser) => {
                 authUser.user.sendEmailVerification();
-                alert(
-                    `Potwierdź rejestrację klikając w link aktywacyjny wysłany na Twoją skrzynkę`,
+                alertify.alert(
+                    'Potwierdź rejestracje',
+                    'Potwierdź rejestrację klikając w link aktywacyjny wysłany na Twoją skrzynkę',
                 );
                 reset();
                 return authUser.user.updateProfile({
                     displayName: `${data.firstName} ${data.lastName}`,
                 });
             })
-            .catch((err) => alert(err.message));
+            .catch((err) => alertify.alert('Błąd', err.message));
     };
     return (
         <Wrapper>

@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { auth } from '../services/Firebase';
+import alertify from 'alertifyjs';
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -20,10 +21,14 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
     },
     paper: {
+        maxWidth: '90vw',
         backgroundColor: `#ededed`,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
+    },
+    text: {
+        marginBottom: '10px',
     },
 }));
 
@@ -53,9 +58,12 @@ const PasswordResetModal = () => {
 
     const handleReset = (data) => {
         auth.sendPasswordResetEmail(data.email)
-            .then(() => alert(`Email został wysłany!`))
+            .then(() => {
+                alertify.alert(`Reset hasła`, `Email został wysłany!`);
+                reset();
+            })
             .catch((error) => {
-                alert(error.message);
+                alertify.alert(`Reset hasła`, error.message);
             });
     };
 
@@ -74,8 +82,13 @@ const PasswordResetModal = () => {
         >
             <Fade in={passwordReset}>
                 <div className={classes.paper}>
-                    <h3 id='transition-modal-title'>Resetowanie hasła</h3>
-                    <p id='transition-modal-description'>
+                    <h3 id='transition-modal-title' className={classes.text}>
+                        Resetowanie hasła
+                    </h3>
+                    <p
+                        id='transition-modal-description'
+                        className={classes.text}
+                    >
                         Podaj adres e-mail, do którego chcesz zresetować hasło.
                     </p>
                     <form onSubmit={handleSubmit(handleReset)}>
