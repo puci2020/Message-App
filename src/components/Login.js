@@ -16,6 +16,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
+import { useState } from 'react';
+import PasswordResetModal from './PasswordResetModal';
 
 const Wrapper = styled.div`
     width: 600px;
@@ -64,6 +66,28 @@ const RoundButton = styled.div`
     }
 `;
 
+const PasswordReset = styled.div`
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: ${({ theme }) => theme.font.size.xxs};
+    color: gray;
+
+    span {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+
+        &:hover {
+            cursor: pointer;
+            color: ${({ theme }) => theme.colors.menu.hoverLink};
+        }
+    }
+`;
+
 const schema = yup.object().shape({
     email: yup
         .string()
@@ -78,6 +102,7 @@ const schema = yup.object().shape({
 const Login = () => {
     const [{}, dispatch] = useStateValue();
     const history = useHistory();
+    // const [passwordReset, setpasswordReset] = useState(false);
     const {
         register,
         handleSubmit,
@@ -143,6 +168,13 @@ const Login = () => {
             .catch((error) => alert(error.message));
     };
 
+    const openPasswordReset = () => {
+        dispatch({
+            type: actionTypes.SET_PASSWORD_RESET,
+            passwordReset: true,
+        });
+    };
+
     return (
         <Wrapper>
             <h1>Zaloguj się!</h1>
@@ -161,6 +193,9 @@ const Login = () => {
                         {...register('password')}
                     />
                 </Input>
+                <PasswordReset>
+                    <span onClick={openPasswordReset}>Nie pamiętam hasła</span>
+                </PasswordReset>
                 <div className='button__group'>
                     <Button
                         style={{
@@ -199,6 +234,7 @@ const Login = () => {
                     <FaGithub />
                 </RoundButton>
             </ButtonsWraper>
+            <PasswordResetModal />
         </Wrapper>
     );
 };
