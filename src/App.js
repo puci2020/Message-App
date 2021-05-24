@@ -1,10 +1,12 @@
 import React from 'react';
+import { useEffect } from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import Chat from './components/Chat';
 import Login from './components/Login';
 import Registration from './components/Registration';
 import Sidebar from './components/Sidebar';
+import { actionTypes } from './services/reducer';
 import { useStateValue } from './services/StateProvider';
 import ProtectedRouter from './utils/ProtectedRouter';
 
@@ -30,9 +32,31 @@ const Container = styled.div`
 const App = () => {
     const [{ user }, dispatch] = useStateValue();
 
+    // useEffect(() => {
+    //     if (user !== null) {
+    //         localStorage.setItem('user', user);
+    //     } else if (localStorage.getItem('user') !== null && !user) {
+    //         dispatch({
+    //             type: actionTypes.SET_USER,
+    //             user: localStorage.getItem('user'),
+    //         });
+    //     } else {
+    //         dispatch({
+    //             type: actionTypes.SET_USER,
+    //             user: null,
+    //         });
+    //     }
+
+    //     console.log(localStorage.getItem('user'));
+
+    //     console.log('setuser');
+    // }, [dispatch, user]);
+
     return (
         <Wrapper>
-            {!user ? (
+            {console.log(user)}
+            {console.log(localStorage.getItem(user))}
+            {!localStorage.getItem(user) ? (
                 <Router>
                     <Switch>
                         <Route exact path='/'>
