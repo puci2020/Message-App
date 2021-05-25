@@ -32,31 +32,25 @@ const Container = styled.div`
 const App = () => {
     const [{ user }, dispatch] = useStateValue();
 
-    // useEffect(() => {
-    //     if (user !== null) {
-    //         localStorage.setItem('user', user);
-    //     } else if (localStorage.getItem('user') !== null && !user) {
-    //         dispatch({
-    //             type: actionTypes.SET_USER,
-    //             user: localStorage.getItem('user'),
-    //         });
-    //     } else {
-    //         dispatch({
-    //             type: actionTypes.SET_USER,
-    //             user: null,
-    //         });
-    //     }
-
-    //     console.log(localStorage.getItem('user'));
-
-    //     console.log('setuser');
-    // }, [dispatch, user]);
+    useEffect(() => {
+        if (user !== null) {
+            localStorage.setItem('user', JSON.stringify(user));
+        } else if (localStorage.getItem('user') !== null && !user) {
+            dispatch({
+                type: actionTypes.SET_USER,
+                user: JSON.parse(localStorage.getItem('user')),
+            });
+        } else {
+            dispatch({
+                type: actionTypes.SET_USER,
+                user: null,
+            });
+        }
+    }, [dispatch, user]);
 
     return (
         <Wrapper>
-            {console.log(user)}
-            {console.log(localStorage.getItem(user))}
-            {!localStorage.getItem(user) ? (
+            {!user ? (
                 <Router>
                     <Switch>
                         <Route exact path='/'>

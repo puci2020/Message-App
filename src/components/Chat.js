@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import db, { auth } from '../services/Firebase';
 import { useStateValue } from '../services/StateProvider';
 import Sidebar from './Sidebar';
+import { dateToString } from '../utils/Date';
 
 const Wrapper = styled.div`
     flex: 0.65;
@@ -98,9 +99,7 @@ const Chat = () => {
                                     ? ''
                                     : message.name
                             }
-                            date={new Date(
-                                message.timestamp?.toDate(),
-                            ).toUTCString()}
+                            date={message.timestamp}
                             text={message.message}
                             key={message.timestamp}
                         />

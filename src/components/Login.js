@@ -159,7 +159,6 @@ const Login = () => {
                         type: actionTypes.SET_USER,
                         user: result.user,
                     });
-                    localStorage.setItem('user', [result.user]);
                     history.push('/room');
                     alertify.success('Zalogowano pomyślnie!');
                 } else {

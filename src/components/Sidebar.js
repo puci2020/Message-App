@@ -84,6 +84,7 @@ const Sidebar = () => {
                     type: actionTypes.SET_USER,
                     user: null,
                 });
+                localStorage.setItem('user', null);
                 history.push('/');
                 alertify.success(`Wylogowano pomyślnie!`);
             })
