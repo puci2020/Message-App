@@ -115,7 +115,11 @@ const Chat = () => {
                     left={
                         <ChatItem
                             name={roomName}
-                            info={displayRoomInfo(lastSeen)}
+                            info={
+                                roomName
+                                    ? displayRoomInfo(lastSeen)
+                                    : 'Wybierz czat z menu aby rozmawiać'
+                            }
                         />
                     }
                     right={
@@ -148,7 +152,7 @@ const Chat = () => {
                     ))}
                     <div ref={messageEnd} />
                 </Body>
-                <MessageForm id={id} />
+                {roomName ? <MessageForm id={id} /> : ''}
             </Wrapper>
         </Container>
     );
