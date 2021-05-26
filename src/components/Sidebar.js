@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { IconButton } from '@material-ui/core';
-import ChatIcon from '@material-ui/icons/Chat';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { ExitToApp, SearchOutlined } from '@material-ui/icons';
 import ChatItem from './ChatItem';
 import Header from './Header';
@@ -124,7 +123,7 @@ const Sidebar = () => {
                 right={
                     <>
                         <IconButton>
-                            <MoreVertIcon />
+                            <SettingsIcon />
                         </IconButton>
                         <IconButton onClick={logOut}>
                             <ExitToApp />

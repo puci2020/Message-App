@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Header from './Header';
 import { IconButton } from '@material-ui/core';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { AttachFile, SearchOutlined } from '@material-ui/icons';
+import SettingsIcon from '@material-ui/icons/Settings';
 import ChatItem from './ChatItem';
 import Message from './Message';
 import MessageForm from './MessageForm';
@@ -122,7 +121,7 @@ const Chat = () => {
                     right={
                         <>
                             <IconButton>
-                                <MoreVertIcon />
+                                <SettingsIcon />
                             </IconButton>
                             <IconButton
                                 id='menuButton'
