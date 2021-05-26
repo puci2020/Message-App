@@ -102,7 +102,7 @@ const Chat = () => {
         if (showFullDate(date).length > 1) {
             return `Ostatnia aktywność: ${showFullDate(date)}`;
         } else {
-            return '';
+            return 'Aktywny teraz';
         }
     };
 
