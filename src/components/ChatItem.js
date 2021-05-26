@@ -5,7 +5,7 @@ import db from '../services/Firebase';
 import alertify from 'alertifyjs';
 
 const Wrapper = styled.div`
-    width: 100%;
+    width: ${(props) => (props.chat ? '100%' : '80%')};
     height: ${(props) => (props.chat ? '70px' : 'auto')};
     border-bottom: ${(props) => (props.chat ? '1px solid #f6f6f6' : '')};
     /* border-bottom: 1px solid ${({ theme }) => theme.colors.secondary}; */
@@ -43,6 +43,7 @@ const ChatItem = ({ id, newChat, chat, avatar, name, info }) => {
                 if (value) {
                     db.collection('rooms').add({
                         name: value,
+                        lastMessage: null,
                     });
 
                     alertify.success(

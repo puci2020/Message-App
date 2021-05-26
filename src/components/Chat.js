@@ -12,11 +12,19 @@ import db from '../services/Firebase';
 import { useStateValue } from '../services/StateProvider';
 import Sidebar from './Sidebar';
 import { useRef } from 'react';
+import { showFullDate } from '../utils/Date';
+import MenuIcon from '@material-ui/icons/Menu';
+import MenuOpenIcon from '@material-ui/icons/MenuOpen';
+import { actionTypes } from '../services/reducer';
 
 const Wrapper = styled.div`
     flex: 0.65;
     display: flex;
     flex-direction: column;
+
+    ${({ theme }) => theme.media.tablet} {
+        flex: 1;
+    }
     /* overflow: hidden; */
     /* background-color: blue; */
 `;
@@ -39,6 +47,9 @@ const Container = styled.div`
     height: 90vh;
     width: 90vw;
     box-shadow: -1px 4px 20px -6px rgba(0, 0, 0, 0.7);
+    ${({ theme }) => theme.media.tablet} {
+        height: 80vh;
+    }
 `;
 
 // const Footer = styled.div``;
@@ -46,15 +57,25 @@ const Container = styled.div`
 const Chat = () => {
     const { id } = useParams();
     const [roomName, setRoomName] = useState('');
+    const [lastSeen, setLastSeen] = useState(null);
     const [messages, setMessages] = useState([]);
     const messageEnd = useRef(null);
 
-    const [{ user }] = useStateValue();
+    const [{ user, sidebar }, dispatch] = useStateValue();
     useEffect(() => {
         if (id) {
             db.collection('rooms')
                 .doc(id)
-                .onSnapshot((snapschot) => setRoomName(snapschot.data().name));
+                .onSnapshot((snapschot) => {
+                    setRoomName(snapschot.data().name);
+                    // console.log(snapschot.data());
+                    setLastSeen(
+                        snapschot.data().lastSeen,
+                        // `${dateToString(
+                        //     snapschot.data().lastSeen,
+                        // )} ${timeToString(snapschot.data().lastSeen)}`,
+                    );
+                });
 
             db.collection('rooms')
                 .doc(id)
@@ -71,6 +92,21 @@ const Chat = () => {
         messageEnd.current.scrollIntoView({ behavior: 'smooth' });
     };
 
+    const showHideSidebar = () => {
+        dispatch({
+            type: actionTypes.SET_SIDEBAR,
+            sidebar: !sidebar,
+        });
+    };
+
+    const displayRoomInfo = (date) => {
+        if (showFullDate(date).length > 1) {
+            return `Ostatnia aktywność: ${showFullDate(date)}`;
+        } else {
+            return '';
+        }
+    };
+
     return (
         <Container>
             <Sidebar />
@@ -80,19 +116,19 @@ const Chat = () => {
                     left={
                         <ChatItem
                             name={roomName}
-                            info={'Ostatnio widziana...'}
+                            info={displayRoomInfo(lastSeen)}
                         />
                     }
                     right={
                         <>
                             <IconButton>
-                                <SearchOutlined />
-                            </IconButton>
-                            <IconButton>
-                                <AttachFile />
-                            </IconButton>
-                            <IconButton>
                                 <MoreVertIcon />
+                            </IconButton>
+                            <IconButton
+                                id='menuButton'
+                                onClick={showHideSidebar}
+                            >
+                                {sidebar ? <MenuOpenIcon /> : <MenuIcon />}
                             </IconButton>
                         </>
                     }

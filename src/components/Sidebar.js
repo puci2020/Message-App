@@ -17,6 +17,20 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     flex: 0.35;
+    background-color: ${({ theme }) => theme.colors.primary};
+
+    ${({ theme }) => theme.media.tablet} {
+        position: absolute;
+        /* top: 0; */
+        /* left: 0; */
+        transform: ${(props) =>
+            props.mobile ? 'translateX(0)' : 'translateX(-120%)'};
+        transition: transform 0.35s ease-in-out;
+        z-index: 2;
+        width: 70%;
+        height: 80vh;
+        max-width: 400px;
+    }
 `;
 
 const Search = styled.div`
@@ -58,7 +72,7 @@ const Chats = styled.div`
 `;
 
 const Sidebar = () => {
-    const [{ user }, dispatch] = useStateValue();
+    const [{ user, sidebar }, dispatch] = useStateValue();
     const [rooms, setRooms] = useState([]);
     const history = useHistory();
 
@@ -77,6 +91,13 @@ const Sidebar = () => {
         };
     }, []);
 
+    const showHideSidebar = () => {
+        dispatch({
+            type: actionTypes.SET_SIDEBAR,
+            sidebar: !sidebar,
+        });
+    };
+
     const logOut = () => {
         auth.signOut()
             .then((result) => {
@@ -92,7 +113,7 @@ const Sidebar = () => {
     };
 
     return (
-        <Wrapper>
+        <Wrapper mobile={sidebar}>
             <Header
                 left={
                     <ChatItem
@@ -102,9 +123,6 @@ const Sidebar = () => {
                 }
                 right={
                     <>
-                        <IconButton>
-                            <ChatIcon />
-                        </IconButton>
                         <IconButton>
                             <MoreVertIcon />
                         </IconButton>
@@ -125,7 +143,7 @@ const Sidebar = () => {
                     placeholder={'Wyszukaj czat!'}
                 />
             </Search>
-            <Chats>
+            <Chats onClick={showHideSidebar}>
                 <ChatItem newChat chat />
                 {rooms.map((room) => (
                     <Link
@@ -140,7 +158,7 @@ const Sidebar = () => {
                             chat
                             id={room.id}
                             name={room.data.name}
-                            info={'Ostatnia wiadomość...'}
+                            info={room.data.lastMessage}
                         />
                     </Link>
                 ))}

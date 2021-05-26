@@ -4,6 +4,9 @@ import {
     compareDates,
     compareTimes,
     dateToString,
+    showDate,
+    showFullDate,
+    showTime,
     timeToString,
 } from '../utils/Date';
 
@@ -46,35 +49,12 @@ const Author = styled.span`
 `;
 
 const Message = ({ own, user, text, date }) => {
-    const showDate = (messageDate) => {
-        const currentDate = new window.Date();
-        const compare = compareDates(messageDate, currentDate);
-        if (compare > 1) {
-            return dateToString(date);
-        } else {
-            return '';
-        }
-    };
-    const showTime = (messageDate) => {
-        const currentDate = new window.Date();
-        const compare = compareTimes(messageDate, currentDate);
-        if (compare > 1) {
-            return timeToString(date);
-        } else {
-            return '';
-        }
-    };
-
-    const showFullDate = () => {
-        return `${showDate(date)} ${showTime(date)}`;
-    };
-
     return (
         <Wrapper own={own}>
             <Author>{user}</Author>
             <Content>
                 <div className='text'>{text}</div>
-                <Date>{date ? showFullDate() : ''}</Date>
+                <Date>{date ? showFullDate(date) : ''}</Date>
             </Content>
         </Wrapper>
     );
