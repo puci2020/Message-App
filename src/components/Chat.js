@@ -8,10 +8,10 @@ import ChatItem from './ChatItem';
 import Message from './Message';
 import MessageForm from './MessageForm';
 import { useParams } from 'react-router-dom';
-import db, { auth } from '../services/Firebase';
+import db from '../services/Firebase';
 import { useStateValue } from '../services/StateProvider';
 import Sidebar from './Sidebar';
-import { dateToString } from '../utils/Date';
+import { useRef } from 'react';
 
 const Wrapper = styled.div`
     flex: 0.65;
@@ -47,6 +47,8 @@ const Chat = () => {
     const { id } = useParams();
     const [roomName, setRoomName] = useState('');
     const [messages, setMessages] = useState([]);
+    const messageEnd = useRef(null);
+
     const [{ user }] = useStateValue();
     useEffect(() => {
         if (id) {
@@ -58,11 +60,16 @@ const Chat = () => {
                 .doc(id)
                 .collection('messages')
                 .orderBy('timestamp', 'asc')
-                .onSnapshot((snapshot) =>
-                    setMessages(snapshot.docs.map((doc) => doc.data())),
-                );
+                .onSnapshot((snapshot) => {
+                    setMessages(snapshot.docs.map((doc) => doc.data()));
+                    scrollToBottom();
+                });
         }
     }, [id]);
+
+    const scrollToBottom = () => {
+        messageEnd.current.scrollIntoView({ behavior: 'smooth' });
+    };
 
     return (
         <Container>
@@ -104,6 +111,7 @@ const Chat = () => {
                             key={message.timestamp}
                         />
                     ))}
+                    <div ref={messageEnd} />
                 </Body>
                 <MessageForm id={id} />
             </Wrapper>

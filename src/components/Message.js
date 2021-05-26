@@ -1,6 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { compareDates, dateToString } from '../utils/Date';
+import {
+    compareDates,
+    compareTimes,
+    dateToString,
+    timeToString,
+} from '../utils/Date';
 
 const Wrapper = styled.div`
     width: fit-content;
@@ -43,24 +48,33 @@ const Author = styled.span`
 const Message = ({ own, user, text, date }) => {
     const showDate = (messageDate) => {
         const currentDate = new window.Date();
-        // if (currentDate.getDay() > messageDate.getDay())
-        //     return dateToString(messageDate);
-
-        // console.log(currentDate);
-        // console.log(dateToString(date));
-        // console.log(date.toDate());
-        compareDates(date, currentDate);
+        const compare = compareDates(messageDate, currentDate);
+        if (compare > 1) {
+            return dateToString(date);
+        } else {
+            return '';
+        }
     };
-    if (date) {
-        showDate(date);
-    }
+    const showTime = (messageDate) => {
+        const currentDate = new window.Date();
+        const compare = compareTimes(messageDate, currentDate);
+        if (compare > 1) {
+            return timeToString(date);
+        } else {
+            return '';
+        }
+    };
+
+    const showFullDate = () => {
+        return `${showDate(date)} ${showTime(date)}`;
+    };
 
     return (
         <Wrapper own={own}>
             <Author>{user}</Author>
             <Content>
                 <div className='text'>{text}</div>
-                <Date>{date ? dateToString(date) : ''}</Date>
+                <Date>{date ? showFullDate() : ''}</Date>
             </Content>
         </Wrapper>
     );

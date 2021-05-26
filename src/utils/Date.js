@@ -23,11 +23,17 @@ export const timeToString = (timestamp) => {
 export const compareDates = (DBtimestamp, sysDate) => {
     const date1 = DBtimestamp.toDate();
     const date2 = sysDate;
-    const diff = date2.getTime() - date1.getTime();
-    // console.log(dateToString(date1));
-    // console.log(dateToString(date2));
-    console.log(diff / (1000 * 3600 * 24));
-    // console.log(date2.getTime());
+    const difference = date2.getTime() - date1.getTime();
+
+    return difference / (1000 * 3600 * 24);
+};
+
+export const compareTimes = (DBtimestamp, sysDate) => {
+    const time1 = DBtimestamp.toDate();
+    const time2 = sysDate;
+    const difference = time2.getTime() - time1.getTime();
+
+    return difference / (1000 * 600);
 };
 
 export const getDay = (timestamp) => {
