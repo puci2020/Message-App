@@ -58,6 +58,7 @@ const Chat = () => {
   const [roomName, setRoomName] = useState('');
   const [lastSeen, setLastSeen] = useState(null);
   const [messages, setMessages] = useState([]);
+  // const [messageId, setMessageId] = useState([]);
   const messageEnd = useRef(null);
 
   const [{ sidebar }, dispatch] = useStateValue();
@@ -87,7 +88,12 @@ const Chat = () => {
         .collection('messages')
         .orderBy('timestamp', 'asc')
         .onSnapshot((snapshot) => {
-          setMessages(snapshot.docs.map((doc) => doc.data()));
+          setMessages(
+            snapshot.docs.map((doc) => ({
+              messageId: doc.id,
+              data: doc.data(),
+            }))
+          );
           scrollToBottom();
         });
     }
@@ -137,11 +143,15 @@ const Chat = () => {
         <Body>
           {messages.map((message) => (
             <Message
-              own={message.name === user?.displayName}
-              user={message.name === user?.displayName ? '' : message.name}
-              date={message.timestamp}
-              text={message.message}
-              key={message.timestamp}
+              id={message.messageId}
+              roomId={id}
+              own={message.data.name === user?.displayName}
+              user={
+                message.data.name === user?.displayName ? '' : message.data.name
+              }
+              date={message.data.timestamp}
+              text={message.data.message}
+              key={message.data.timestamp}
             />
           ))}
           <div ref={messageEnd} />

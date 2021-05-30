@@ -110,7 +110,6 @@ const schema = yup.object().shape({
 const Login = () => {
   // eslint-disable-next-line no-empty-pattern
   const [{}, dispatch] = useStateValue();
-  // const [loginError, setLoginError] = useState(null);
   const history = useHistory();
   const {
     register,
@@ -118,9 +117,7 @@ const Login = () => {
     reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
-  // eslint-disable-next-line no-unused-vars
-  const { currentUser, signInWithEmail, signInWithGoogle, signInWithFacebook } =
-    useAuth();
+  const { signInWithEmail, signInWithGoogle, signInWithFacebook } = useAuth();
 
   const google = async () => {
     try {

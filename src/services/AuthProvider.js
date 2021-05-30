@@ -9,7 +9,6 @@ export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
-  // const [userEmail, setUserEmail] = useState();
   const [loading, setLoading] = useState(true);
 
   const signUpWithEmail = (email, password) =>
