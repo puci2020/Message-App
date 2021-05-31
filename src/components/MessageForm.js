@@ -1,4 +1,5 @@
 import { IconButton } from '@material-ui/core';
+import { AttachFile } from '@material-ui/icons';
 import MicNoneIcon from '@material-ui/icons/MicNone';
 import SendIcon from '@material-ui/icons/Send';
 import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
@@ -8,6 +9,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../services/AuthProvider';
 import db from '../services/Firebase';
+import { actionTypes } from '../services/reducer';
+import { useStateValue } from '../services/StateProvider';
+import FileUploadModal from './FileUploadModal';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -27,7 +31,7 @@ const Wrapper = styled.div`
     padding-left: 10px;
     border: none;
     outline: none;
-    margin-left: 10px;
+    margin: 0 10px;
     background-color: white;
     width: 100%;
     height: 35px;
@@ -38,7 +42,7 @@ const Wrapper = styled.div`
 
 const MessageForm = ({ id }) => {
   const [message, setMessage] = useState('');
-  //   const [{ user }] = useStateValue();
+  const [{ fileUpload }, dispatch] = useStateValue();
 
   const { currentUser } = useAuth();
   const user = currentUser;
@@ -64,6 +68,13 @@ const MessageForm = ({ id }) => {
     setMessage('');
   };
 
+  const openFileUpload = () => {
+    dispatch({
+      type: actionTypes.SET_FILE_UPLOAD,
+      fileUpload: true,
+    });
+  };
+
   return (
     <Wrapper>
       <form>
@@ -76,6 +87,9 @@ const MessageForm = ({ id }) => {
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Napisz wiadomość"
         />
+        <IconButton onClick={openFileUpload} onKeyDown={openFileUpload}>
+          <AttachFile />
+        </IconButton>
         <IconButton>
           <SentimentVerySatisfiedIcon />
         </IconButton>
@@ -83,6 +97,7 @@ const MessageForm = ({ id }) => {
           <SendIcon />
         </IconButton>
       </form>
+      <FileUploadModal />
     </Wrapper>
   );
 };

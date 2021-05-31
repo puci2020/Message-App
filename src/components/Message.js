@@ -20,33 +20,6 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-// const Like = styled.div`
-//   margin: 5px;
-//   display: flex;
-//   align-items: center;
-
-//   .number {
-//     padding: 2px;
-//     /* display: flex; */
-//     /* align-items: flex-end; */
-//     font-size: 14px;
-//     /* background-color: #f6ccd2; */
-//     color: black;
-
-//     /* border-radius: 10px; */
-//   }
-
-//   svg {
-//     /* position: absolute; */
-//     width: 25px;
-//     height: 25px;
-
-//     &:hover {
-//       cursor: pointer;
-//     }
-//   }
-// `;
-
 const Content = styled.div`
   display: flex;
   flex-direction: column;
@@ -78,7 +51,6 @@ const Author = styled.span`
   font-size: ${({ theme }) => theme.font.size.xxs};
 `;
 
-// eslint-disable-next-line react/prop-types
 const Message = ({ id, roomId, own, user, text, date }) => {
   const [loading, setLoading] = useState(true);
   const [like, setLike] = useState(null);
@@ -86,7 +58,8 @@ const Message = ({ id, roomId, own, user, text, date }) => {
   const { currentUser } = useAuth();
 
   useEffect(() => {
-    db.collection('rooms')
+    const unsubscribe = db
+      .collection('rooms')
       .doc(roomId)
       .collection('messages')
       .doc(id)
@@ -101,18 +74,16 @@ const Message = ({ id, roomId, own, user, text, date }) => {
         );
         setLoading(false);
       });
+    return unsubscribe;
   }, [like]);
 
   useEffect(() => {
     likes.forEach((el) => {
-      if (el.data.user === currentUser.email) {
-        setLike(el);
-      }
+      if (el.data.user === currentUser.email) setLike(el);
     });
   }, [loading]);
 
   const handleLikeMessage = () => {
-    console.log('dziala');
     if (like) {
       db.collection('rooms')
         .doc(roomId)
@@ -150,7 +121,7 @@ const Message = ({ id, roomId, own, user, text, date }) => {
 
         <Text>
           <div className="text">{text}</div>
-          <Date>{date ? showFullDate(date) : ''}</Date>
+          <Date>{date ? showFullDate(date) : null}</Date>
         </Text>
       </Content>
     </Wrapper>
@@ -161,15 +132,17 @@ export default Message;
 
 Message.defaultProps = {
   own: false,
-  user: '',
-  date: null,
-  // liked: null
+  user: null,
+  date: null
 };
-
 Message.propTypes = {
+  id: PropTypes.string.isRequired,
+  roomId: PropTypes.string.isRequired,
   own: PropTypes.bool,
   user: PropTypes.string,
   text: PropTypes.string.isRequired,
-  date: PropTypes.oneOfType([PropTypes.object]),
-  // liked: PropTypes.arrayOf.shape()
+  date: PropTypes.shape({
+    seconds: PropTypes.number,
+    nanoseconds: PropTypes.number,
+  })
 };

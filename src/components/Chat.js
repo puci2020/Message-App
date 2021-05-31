@@ -65,7 +65,7 @@ const Chat = () => {
   const { currentUser } = useAuth();
   const user = currentUser;
   const scrollToBottom = () => {
-    messageEnd.current.scrollIntoView({ behavior: 'smooth' });
+    // messageEnd.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -94,7 +94,7 @@ const Chat = () => {
               data: doc.data(),
             }))
           );
-          scrollToBottom();
+          // scrollToBottom();
         });
     }
   }, [id]);
@@ -147,7 +147,9 @@ const Chat = () => {
               roomId={id}
               own={message.data.name === user?.displayName}
               user={
-                message.data.name === user?.displayName ? '' : message.data.name
+                message.data.name === user?.displayName
+                  ? null
+                  : message.data.name
               }
               date={message.data.timestamp}
               text={message.data.message}

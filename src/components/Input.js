@@ -36,9 +36,11 @@ const InputWrapper = styled.div`
   input {
     border: none;
     outline: none;
-    margin-left: 10px;
+    margin: 0 10px;
     width: 100%;
     height: 100%;
+    display: flex;
+    align-items: center;
   }
 `;
 

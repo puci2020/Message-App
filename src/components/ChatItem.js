@@ -3,6 +3,7 @@ import alertify from 'alertifyjs';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
+import firebase from '../../node_modules/firebase';
 import db from '../services/Firebase';
 
 const Wrapper = styled.div`
@@ -45,6 +46,7 @@ const ChatItem = ({ newChat, chat, avatar, name, info }) => {
           db.collection('rooms').add({
             name: value,
             lastMessage: null,
+            lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
           });
 
           alertify.success(`Czat o nazwie "${value}" utworzony pomyślnie!`);

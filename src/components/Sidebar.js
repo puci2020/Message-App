@@ -79,14 +79,17 @@ const Sidebar = () => {
   const history = useHistory();
 
   useEffect(() => {
-    const unsubscribe = db.collection('rooms').onSnapshot((snapshot) =>
-      setRooms(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          data: doc.data(),
-        }))
-      )
-    );
+    const unsubscribe = db
+      .collection('rooms')
+      .orderBy('lastSeen', 'desc')
+      .onSnapshot((snapshot) =>
+        setRooms(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        )
+      );
 
     return () => {
       unsubscribe();
