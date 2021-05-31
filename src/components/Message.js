@@ -1,5 +1,3 @@
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import firebase from 'firebase';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
@@ -7,6 +5,7 @@ import styled from 'styled-components';
 import { useAuth } from '../services/AuthProvider';
 import db from '../services/Firebase';
 import { showFullDate } from '../utils/Date';
+import Like from './Like';
 
 const Wrapper = styled.div`
   width: fit-content;
@@ -19,14 +18,34 @@ const Wrapper = styled.div`
   flex-direction: ${(props) => (props.own ? 'row' : 'row-reverse')};
   display: flex;
   align-items: center;
-
-  .like {
-    margin: 5px;
-    display: grid;
-    place-items: center;
-  }
-  /* flex-direction: column; */
 `;
+
+// const Like = styled.div`
+//   margin: 5px;
+//   display: flex;
+//   align-items: center;
+
+//   .number {
+//     padding: 2px;
+//     /* display: flex; */
+//     /* align-items: flex-end; */
+//     font-size: 14px;
+//     /* background-color: #f6ccd2; */
+//     color: black;
+
+//     /* border-radius: 10px; */
+//   }
+
+//   svg {
+//     /* position: absolute; */
+//     width: 25px;
+//     height: 25px;
+
+//     &:hover {
+//       cursor: pointer;
+//     }
+//   }
+// `;
 
 const Content = styled.div`
   display: flex;
@@ -93,6 +112,7 @@ const Message = ({ id, roomId, own, user, text, date }) => {
   }, [loading]);
 
   const handleLikeMessage = () => {
+    console.log('dziala');
     if (like) {
       db.collection('rooms')
         .doc(roomId)
@@ -118,17 +138,12 @@ const Message = ({ id, roomId, own, user, text, date }) => {
   };
   return (
     <Wrapper own={own}>
-      {own ? (
-        <div className="like">{likes ? <FavoriteIcon /> : ''}</div>
-      ) : (
-        <div className="like">
-          {like?.data.liked ? (
-            <FavoriteIcon onClick={handleLikeMessage} />
-          ) : (
-            <FavoriteBorderIcon onClick={handleLikeMessage} />
-          )}
-        </div>
-      )}
+      <Like
+        handleLike={handleLikeMessage}
+        own={own}
+        liked={like?.data.liked}
+        number={likes?.length}
+      />
 
       <Content>
         <Author>{user}</Author>
