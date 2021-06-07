@@ -153,6 +153,8 @@ const Chat = () => {
               }
               date={message.data.timestamp}
               text={message.data.message}
+              type={message.data.type}
+              fileName={message.data.fileName}
               key={message.data.timestamp}
             />
           ))}

@@ -7,6 +7,11 @@ import { AttachFile } from '@material-ui/icons';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import firebase from 'firebase';
+import alertify from 'alertifyjs';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useAuth } from '../services/AuthProvider';
+import db, { storage } from '../services/Firebase';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import Input from './Input';
@@ -30,30 +35,38 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const schema = yup.object().shape({
-  uploadFile: yup.mixed().required('Wybierz plik z urządzenia'),
-  // .test(
-  //   'fileSize',
-  //   'Plik jest za duży',
-  //   (value) => value && value[0].size <= 2000000
-  // )
-  // .test(
-  //   'type',
-  //   'Można przesłać wyłącznie pliki PNG i PDF',
-  //   (value) =>
-  //     (value && value[0].type === 'image/png') ||
-  //     (value && value[0].type === 'application/pdf')
-  // ),
+  uploadFile: yup
+    .mixed()
+
+    .test(
+      'fileSize',
+      'Plik jest za duży',
+      (value) => value && value[0].size <= 2000000
+    )
+    .test(
+      'type',
+      'Można przesłać wyłącznie pliki PNG i PDF',
+      (value) =>
+        (value && value[0].type === 'image/png') ||
+        (value && value[0].type === 'image/jpeg') ||
+        (value && value[0].type === 'image/jpg') ||
+        (value && value[0].type === 'application/pdf')
+    )
+    .required('Wybierz plik z urządzenia'),
 });
 
-const FileUploadModal = () => {
+// eslint-disable-next-line react/prop-types
+const FileUploadModal = ({ id }) => {
   const classes = useStyles();
+  const { currentUser } = useAuth();
   const [{ fileUpload }, dispatch] = useStateValue();
   const {
     register,
     handleSubmit,
     reset,
+    unregister,
     formState: { errors },
-  } = useForm();
+  } = useForm({ resolver: yupResolver(schema) });
 
   const handleClose = () => {
     dispatch({
@@ -63,16 +76,31 @@ const FileUploadModal = () => {
   };
 
   const handleUpload = (data) => {
-    // auth
-    //   .sendPasswordResetEmail(data.email)
-    //   .then(() => {
-    //     alertify.alert(`Reset hasła`, `Email został wysłany!`);
-    //     reset();
-    //   })
-    //   .catch((error) => {
-    //     alertify.alert(`Reset hasła`, error.message);
-    //   });
-    console.log(data);
+    const storageRef = storage.ref();
+    const fileRef = storageRef.child(data.uploadFile[0].name);
+
+    fileRef.put(data.uploadFile[0]).then(() => {
+      storage
+        .ref()
+        .child(data.uploadFile[0].name)
+        .getDownloadURL()
+        .then((url) => {
+          db.collection('rooms').doc(id).collection('messages').add({
+            message: url,
+            name: currentUser?.displayName,
+            type: data.uploadFile[0].type,
+            fileName: data.uploadFile[0].name,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+          db.collection('rooms').doc(id).update({
+            lastMessage: 'Plik...',
+            lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+          reset();
+          handleClose();
+          alertify.success('Plik wysłano');
+        });
+    });
   };
 
   return (
@@ -101,6 +129,7 @@ const FileUploadModal = () => {
               <input
                 type="file"
                 placeholder="Plik"
+                // onChange={reset}
                 {...register('uploadFile', { required: true })}
               />
             </Input>
@@ -114,6 +143,7 @@ const FileUploadModal = () => {
             >
               Wyślij
             </Button>
+
             {/* <Button
               style={{
                 marginTop: '10px',

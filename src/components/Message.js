@@ -2,6 +2,7 @@ import firebase from 'firebase';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { AiOutlineFilePdf } from 'react-icons/ai';
 import { useAuth } from '../services/AuthProvider';
 import db from '../services/Firebase';
 import { showFullDate } from '../utils/Date';
@@ -16,6 +17,7 @@ const Wrapper = styled.div`
   max-width: 60%;
   background-color: ${(props) => (props.own ? '#3aecdc7d' : 'white')};
   flex-direction: ${(props) => (props.own ? 'row' : 'row-reverse')};
+  justify-content: ${(props) => (props.own ? 'flex-end' : 'flex-start')};
   display: flex;
   align-items: center;
 `;
@@ -23,15 +25,37 @@ const Wrapper = styled.div`
 const Content = styled.div`
   display: flex;
   flex-direction: column;
+  /* justify-content: flex-end; */
+  width: fit-content;
+  /* max-width: 90%; */
 `;
 
 const Text = styled.div`
   display: flex;
   /* justify-content: space-between; */
   flex-direction: column;
-
+  max-width: 25vw;
   .text {
     margin-bottom: 10px;
+
+    .image {
+      width: 100%;
+      height: auto;
+    }
+  }
+`;
+
+const A = styled.a`
+  display: flex;
+  align-items: center;
+  color: black;
+
+  svg {
+    margin-right: 5px;
+  }
+
+  &:hover {
+    color: gray;
   }
 `;
 
@@ -51,7 +75,8 @@ const Author = styled.span`
   font-size: ${({ theme }) => theme.font.size.xxs};
 `;
 
-const Message = ({ id, roomId, own, user, text, date }) => {
+// eslint-disable-next-line react/prop-types
+const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
   const [loading, setLoading] = useState(true);
   const [like, setLike] = useState(null);
   const [likes, setLikes] = useState([]);
@@ -107,6 +132,32 @@ const Message = ({ id, roomId, own, user, text, date }) => {
       setLoading(true);
     }
   };
+
+  const handleCheckFileType = (fileType, name, message) => {
+    if (
+      fileType === 'image/png' ||
+      fileType === 'image/jpeg' ||
+      fileType === 'image/jpeg'
+    ) {
+      return (
+        <div className="text">
+          <img className="image" src={message} alt={message} />
+        </div>
+      );
+    }
+    if (fileType === 'application/pdf') {
+      return (
+        <div className="text">
+          <A href={message} target="_blank" rel="noreferrer">
+            <AiOutlineFilePdf />
+            {name}
+          </A>
+        </div>
+      );
+    }
+    return <div className="text">{message}</div>;
+  };
+
   return (
     <Wrapper own={own}>
       <Like
@@ -120,7 +171,8 @@ const Message = ({ id, roomId, own, user, text, date }) => {
         <Author>{user}</Author>
 
         <Text>
-          <div className="text">{text}</div>
+          {handleCheckFileType(type, fileName, text)}
+
           <Date>{date ? showFullDate(date) : null}</Date>
         </Text>
       </Content>
@@ -133,7 +185,7 @@ export default Message;
 Message.defaultProps = {
   own: false,
   user: null,
-  date: null
+  date: null,
 };
 Message.propTypes = {
   id: PropTypes.string.isRequired,
@@ -144,5 +196,5 @@ Message.propTypes = {
   date: PropTypes.shape({
     seconds: PropTypes.number,
     nanoseconds: PropTypes.number,
-  })
+  }),
 };

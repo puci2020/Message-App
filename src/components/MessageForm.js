@@ -54,6 +54,7 @@ const MessageForm = ({ id }) => {
     db.collection('rooms').doc(id).collection('messages').add({
       message,
       name: user?.displayName,
+      type: 'text',
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
     db.collection('rooms')
@@ -97,7 +98,7 @@ const MessageForm = ({ id }) => {
           <SendIcon />
         </IconButton>
       </form>
-      <FileUploadModal />
+      <FileUploadModal id={id} />
     </Wrapper>
   );
 };

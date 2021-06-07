@@ -5,8 +5,11 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   margin: 5px;
+  /* width: 40px; */
+  /* min-width: 35px; */
   display: flex;
   align-items: center;
+  width: fit-content;
   svg {
     /* position: absolute; */
     width: 25px;
