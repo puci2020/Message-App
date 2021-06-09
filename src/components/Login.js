@@ -12,7 +12,7 @@ import { useAuth } from '../services/AuthProvider';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import Input from './Input';
-import PasswordResetModal from './PasswordResetModal';
+import UpdateUserDataModal from './UpdateUserDataModal';
 
 const Wrapper = styled.div`
   width: 600px;
@@ -159,8 +159,8 @@ const Login = () => {
 
   const openPasswordReset = () => {
     dispatch({
-      type: actionTypes.SET_PASSWORD_RESET,
-      passwordReset: true,
+      type: actionTypes.SET_UPDATE_USER_DATA,
+      updateUserData: true,
     });
   };
 
@@ -226,7 +226,7 @@ const Login = () => {
                     <FaGithub />
                 </RoundButton> */}
       </ButtonsWraper>
-      <PasswordResetModal />
+      <UpdateUserDataModal type="passwordReset" />
     </Wrapper>
   );
 };

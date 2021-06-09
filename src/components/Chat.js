@@ -5,6 +5,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import ScrollToBottom from 'react-scroll-to-bottom';
 import { useAuth } from '../services/AuthProvider';
 import db from '../services/Firebase';
 import { actionTypes } from '../services/reducer';
@@ -20,24 +21,23 @@ const Wrapper = styled.div`
   flex: 0.65;
   display: flex;
   flex-direction: column;
+  height: 100%;
+
+  .scroll {
+    height: 100%;
+  }
 
   ${({ theme }) => theme.media.tablet} {
     flex: 1;
   }
-  /* overflow: hidden; */
-  /* background-color: blue; */
 `;
 
 const Body = styled.div`
-  /* background-color: darkgray; */
   background-image: url('https://images.unsplash.com/photo-1533628635777-112b2239b1c7?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-  /* height: auto; */
   flex: 1;
   overflow-y: auto;
   padding: 30px;
-  /* position: relative;
-  display: flex;
-  flex-direction: column; */
+  min-height: 100%;
 `;
 
 const Container = styled.div`
@@ -51,22 +51,15 @@ const Container = styled.div`
   }
 `;
 
-// const Footer = styled.div``;
-
 const Chat = () => {
   const { id } = useParams();
   const [roomName, setRoomName] = useState('');
   const [lastSeen, setLastSeen] = useState(null);
   const [messages, setMessages] = useState([]);
-  // const [messageId, setMessageId] = useState([]);
-  const messageEnd = useRef(null);
 
   const [{ sidebar }, dispatch] = useStateValue();
   const { currentUser } = useAuth();
   const user = currentUser;
-  const scrollToBottom = () => {
-    // messageEnd.current.scrollIntoView({ behavior: 'smooth' });
-  };
 
   useEffect(() => {
     if (id) {
@@ -74,13 +67,7 @@ const Chat = () => {
         .doc(id)
         .onSnapshot((snapschot) => {
           setRoomName(snapschot.data().name);
-          // console.log(snapschot.data());
-          setLastSeen(
-            snapschot.data().lastSeen
-            // `${dateToString(
-            //     snapschot.data().lastSeen,
-            // )} ${timeToString(snapschot.data().lastSeen)}`,
-          );
+          setLastSeen(snapschot.data().lastSeen);
         });
 
       db.collection('rooms')
@@ -94,7 +81,6 @@ const Chat = () => {
               data: doc.data(),
             }))
           );
-          // scrollToBottom();
         });
     }
   }, [id]);
@@ -114,32 +100,31 @@ const Chat = () => {
   };
 
   return (
-    <Container>
-      <Sidebar />
-      <Wrapper>
-        {/* {isNewUser} */}
-        <Header
-          left={
-            <ChatItem
-              name={roomName}
-              info={
-                roomName
-                  ? displayRoomInfo(lastSeen)
-                  : 'Wybierz czat z menu aby rozmawiać'
-              }
-            />
-          }
-          right={
-            <>
-              <IconButton>
-                <SettingsIcon />
-              </IconButton>
-              <IconButton id="menuButton" onClick={showHideSidebar}>
-                {sidebar ? <MenuOpenIcon /> : <MenuIcon />}
-              </IconButton>
-            </>
-          }
-        />
+    <Wrapper>
+      <Header
+        left={
+          <ChatItem
+            name={roomName}
+            info={
+              roomName
+                ? displayRoomInfo(lastSeen)
+                : 'Wybierz czat z menu aby rozmawiać'
+            }
+          />
+        }
+        right={
+          <>
+            <IconButton>
+              <SettingsIcon />
+            </IconButton>
+            <IconButton id="menuButton" onClick={showHideSidebar}>
+              {sidebar ? <MenuOpenIcon /> : <MenuIcon />}
+            </IconButton>
+          </>
+        }
+      />
+
+      <ScrollToBottom className="scroll">
         <Body>
           {messages.map((message) => (
             <Message
@@ -158,11 +143,10 @@ const Chat = () => {
               key={message.data.timestamp}
             />
           ))}
-          <div ref={messageEnd} />
         </Body>
-        {roomName ? <MessageForm id={id} /> : ''}
-      </Wrapper>
-    </Container>
+      </ScrollToBottom>
+      {roomName ? <MessageForm id={id} /> : ''}
+    </Wrapper>
   );
 };
 

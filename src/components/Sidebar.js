@@ -3,7 +3,7 @@ import { ExitToApp, SearchOutlined } from '@material-ui/icons';
 import SettingsIcon from '@material-ui/icons/Settings';
 import alertify from 'alertifyjs';
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, Switch, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAuth } from '../services/AuthProvider';
 import db, { auth } from '../services/Firebase';
@@ -124,9 +124,11 @@ const Sidebar = () => {
         left={<ChatItem avatar={user?.photoURL} name={user?.displayName} />}
         right={
           <>
-            <IconButton>
-              <SettingsIcon />
-            </IconButton>
+            <Link to={`/settings/user/${user.uid}`}>
+              <IconButton>
+                <SettingsIcon />
+              </IconButton>
+            </Link>
             <IconButton onClick={logOut}>
               <ExitToApp />
             </IconButton>

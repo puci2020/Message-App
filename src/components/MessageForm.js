@@ -15,6 +15,7 @@ import FileUploadModal from './FileUploadModal';
 
 const Wrapper = styled.div`
   width: 100%;
+  height: 100px;
   background-color: ${({ theme }) => theme.colors.primary};
   display: flex;
   align-items: center;
