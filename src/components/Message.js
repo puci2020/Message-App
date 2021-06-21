@@ -80,7 +80,17 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
   const [loading, setLoading] = useState(true);
   const [like, setLike] = useState(null);
   const [likes, setLikes] = useState([]);
+  const [displayName, setDisplayName] = useState(null);
   const { currentUser } = useAuth();
+
+  const getUserName = (uid) => {
+    db.collection('users')
+      .doc(uid)
+      .get()
+      .then((doc) => {
+        if (doc.exists) setDisplayName(doc.data().userName);
+      });
+  };
 
   useEffect(() => {
     const unsubscribe = db
@@ -90,7 +100,6 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
       .doc(id)
       .collection('likes')
       .onSnapshot((snapshot) => {
-        // console.log(snapshot);
         setLikes(
           snapshot.docs.map((doc) => ({
             likeId: doc.id,
@@ -106,6 +115,7 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
     likes.forEach((el) => {
       if (el.data.user === currentUser.email) setLike(el);
     });
+    if (user) getUserName(user);
   }, [loading]);
 
   const handleLikeMessage = () => {
@@ -168,7 +178,7 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
       />
 
       <Content>
-        <Author>{user}</Author>
+        <Author>{user ? displayName : null}</Author>
 
         <Text>
           {handleCheckFileType(type, fileName, text)}

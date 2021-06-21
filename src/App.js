@@ -20,17 +20,7 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-// const Container = styled.div`
-//   display: flex;
-//   background-color: ${({ theme }) => theme.colors.primary};
-//   height: 90%;
-//   width: 90vw;
-//   box-shadow: -1px 4px 20px -6px rgba(0, 0, 0, 0.7);
-// `;
-
 const App = () => (
-  // const [{ user }, dispatch] = useStateValue();
-
   <AuthProvider>
     <Wrapper>
       <Router>

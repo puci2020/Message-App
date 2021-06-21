@@ -54,7 +54,7 @@ const MessageForm = ({ id }) => {
     e.preventDefault();
     db.collection('rooms').doc(id).collection('messages').add({
       message,
-      name: user?.displayName,
+      user: user?.uid,
       type: 'text',
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });

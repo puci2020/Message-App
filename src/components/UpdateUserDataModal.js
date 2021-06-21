@@ -15,6 +15,7 @@ import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import Input from './Input';
 import PasswordReset from './UpdateUserDataForms/PasswordReset';
+import NameUpdate from './UpdateUserDataForms/NameUpdate';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     maxWidth: '90vw',
+    width: '400px',
     backgroundColor: `#ededed`,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -58,6 +60,7 @@ const UpdateUserDataModal = ({ type }) => {
       <Fade in={updateUserData}>
         <div className={classes.paper}>
           {type === 'passwordReset' ? <PasswordReset /> : null}
+          {type === 'nameUpdate' ? <NameUpdate /> : null}
         </div>
       </Fade>
     </Modal>

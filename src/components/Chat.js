@@ -130,12 +130,8 @@ const Chat = () => {
             <Message
               id={message.messageId}
               roomId={id}
-              own={message.data.name === user?.displayName}
-              user={
-                message.data.name === user?.displayName
-                  ? null
-                  : message.data.name
-              }
+              own={message.data.user === user?.uid}
+              user={message.data.user === user?.uid ? null : message.data.user}
               date={message.data.timestamp}
               text={message.data.message}
               type={message.data.type}

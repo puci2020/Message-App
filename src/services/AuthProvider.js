@@ -1,7 +1,7 @@
 import alertify from 'alertifyjs';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
-import { auth, facebookProvider, provider } from './Firebase';
+import db, { auth, facebookProvider, provider } from './Firebase';
 
 const AuthContext = React.createContext();
 
@@ -10,6 +10,24 @@ export const useAuth = () => useContext(AuthContext);
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
+  const [userExist, setUserExist] = useState(false);
+
+  const userDocExist = (uid) => {
+    db.collection('users')
+      .doc(uid)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          setUserExist(true);
+        }
+      });
+  };
+
+  const createUser = (uid, name) => {
+    db.collection('users').doc(uid).set({
+      userName: name,
+    });
+  };
 
   const signUpWithEmail = (email, password) =>
     auth.createUserWithEmailAndPassword(email, password);
@@ -22,6 +40,10 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
+        userDocExist(user.uid);
+        if (!userExist) {
+          createUser(user.uid, user.displayName);
+        }
         if (user.emailVerified) {
           setCurrentUser(user);
           alertify.success('Zalogowano pomyślnie!');
@@ -52,6 +74,7 @@ const AuthProvider = ({ children }) => {
     signInWithEmail,
     signInWithGoogle,
     signInWithFacebook,
+    createUser,
   };
 
   return (

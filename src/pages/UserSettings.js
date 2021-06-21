@@ -16,6 +16,7 @@ import Header from '../components/Header';
 import { useAuth } from '../services/AuthProvider';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
+import UpdateUserDataModal from '../components/UpdateUserDataModal';
 
 const Wrapper = styled.div`
   display: flex;
@@ -68,6 +69,13 @@ const UserSettings = () => {
     });
   };
 
+  const openNameUpdate = () => {
+    dispatch({
+      type: actionTypes.SET_UPDATE_USER_DATA,
+      updateUserData: true,
+    });
+  };
+
   return (
     <Wrapper>
       <Header
@@ -98,7 +106,7 @@ const UserSettings = () => {
         <Field>
           <h3>{currentUser.displayName}</h3>
           <Tooltip title="Edytuj">
-            <IconButton id="menuButton" size="small">
+            <IconButton id="menuButton" size="small" onClick={openNameUpdate}>
               <EditIcon />
             </IconButton>
           </Tooltip>
@@ -112,6 +120,7 @@ const UserSettings = () => {
           </Tooltip>
         </Field>
       </Body>
+      <UpdateUserDataModal type="nameUpdate" />
     </Wrapper>
   );
 };
