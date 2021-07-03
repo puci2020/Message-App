@@ -16,6 +16,8 @@ import { useStateValue } from '../services/StateProvider';
 import Input from './Input';
 import PasswordReset from './UpdateUserDataForms/PasswordReset';
 import NameUpdate from './UpdateUserDataForms/NameUpdate';
+import EmailUpdate from './UpdateUserDataForms/EmailUpdate';
+import PasswordUpdate from './UpdateUserDataForms/PasswordUpdate';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -61,6 +63,8 @@ const UpdateUserDataModal = ({ type }) => {
         <div className={classes.paper}>
           {type === 'passwordReset' ? <PasswordReset /> : null}
           {type === 'nameUpdate' ? <NameUpdate /> : null}
+          {type === 'emailUpdate' ? <EmailUpdate /> : null}
+          {type === 'passwordUpdate' ? <PasswordUpdate /> : null}
         </div>
       </Fade>
     </Modal>
@@ -69,6 +73,10 @@ const UpdateUserDataModal = ({ type }) => {
 
 export default UpdateUserDataModal;
 
+UpdateUserDataModal.defaultProps = {
+  type: null,
+};
+
 UpdateUserDataModal.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
 };

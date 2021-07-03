@@ -9,7 +9,7 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import EditIcon from '@material-ui/icons/Edit';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ChatItem from '../components/ChatItem';
 import Header from '../components/Header';
@@ -17,6 +17,8 @@ import { useAuth } from '../services/AuthProvider';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import UpdateUserDataModal from '../components/UpdateUserDataModal';
+import { auth } from '../services/Firebase';
+import NameUpdate from '../components/UpdateUserDataForms/NameUpdate';
 
 const Wrapper = styled.div`
   display: flex;
@@ -59,7 +61,8 @@ const useStyles = makeStyles((theme) => ({
 
 const UserSettings = () => {
   const classes = useStyles();
-  const [{ sidebar }, dispatch] = useStateValue();
+  const [{ sidebar, currentProvider }, dispatch] = useStateValue();
+  const [updateType, setUpdateType] = useState(null);
   const { currentUser } = useAuth();
 
   const showHideSidebar = () => {
@@ -69,11 +72,48 @@ const UserSettings = () => {
     });
   };
 
-  const openNameUpdate = () => {
+  const getUserProvider = () => {
+    dispatch({
+      type: actionTypes.SET_CURRENT_PROVIDER,
+      currentProvider: currentUser.providerData,
+    });
+  };
+
+  const checkProviderId = (name) => {
+    let check = false;
+    currentUser.providerData.forEach((el) => {
+      if (el.providerId === name) {
+        check = true;
+      }
+    });
+    return check;
+  };
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      getUserProvider();
+    });
+    return unsubscribe;
+  }, []);
+
+  const openUpdate = () => {
     dispatch({
       type: actionTypes.SET_UPDATE_USER_DATA,
       updateUserData: true,
     });
+  };
+
+  const editName = () => {
+    setUpdateType('nameUpdate');
+    openUpdate();
+  };
+  const editEmail = () => {
+    setUpdateType('emailUpdate');
+    openUpdate();
+  };
+  const editPassword = () => {
+    setUpdateType('passwordUpdate');
+    openUpdate();
   };
 
   return (
@@ -106,21 +146,33 @@ const UserSettings = () => {
         <Field>
           <h3>{currentUser.displayName}</h3>
           <Tooltip title="Edytuj">
-            <IconButton id="menuButton" size="small" onClick={openNameUpdate}>
+            <IconButton id="menuButton" size="small" onClick={editName}>
               <EditIcon />
             </IconButton>
           </Tooltip>
         </Field>
-        <Field>
-          <h3>{currentUser.email}</h3>
-          <Tooltip title="Edytuj">
-            <IconButton id="menuButton" size="small">
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-        </Field>
+        {currentProvider.length === 1 && checkProviderId('password') ? (
+          <Field>
+            <h3>{currentUser.email}</h3>
+            <Tooltip title="Edytuj">
+              <IconButton id="menuButton" size="small" onClick={editEmail}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+          </Field>
+        ) : null}
+        {checkProviderId('password') ? (
+          <Field>
+            <h3>Zmień hasło</h3>
+            <Tooltip title="Edytuj">
+              <IconButton id="menuButton" size="small" onClick={editPassword}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+          </Field>
+        ) : null}
       </Body>
-      <UpdateUserDataModal type="nameUpdate" />
+      <UpdateUserDataModal type={updateType} />
     </Wrapper>
   );
 };

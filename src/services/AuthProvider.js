@@ -1,7 +1,10 @@
 import alertify from 'alertifyjs';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import db, { auth, facebookProvider, provider } from './Firebase';
+import { actionTypes } from './reducer';
+import { useStateValue } from './StateProvider';
 
 const AuthContext = React.createContext();
 
@@ -11,6 +14,9 @@ const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
   const [userExist, setUserExist] = useState(false);
+
+  // eslint-disable-next-line no-empty-pattern
+  const [{}, dispatch] = useStateValue();
 
   const userDocExist = (uid) => {
     db.collection('users')
@@ -36,6 +42,21 @@ const AuthProvider = ({ children }) => {
 
   const signInWithGoogle = () => auth.signInWithPopup(provider);
   const signInWithFacebook = () => auth.signInWithPopup(facebookProvider);
+
+  const logOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        dispatch({
+          type: actionTypes.SET_USER,
+          user: null,
+        });
+        localStorage.removeItem('user');
+
+        alertify.success(`Wylogowano pomyślnie!`);
+      })
+      .catch((error) => alertify.alert('Błąd', error.message));
+  };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -75,6 +96,7 @@ const AuthProvider = ({ children }) => {
     signInWithGoogle,
     signInWithFacebook,
     createUser,
+    logOut,
   };
 
   return (

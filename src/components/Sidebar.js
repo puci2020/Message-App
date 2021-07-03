@@ -73,7 +73,7 @@ const Chats = styled.div`
 
 const Sidebar = () => {
   const [{ sidebar }, dispatch] = useStateValue();
-  const { currentUser } = useAuth();
+  const { currentUser, logOut } = useAuth();
   const user = currentUser;
   const [rooms, setRooms] = useState([]);
   const history = useHistory();
@@ -102,20 +102,9 @@ const Sidebar = () => {
       sidebar: !sidebar,
     });
   };
-
-  const logOut = () => {
-    auth
-      .signOut()
-      .then(() => {
-        dispatch({
-          type: actionTypes.SET_USER,
-          user: null,
-        });
-        localStorage.removeItem('user');
-        history.push('/login');
-        alertify.success(`Wylogowano pomyślnie!`);
-      })
-      .catch((error) => alertify.alert('Błąd', error.message));
+  const handleLogOut = async () => {
+    await logOut();
+    history.push('/login');
   };
 
   return (
@@ -129,7 +118,7 @@ const Sidebar = () => {
                 <SettingsIcon />
               </IconButton>
             </Link>
-            <IconButton onClick={logOut}>
+            <IconButton onClick={handleLogOut}>
               <ExitToApp />
             </IconButton>
           </>

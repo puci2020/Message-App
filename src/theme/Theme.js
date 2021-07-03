@@ -1,14 +1,17 @@
 // eslint-disable-next-line import/prefer-default-export
 export const theme = {
   colors: {
-    background: '#dadbd3',
-    primary: '#ededed',
+    background: '#9a9090',
+    // background: '#dadbd3',
+    primary: '#ecefea',
+    // primary: '#ededed',
     secondary: '#f6f6f6',
     border: '#f6f6f6',
 
     message: {
       primary: 'white',
-      secondary: '#3aecdc7d',
+      // secondary: '#3aecdc7d',
+      secondary: '#63d4ff7d',
     },
 
     menu: {

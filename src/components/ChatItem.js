@@ -3,6 +3,7 @@ import alertify from 'alertifyjs';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import firebase from '../../node_modules/firebase';
 import db from '../services/Firebase';
 
@@ -17,11 +18,19 @@ const Wrapper = styled.div`
   /* position: ${(props) => (props.chat ? 'static' : 'relative')}; */
   /* top: ${(props) => (props.chat ? '' : '0')}; */
   cursor: pointer;
+  margin-top: 5px;
 
   &:hover {
     background-color: ${(props) => (props.chat ? '#f6f6f6' : '')};
     cursor: ${(props) => (props.chat ? 'pointer' : 'default')};
     /* background-color: ${({ theme }) => theme.colors.secondary}; */
+  }
+
+  .addButton {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
   }
 `;
 
@@ -78,6 +87,9 @@ const ChatItem = ({ newChat, chat, avatar, name, info }) => {
     </Wrapper>
   ) : (
     <Wrapper chat={chat} onClick={createNewChat}>
+      <div className="addButton">
+        <AddCircleIcon fontSize="large" color="action" />
+      </div>
       <h3>Stwórz czat</h3>
     </Wrapper>
   );

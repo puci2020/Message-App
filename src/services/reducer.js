@@ -3,6 +3,7 @@ export const initialState = {
   updateUserData: false,
   fileUpload: false,
   sidebar: false,
+  currentProvider: [],
   // isNewUser: null,
 };
 
@@ -11,6 +12,7 @@ export const actionTypes = {
   SET_UPDATE_USER_DATA: 'SET_UPDATE_USER_DATA',
   SET_FILE_UPLOAD: 'SET_FILE_UPLOAD',
   SET_SIDEBAR: 'SET_SIDEBAR',
+  SET_CURRENT_PROVIDER: 'SET_CURRENT_PROVIDER',
 };
 
 const reducer = (state, action) => {
@@ -35,6 +37,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         sidebar: action.sidebar,
+      };
+    case actionTypes.SET_CURRENT_PROVIDER:
+      return {
+        ...state,
+        currentProvider: action.currentProvider,
       };
     default:
       return state;
