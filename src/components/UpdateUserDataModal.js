@@ -19,6 +19,7 @@ import NameUpdate from './UpdateUserDataForms/NameUpdate';
 import EmailUpdate from './UpdateUserDataForms/EmailUpdate';
 import PasswordUpdate from './UpdateUserDataForms/PasswordUpdate';
 import ImageUpdate from './UpdateUserDataForms/ImageUpdate';
+import NameChatUpdate from './UpdateChatDataForms/NameChatUpdate';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UpdateUserDataModal = ({ type }) => {
+const UpdateUserDataModal = ({ type, id }) => {
   const classes = useStyles();
   const [{ updateUserData }, dispatch] = useStateValue();
 
@@ -67,6 +68,7 @@ const UpdateUserDataModal = ({ type }) => {
           {type === 'emailUpdate' ? <EmailUpdate /> : null}
           {type === 'passwordUpdate' ? <PasswordUpdate /> : null}
           {type === 'imageUpdate' ? <ImageUpdate /> : null}
+          {type === 'nameChatUpdate' ? <NameChatUpdate id={id} /> : null}
         </div>
       </Fade>
     </Modal>
@@ -77,8 +79,10 @@ export default UpdateUserDataModal;
 
 UpdateUserDataModal.defaultProps = {
   type: null,
+  id: null,
 };
 
 UpdateUserDataModal.propTypes = {
   type: PropTypes.string,
+  id: PropTypes.string
 };

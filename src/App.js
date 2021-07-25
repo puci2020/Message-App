@@ -5,6 +5,7 @@ import Chat from './components/Chat';
 import Container from './components/Container';
 import Login from './components/Login';
 import Registration from './components/Registration';
+import ChatSettings from './pages/ChatSettings';
 import UserSettings from './pages/UserSettings';
 import AuthProvider from './services/AuthProvider';
 import ProtectedRouter from './utils/ProtectedRouter';
@@ -28,6 +29,7 @@ const App = () => (
           <ProtectedRouter exact path="/" component={Chat} />
           <ProtectedRouter path="/room/:id" component={Chat} />
           <ProtectedRouter path="/settings/user/:id" component={UserSettings} />
+          <ProtectedRouter path="/settings/room/:id" component={ChatSettings} />
 
           <Route path="/login">
             <Login />

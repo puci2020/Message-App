@@ -56,6 +56,7 @@ const ChatItem = ({ newChat, chat, avatar, name, info }) => {
             name: value,
             lastMessage: null,
             lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
+            photoURL: null
           });
 
           alertify.success(`Czat o nazwie "${value}" utworzony pomyślnie!`);
@@ -68,13 +69,6 @@ const ChatItem = ({ newChat, chat, avatar, name, info }) => {
       }
     );
 
-    // console.log(roomName2);
-
-    // if (roomName) {
-    //     db.collection('rooms').add({
-    //         name: roomName,
-    //     });
-    // }
   };
 
   return !newChat ? (

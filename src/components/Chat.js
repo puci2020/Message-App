@@ -3,7 +3,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import SettingsIcon from '@material-ui/icons/Settings';
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { useAuth } from '../services/AuthProvider';
@@ -114,9 +114,12 @@ const Chat = () => {
         }
         right={
           <>
-            <IconButton>
+          {roomName ? 
+           <Link to={`/settings/room/${id}`}>
+          <IconButton>
               <SettingsIcon />
-            </IconButton>
+            </IconButton></Link> : null}
+            
             <IconButton id="menuButton" onClick={showHideSidebar}>
               {sidebar ? <MenuOpenIcon /> : <MenuIcon />}
             </IconButton>
