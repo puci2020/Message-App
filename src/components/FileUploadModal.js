@@ -143,18 +143,6 @@ const FileUploadModal = ({ id }) => {
             >
               Wyślij
             </Button>
-
-            {/* <Button
-              style={{
-                marginTop: '10px',
-              }}
-              color="primary"
-              variant="contained"
-              type="button"
-              onClick={reset()}
-            >
-              Reset
-            </Button> */}
           </form>
         </div>
       </Fade>

@@ -18,6 +18,7 @@ import PasswordReset from './UpdateUserDataForms/PasswordReset';
 import NameUpdate from './UpdateUserDataForms/NameUpdate';
 import EmailUpdate from './UpdateUserDataForms/EmailUpdate';
 import PasswordUpdate from './UpdateUserDataForms/PasswordUpdate';
+import ImageUpdate from './UpdateUserDataForms/ImageUpdate';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -65,6 +66,7 @@ const UpdateUserDataModal = ({ type }) => {
           {type === 'nameUpdate' ? <NameUpdate /> : null}
           {type === 'emailUpdate' ? <EmailUpdate /> : null}
           {type === 'passwordUpdate' ? <PasswordUpdate /> : null}
+          {type === 'imageUpdate' ? <ImageUpdate /> : null}
         </div>
       </Fade>
     </Modal>

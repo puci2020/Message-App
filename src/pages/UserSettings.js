@@ -115,6 +115,10 @@ const UserSettings = () => {
     setUpdateType('passwordUpdate');
     openUpdate();
   };
+  const editImage = () => {
+    setUpdateType('imageUpdate');
+    openUpdate();
+  }
 
   return (
     <Wrapper>
@@ -143,9 +147,14 @@ const UserSettings = () => {
           src={currentUser.photoURL}
           className={classes.large}
         />
+        <Tooltip title="Edytuj zdjęcie">
+            <IconButton id="menuButton" size="small" onClick={editImage}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
         <Field>
           <h3>{currentUser.displayName}</h3>
-          <Tooltip title="Edytuj">
+          <Tooltip title="Edytuj nazwę">
             <IconButton id="menuButton" size="small" onClick={editName}>
               <EditIcon />
             </IconButton>
@@ -154,7 +163,7 @@ const UserSettings = () => {
         {currentProvider.length === 1 && checkProviderId('password') ? (
           <Field>
             <h3>{currentUser.email}</h3>
-            <Tooltip title="Edytuj">
+            <Tooltip title="Edytuj e-mail">
               <IconButton id="menuButton" size="small" onClick={editEmail}>
                 <EditIcon />
               </IconButton>
@@ -164,7 +173,7 @@ const UserSettings = () => {
         {checkProviderId('password') ? (
           <Field>
             <h3>Zmień hasło</h3>
-            <Tooltip title="Edytuj">
+            <Tooltip title="Edytuj hasło">
               <IconButton id="menuButton" size="small" onClick={editPassword}>
                 <EditIcon />
               </IconButton>
