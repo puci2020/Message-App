@@ -5,6 +5,7 @@ import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
 import { AttachFile } from '@material-ui/icons';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import firebase from 'firebase';
@@ -55,7 +56,6 @@ const schema = yup.object().shape({
     .required('Wybierz plik z urządzenia'),
 });
 
-// eslint-disable-next-line react/prop-types
 const FileUploadModal = ({ id }) => {
   const classes = useStyles();
   const { currentUser } = useAuth();
@@ -151,3 +151,11 @@ const FileUploadModal = ({ id }) => {
 };
 
 export default FileUploadModal;
+
+FileUploadModal.defaultProps = {
+  id: null,
+};
+
+FileUploadModal.propTypes = {
+  id: PropTypes.string,
+};
