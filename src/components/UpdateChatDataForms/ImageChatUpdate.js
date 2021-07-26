@@ -7,6 +7,7 @@ import { AttachFile } from '@material-ui/icons';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import PropTypes from 'prop-types';
 import firebase from 'firebase';
 import alertify from 'alertifyjs';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -54,9 +55,8 @@ const schema = yup.object().shape({
     .required('Wybierz plik z urządzenia'),
 });
 
-const ImageUpdate = () => {
+const ImageChatUpdate = ({ id }) => {
   const classes = useStyles();
-  const { currentUser } = useAuth();
   const [{ fileUpload }, dispatch] = useStateValue();
   const {
     register,
@@ -83,8 +83,9 @@ const ImageUpdate = () => {
         .child(data.uploadFile[0].name)
         .getDownloadURL()
         .then((url) => {
-          currentUser
-            .updateProfile({
+          db.collection('rooms')
+            .doc(id)
+            .update({
               photoURL: url,
             })
             .then(() => {
@@ -131,4 +132,14 @@ const ImageUpdate = () => {
   );
 };
 
-export default ImageUpdate;
+export default ImageChatUpdate;
+
+ImageChatUpdate.defaultProps = {
+  type: null,
+  id: null,
+};
+
+ImageChatUpdate.propTypes = {
+  type: PropTypes.string,
+  id: PropTypes.string,
+};

@@ -149,6 +149,7 @@ const Sidebar = () => {
               id={room.id}
               name={room.data.name}
               info={room.data.lastMessage}
+              avatar={room.data.photoURL}
             />
           </Link>
         ))}

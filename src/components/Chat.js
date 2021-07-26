@@ -55,6 +55,7 @@ const Chat = () => {
   const { id } = useParams();
   const [roomName, setRoomName] = useState('');
   const [lastSeen, setLastSeen] = useState(null);
+  const [roomPhoto, setRoomPhoto] = useState();
   const [messages, setMessages] = useState([]);
 
   const [{ sidebar }, dispatch] = useStateValue();
@@ -68,6 +69,7 @@ const Chat = () => {
         .onSnapshot((snapschot) => {
           setRoomName(snapschot.data().name);
           setLastSeen(snapschot.data().lastSeen);
+          setRoomPhoto(snapschot.data().photoURL);
         });
 
       db.collection('rooms')
@@ -110,16 +112,19 @@ const Chat = () => {
                 ? displayRoomInfo(lastSeen)
                 : 'Wybierz czat z menu aby rozmawiać'
             }
+            avatar={roomPhoto}
           />
         }
         right={
           <>
-          {roomName ? 
-           <Link to={`/settings/room/${id}`}>
-          <IconButton>
-              <SettingsIcon />
-            </IconButton></Link> : null}
-            
+            {roomName ? (
+              <Link to={`/settings/room/${id}`}>
+                <IconButton>
+                  <SettingsIcon />
+                </IconButton>
+              </Link>
+            ) : null}
+
             <IconButton id="menuButton" onClick={showHideSidebar}>
               {sidebar ? <MenuOpenIcon /> : <MenuIcon />}
             </IconButton>

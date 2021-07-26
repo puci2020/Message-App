@@ -10,7 +10,6 @@ import db, { auth } from '../../services/Firebase';
 import Input from '../Input';
 import { useAuth } from '../../services/AuthProvider';
 
-
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: 'flex',
@@ -30,7 +29,7 @@ const nameUpdateSchema = yup.object().shape({
     .min(4, 'Nazwa musi składać się z miniumum 4 znaków'),
 });
 
-const NameChatUpdate = ({id}) => {
+const NameChatUpdate = ({ id }) => {
   const classes = useStyles();
   const { currentUser, createUser } = useAuth();
 
@@ -42,9 +41,12 @@ const NameChatUpdate = ({id}) => {
   } = useForm({ resolver: yupResolver(nameUpdateSchema) });
 
   const handleUpdate = (data) => {
-    db.collection('rooms').doc(id).update({
-      name: data.name
-    }).then(() => {
+    db.collection('rooms')
+      .doc(id)
+      .update({
+        name: data.name,
+      })
+      .then(() => {
         alertify.success(`Nazwa czatu zmieniona`);
         reset();
       })
@@ -62,11 +64,7 @@ const NameChatUpdate = ({id}) => {
       </p>
       <form onSubmit={handleSubmit(handleUpdate)}>
         <Input icon={<PersonIcon />} error={errors.name?.message}>
-          <input
-            type="text"
-            placeholder="Nazwa czatu"
-            {...register('name')}
-          />
+          <input type="text" placeholder="Nazwa czatu" {...register('name')} />
         </Input>
         <Button
           style={{
@@ -90,5 +88,5 @@ NameChatUpdate.defaultProps = {
 };
 
 NameChatUpdate.propTypes = {
-  id: PropTypes.string
+  id: PropTypes.string,
 };

@@ -45,7 +45,7 @@ const schema = yup.object().shape({
     )
     .test(
       'type',
-      'Można przesłać wyłącznie pliki PNG i PDF',
+      'Można przesłać wyłącznie pliki PNG, JPEG, JPG i PDF',
       (value) =>
         (value && value[0].type === 'image/png') ||
         (value && value[0].type === 'image/jpeg') ||

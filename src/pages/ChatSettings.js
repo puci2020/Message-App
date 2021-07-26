@@ -45,78 +45,85 @@ const Field = styled.div`
   }
 `;
 const useStyles = makeStyles((theme) => ({
-    large: {
-      width: theme.spacing(15),
-      height: theme.spacing(15),
-    },
-  }));
+  large: {
+    width: theme.spacing(15),
+    height: theme.spacing(15),
+  },
+}));
 
 const ChatSettings = () => {
-    const { id } = useParams();
-    const classes = useStyles();
-    const [{ sidebar, currentProvider }, dispatch] = useStateValue();
-    const [updateType, setUpdateType] = useState(null);
-    const { currentUser } = useAuth();
-    const [roomName, setRoomName] = useState();
-    const [roomPhoto, setRoomPhoto] = useState();
+  const { id } = useParams();
+  const classes = useStyles();
+  const [{ sidebar, currentProvider }, dispatch] = useStateValue();
+  const [updateType, setUpdateType] = useState(null);
+  const { currentUser } = useAuth();
+  const [roomName, setRoomName] = useState();
+  const [roomPhoto, setRoomPhoto] = useState();
 
-    useEffect(() => {
-        if (id) {
-            db.collection('rooms')
-              .doc(id)
-              .onSnapshot((snapschot) => {
-                setRoomName(snapschot.data().name);
-                setRoomPhoto(snapschot.data().photoURL);
-              });
-            }
-    }, [])
-  
-    const openUpdate = () => {
-        dispatch({
-          type: actionTypes.SET_UPDATE_USER_DATA,
-          updateUserData: true,
+  useEffect(() => {
+    if (id) {
+      db.collection('rooms')
+        .doc(id)
+        .onSnapshot((snapschot) => {
+          setRoomName(snapschot.data().name);
+          setRoomPhoto(snapschot.data().photoURL);
         });
-      };
+    }
+  }, []);
 
-    const showHideSidebar = () => {
-      dispatch({
-        type: actionTypes.SET_SIDEBAR,
-        sidebar: !sidebar,
-      });
-    };
+  const openUpdate = () => {
+    dispatch({
+      type: actionTypes.SET_UPDATE_USER_DATA,
+      updateUserData: true,
+    });
+  };
 
-    const editNameChat = () => {
-        setUpdateType('nameChatUpdate');
-        openUpdate();
-      };
-    return (
-        <Wrapper>
-        <Header
-          left={
-            <ChatItem
-              name="Ustawienia czatu"
-              // info={
-              //   roomName
-              //     ? displayRoomInfo(lastSeen)
-              //     : 'Wybierz czat z menu aby rozmawiać'
-              // }
-            />
-          }
-          right={
-            <>
-              <IconButton id="menuButton" onClick={showHideSidebar}>
-                {sidebar ? <MenuOpenIcon /> : <MenuIcon />}
-              </IconButton>
-            </>
-          }
-        />
-        <Body>
-          <Avatar
-            alt={roomName}
-            src={roomPhoto}
-            className={classes.large}
+  const showHideSidebar = () => {
+    dispatch({
+      type: actionTypes.SET_SIDEBAR,
+      sidebar: !sidebar,
+    });
+  };
+
+  const editNameChat = () => {
+    setUpdateType('nameChatUpdate');
+    openUpdate();
+  };
+
+  const editImageChat = () => {
+    setUpdateType('imageChatUpdate');
+    openUpdate();
+  };
+  return (
+    <Wrapper>
+      <Header
+        left={
+          <ChatItem
+            name="Ustawienia czatu"
+            avatar={roomPhoto}
+            // info={
+            //   roomName
+            //     ? displayRoomInfo(lastSeen)
+            //     : 'Wybierz czat z menu aby rozmawiać'
+            // }
           />
-          <Field>
+        }
+        right={
+          <>
+            <IconButton id="menuButton" onClick={showHideSidebar}>
+              {sidebar ? <MenuOpenIcon /> : <MenuIcon />}
+            </IconButton>
+          </>
+        }
+      />
+      <Body>
+        <Avatar alt={roomName} src={roomPhoto} className={classes.large} />
+        <Tooltip title="Edytuj zdjęcie">
+          <IconButton id="menuButton" size="small" onClick={editImageChat}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+        <Field>
           <h3>{roomName}</h3>
           <Tooltip title="Edytuj nazwę">
             <IconButton id="menuButton" size="small" onClick={editNameChat}>
@@ -124,12 +131,10 @@ const ChatSettings = () => {
             </IconButton>
           </Tooltip>
         </Field>
-        </Body>
-        <UpdateUserDataModal type={updateType} id={id} />
-      </Wrapper>
-
-    )
-}
-
+      </Body>
+      <UpdateUserDataModal type={updateType} id={id} />
+    </Wrapper>
+  );
+};
 
 export default ChatSettings;
