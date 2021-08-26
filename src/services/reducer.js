@@ -4,6 +4,9 @@ export const initialState = {
   fileUpload: false,
   sidebar: false,
   currentProvider: [],
+  emojiPicker: false,
+  message: '',
+  loader: false,
   // isNewUser: null,
 };
 
@@ -13,6 +16,9 @@ export const actionTypes = {
   SET_FILE_UPLOAD: 'SET_FILE_UPLOAD',
   SET_SIDEBAR: 'SET_SIDEBAR',
   SET_CURRENT_PROVIDER: 'SET_CURRENT_PROVIDER',
+  SET_EMOJI_PICKER: 'SET_EMOJI_PICKER',
+  SET_MESSAGE: 'SET_MESSAGE',
+  SET_LOADER: 'SET_LOADER',
 };
 
 const reducer = (state, action) => {
@@ -42,6 +48,21 @@ const reducer = (state, action) => {
       return {
         ...state,
         currentProvider: action.currentProvider,
+      };
+    case actionTypes.SET_EMOJI_PICKER:
+      return {
+        ...state,
+        emojiPicker: action.emojiPicker,
+      };
+    case actionTypes.SET_MESSAGE:
+      return {
+        ...state,
+        message: action.message,
+      };
+    case actionTypes.SET_LOADER:
+      return {
+        ...state,
+        loader: action.loader,
       };
     default:
       return state;

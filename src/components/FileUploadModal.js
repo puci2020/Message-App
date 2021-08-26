@@ -87,7 +87,7 @@ const FileUploadModal = ({ id }) => {
         .then((url) => {
           db.collection('rooms').doc(id).collection('messages').add({
             message: url,
-            name: currentUser?.displayName,
+            user: currentUser?.uid,
             type: data.uploadFile[0].type,
             fileName: data.uploadFile[0].name,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),

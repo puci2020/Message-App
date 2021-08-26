@@ -134,7 +134,7 @@ const Sidebar = () => {
         </Input>
       </Search>
       <Chats onClick={showHideSidebar}>
-        <ChatItem newChat chat />
+        <ChatItem newChat chat user={user.uid} />
         {rooms.map((room) => (
           <Link
             key={room.id}

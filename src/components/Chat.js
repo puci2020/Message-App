@@ -56,11 +56,12 @@ const Chat = () => {
   const [roomName, setRoomName] = useState('');
   const [lastSeen, setLastSeen] = useState(null);
   const [roomPhoto, setRoomPhoto] = useState();
+  const [user, setUser] = useState();
   const [messages, setMessages] = useState([]);
 
   const [{ sidebar }, dispatch] = useStateValue();
   const { currentUser } = useAuth();
-  const user = currentUser;
+  // const user = currentUser;
 
   useEffect(() => {
     if (id) {
@@ -70,6 +71,7 @@ const Chat = () => {
           setRoomName(snapschot.data().name);
           setLastSeen(snapschot.data().lastSeen);
           setRoomPhoto(snapschot.data().photoURL);
+          setUser(snapschot.data().user);
         });
 
       db.collection('rooms')
@@ -117,7 +119,7 @@ const Chat = () => {
         }
         right={
           <>
-            {roomName ? (
+            {roomName && user === currentUser.uid ? (
               <Link to={`/settings/room/${id}`}>
                 <IconButton>
                   <SettingsIcon />
@@ -138,8 +140,12 @@ const Chat = () => {
             <Message
               id={message.messageId}
               roomId={id}
-              own={message.data.user === user?.uid}
-              user={message.data.user === user?.uid ? null : message.data.user}
+              own={message.data.user === currentUser?.uid}
+              user={
+                message.data.user === currentUser?.uid
+                  ? null
+                  : message.data.user
+              }
               date={message.data.timestamp}
               text={message.data.message}
               type={message.data.type}

@@ -7,11 +7,14 @@ import firebase from 'firebase';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Picker from 'emoji-picker-react';
+import alertify from 'alertifyjs';
 import { useAuth } from '../services/AuthProvider';
 import db from '../services/Firebase';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import FileUploadModal from './FileUploadModal';
+import EmojiPicker from './EmojiPicker';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -42,19 +45,25 @@ const Wrapper = styled.div`
 `;
 
 const MessageForm = ({ id }) => {
-  const [message, setMessage] = useState('');
-  const [{ fileUpload }, dispatch] = useStateValue();
+  // const [message, setMessage] = useState('');
+  const [{ message, emojiPicker }, dispatch] = useStateValue();
 
   const { currentUser } = useAuth();
-  const user = currentUser;
 
   const getCountString = (text) => text.length;
+
+  const setMessage = (data) => {
+    dispatch({
+      type: actionTypes.SET_MESSAGE,
+      message: data,
+    });
+  };
 
   const sendMessage = (e) => {
     e.preventDefault();
     db.collection('rooms').doc(id).collection('messages').add({
       message,
-      user: user?.uid,
+      user: currentUser?.uid,
       type: 'text',
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
@@ -77,6 +86,17 @@ const MessageForm = ({ id }) => {
     });
   };
 
+  const openEmojiPicker = () => {
+    dispatch({
+      type: actionTypes.SET_EMOJI_PICKER,
+      emojiPicker: true,
+    });
+    // dispatch({
+    //   type: actionTypes.SET_LOADER,
+    //   loader: true,
+    // });
+  };
+
   return (
     <Wrapper>
       <form>
@@ -92,7 +112,8 @@ const MessageForm = ({ id }) => {
         <IconButton onClick={openFileUpload} onKeyDown={openFileUpload}>
           <AttachFile />
         </IconButton>
-        <IconButton>
+
+        <IconButton onClick={openEmojiPicker} onKeyDown={openEmojiPicker}>
           <SentimentVerySatisfiedIcon />
         </IconButton>
         <IconButton type="submit" onClick={sendMessage}>
@@ -100,6 +121,7 @@ const MessageForm = ({ id }) => {
         </IconButton>
       </form>
       <FileUploadModal id={id} />
+      {emojiPicker && <EmojiPicker id={id} />}
     </Wrapper>
   );
 };

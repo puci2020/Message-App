@@ -9,6 +9,8 @@ import ChatSettings from './pages/ChatSettings';
 import UserSettings from './pages/UserSettings';
 import AuthProvider from './services/AuthProvider';
 import ProtectedRouter from './utils/ProtectedRouter';
+import Loader from './components/Loader';
+import { useStateValue } from './services/StateProvider';
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
@@ -21,25 +23,35 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-const App = () => (
-  <AuthProvider>
-    <Wrapper>
-      <Router>
-        <Switch>
-          <ProtectedRouter exact path="/" component={Chat} />
-          <ProtectedRouter path="/room/:id" component={Chat} />
-          <ProtectedRouter path="/settings/user/:id" component={UserSettings} />
-          <ProtectedRouter path="/settings/room/:id" component={ChatSettings} />
+const App = () => {
+  const [{ loader }, dispatch] = useStateValue();
+  return (
+    <AuthProvider>
+      <Wrapper>
+        {loader && <Loader />}
+        <Router>
+          <Switch>
+            <ProtectedRouter exact path="/" component={Chat} />
+            <ProtectedRouter path="/room/:id" component={Chat} />
+            <ProtectedRouter
+              path="/settings/user/:id"
+              component={UserSettings}
+            />
+            <ProtectedRouter
+              path="/settings/room/:id"
+              component={ChatSettings}
+            />
 
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/registration">
-            <Registration />
-          </Route>
-        </Switch>
-      </Router>
-    </Wrapper>
-  </AuthProvider>
-);
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/registration">
+              <Registration />
+            </Route>
+          </Switch>
+        </Router>
+      </Wrapper>
+    </AuthProvider>
+  );
+};
 export default App;

@@ -43,7 +43,7 @@ const Info = styled.div`
   }
 `;
 // id w props
-const ChatItem = ({ newChat, chat, avatar, name, info }) => {
+const ChatItem = ({ newChat, chat, avatar, name, info, user }) => {
   const createNewChat = () => {
     // const roomName = prompt('Podaj nazwę czatu!');
     alertify.prompt(
@@ -56,7 +56,8 @@ const ChatItem = ({ newChat, chat, avatar, name, info }) => {
             name: value,
             lastMessage: null,
             lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
-            photoURL: null
+            photoURL: null,
+            user: user.toString(),
           });
 
           alertify.success(`Czat o nazwie "${value}" utworzony pomyślnie!`);
@@ -68,7 +69,6 @@ const ChatItem = ({ newChat, chat, avatar, name, info }) => {
         alertify.error('Tworzenie czatu anulowano');
       }
     );
-
   };
 
   return !newChat ? (
@@ -97,6 +97,7 @@ ChatItem.defaultProps = {
   avatar: null,
   name: null,
   info: null,
+  user: null,
 };
 
 ChatItem.propTypes = {
@@ -105,4 +106,5 @@ ChatItem.propTypes = {
   avatar: PropTypes.string,
   name: PropTypes.string,
   info: PropTypes.string,
+  user: PropTypes.string,
 };
