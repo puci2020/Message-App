@@ -1,4 +1,4 @@
-import { IconButton } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -16,6 +16,7 @@ import Header from './Header';
 import Message from './Message';
 import MessageForm from './MessageForm';
 import Sidebar from './Sidebar';
+import Loader from './Loader';
 
 const Wrapper = styled.div`
   flex: 0.65;
@@ -59,12 +60,17 @@ const Chat = () => {
   const [user, setUser] = useState();
   const [messages, setMessages] = useState([]);
 
-  const [{ sidebar }, dispatch] = useStateValue();
+  const [{ sidebar, loader }, dispatch] = useStateValue();
   const { currentUser } = useAuth();
   // const user = currentUser;
 
   useEffect(() => {
     if (id) {
+      dispatch({
+        type: actionTypes.SET_LOADER,
+        loader: true,
+      });
+
       db.collection('rooms')
         .doc(id)
         .onSnapshot((snapschot) => {
@@ -84,6 +90,14 @@ const Chat = () => {
               messageId: doc.id,
               data: doc.data(),
             }))
+          );
+          setTimeout(
+            () =>
+              dispatch({
+                type: actionTypes.SET_LOADER,
+                loader: false,
+              }),
+            1000
           );
         });
     }
@@ -121,40 +135,49 @@ const Chat = () => {
           <>
             {roomName && user === currentUser.uid ? (
               <Link to={`/settings/room/${id}`}>
-                <IconButton>
-                  <SettingsIcon />
-                </IconButton>
+                <Tooltip title="Ustawienia czatu">
+                  <IconButton>
+                    <SettingsIcon />
+                  </IconButton>
+                </Tooltip>
               </Link>
             ) : null}
 
-            <IconButton id="menuButton" onClick={showHideSidebar}>
-              {sidebar ? <MenuOpenIcon /> : <MenuIcon />}
-            </IconButton>
+            <Tooltip title={sidebar ? 'Schowaj menu' : 'Pokaż menu'}>
+              <IconButton id="menuButton" onClick={showHideSidebar}>
+                {sidebar ? <MenuOpenIcon /> : <MenuIcon />}
+              </IconButton>
+            </Tooltip>
           </>
         }
       />
 
       <ScrollToBottom className="scroll">
-        <Body>
-          {messages.map((message) => (
-            <Message
-              id={message.messageId}
-              roomId={id}
-              own={message.data.user === currentUser?.uid}
-              user={
-                message.data.user === currentUser?.uid
-                  ? null
-                  : message.data.user
-              }
-              date={message.data.timestamp}
-              text={message.data.message}
-              type={message.data.type}
-              fileName={message.data.fileName}
-              key={message.data.timestamp}
-            />
-          ))}
-        </Body>
+        {loader ? (
+          <Loader />
+        ) : (
+          <Body>
+            {messages.map((message) => (
+              <Message
+                id={message.messageId}
+                roomId={id}
+                own={message.data.user === currentUser?.uid}
+                user={
+                  message.data.user === currentUser?.uid
+                    ? null
+                    : message.data.user
+                }
+                date={message.data.timestamp}
+                text={message.data.message}
+                type={message.data.type}
+                fileName={message.data.fileName}
+                key={message.data.timestamp}
+              />
+            ))}
+          </Body>
+        )}
       </ScrollToBottom>
+
       {roomName ? <MessageForm id={id} /> : ''}
     </Wrapper>
   );

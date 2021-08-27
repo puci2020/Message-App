@@ -1,14 +1,15 @@
-import { IconButton } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
 import { AttachFile } from '@material-ui/icons';
 import MicNoneIcon from '@material-ui/icons/MicNone';
 import SendIcon from '@material-ui/icons/Send';
 import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
 import firebase from 'firebase';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Picker from 'emoji-picker-react';
 import alertify from 'alertifyjs';
+import useSpeechToText from 'react-hook-speech-to-text';
 import { useAuth } from '../services/AuthProvider';
 import db from '../services/Firebase';
 import { actionTypes } from '../services/reducer';
@@ -46,9 +47,31 @@ const Wrapper = styled.div`
 
 const MessageForm = ({ id }) => {
   // const [message, setMessage] = useState('');
-  const [{ message, emojiPicker }, dispatch] = useStateValue();
+  const [{ message, fileUpload, emojiPicker }, dispatch] = useStateValue();
+
+  const {
+    error,
+    interimResult,
+    isRecording,
+    results,
+    startSpeechToText,
+    stopSpeechToText,
+  } = useSpeechToText({
+    continuous: true,
+    useLegacyResults: false,
+    crossBrowser: true,
+  });
 
   const { currentUser } = useAuth();
+
+  useEffect(() => {
+    results.map((result) =>
+      dispatch({
+        type: actionTypes.SET_MESSAGE,
+        message: message + result.transcript,
+      })
+    );
+  }, [results]);
 
   const getCountString = (text) => text.length;
 
@@ -91,16 +114,15 @@ const MessageForm = ({ id }) => {
       type: actionTypes.SET_EMOJI_PICKER,
       emojiPicker: true,
     });
-    // dispatch({
-    //   type: actionTypes.SET_LOADER,
-    //   loader: true,
-    // });
   };
 
+  if (error) return <p>Web Speech API is not available in this browser 🤷‍</p>;
   return (
     <Wrapper>
       <form>
-        <IconButton>
+        <IconButton
+          onClick={isRecording ? stopSpeechToText : startSpeechToText}
+        >
           <MicNoneIcon />
         </IconButton>
         <input
@@ -109,19 +131,24 @@ const MessageForm = ({ id }) => {
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Napisz wiadomość"
         />
-        <IconButton onClick={openFileUpload} onKeyDown={openFileUpload}>
-          <AttachFile />
-        </IconButton>
-
-        <IconButton onClick={openEmojiPicker} onKeyDown={openEmojiPicker}>
-          <SentimentVerySatisfiedIcon />
-        </IconButton>
-        <IconButton type="submit" onClick={sendMessage}>
-          <SendIcon />
-        </IconButton>
+        <Tooltip title="Dodaj załącznik">
+          <IconButton onClick={openFileUpload} onKeyDown={openFileUpload}>
+            <AttachFile />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Wstaw emoji">
+          <IconButton onClick={openEmojiPicker} onKeyDown={openEmojiPicker}>
+            <SentimentVerySatisfiedIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Wyślij">
+          <IconButton type="submit" onClick={sendMessage}>
+            <SendIcon />
+          </IconButton>
+        </Tooltip>
       </form>
-      <FileUploadModal id={id} />
-      {emojiPicker && <EmojiPicker id={id} />}
+      {fileUpload && <FileUploadModal id={id} />}
+      {emojiPicker && <EmojiPicker />}
     </Wrapper>
   );
 };

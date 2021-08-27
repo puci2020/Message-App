@@ -42,17 +42,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EmojiPicker = ({ id }) => {
+const EmojiPicker = () => {
   const classes = useStyles();
   const [{ emojiPicker, message, loader }, dispatch] = useStateValue();
-
-  useEffect(() => {
-    dispatch({
-      type: actionTypes.SET_LOADER,
-      loader: false,
-    });
-    console.log('tereaz');
-  }, []);
 
   const handleClose = () => {
     dispatch({
@@ -97,11 +89,3 @@ const EmojiPicker = ({ id }) => {
 };
 
 export default EmojiPicker;
-
-EmojiPicker.defaultProps = {
-  id: null,
-};
-
-EmojiPicker.propTypes = {
-  id: PropTypes.string,
-};

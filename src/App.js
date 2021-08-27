@@ -1,6 +1,8 @@
-import React from 'react';
+/* eslint-disable react/prop-types */
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
+import React, { useEffect } from 'react';
+import { render } from 'react-dom';
 import Chat from './components/Chat';
 import Container from './components/Container';
 import Login from './components/Login';
@@ -11,6 +13,7 @@ import AuthProvider from './services/AuthProvider';
 import ProtectedRouter from './utils/ProtectedRouter';
 import Loader from './components/Loader';
 import { useStateValue } from './services/StateProvider';
+import { actionTypes } from './services/reducer';
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
@@ -25,10 +28,11 @@ const Wrapper = styled.div`
 
 const App = () => {
   const [{ loader }, dispatch] = useStateValue();
+
   return (
     <AuthProvider>
       <Wrapper>
-        {loader && <Loader />}
+        {/* {loader && <Loader />} */}
         <Router>
           <Switch>
             <ProtectedRouter exact path="/" component={Chat} />

@@ -1,4 +1,4 @@
-import { IconButton } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
 import { ExitToApp, SearchOutlined } from '@material-ui/icons';
 import SettingsIcon from '@material-ui/icons/Settings';
 import alertify from 'alertifyjs';
@@ -114,13 +114,17 @@ const Sidebar = () => {
         right={
           <>
             <Link to={`/settings/user/${user.uid}`}>
-              <IconButton>
-                <SettingsIcon />
-              </IconButton>
+              <Tooltip title="Ustawienia konta">
+                <IconButton>
+                  <SettingsIcon />
+                </IconButton>
+              </Tooltip>
             </Link>
-            <IconButton onClick={handleLogOut}>
-              <ExitToApp />
-            </IconButton>
+            <Tooltip title="Wyloguj">
+              <IconButton onClick={handleLogOut}>
+                <ExitToApp />
+              </IconButton>
+            </Tooltip>
           </>
         }
       />
