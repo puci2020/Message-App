@@ -16,6 +16,7 @@ import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import FileUploadModal from './FileUploadModal';
 import EmojiPicker from './EmojiPicker';
+import SpeechToText from './SpeechToText';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -49,29 +50,29 @@ const MessageForm = ({ id }) => {
   // const [message, setMessage] = useState('');
   const [{ message, fileUpload, emojiPicker }, dispatch] = useStateValue();
 
-  const {
-    error,
-    interimResult,
-    isRecording,
-    results,
-    startSpeechToText,
-    stopSpeechToText,
-  } = useSpeechToText({
-    continuous: true,
-    useLegacyResults: false,
-    crossBrowser: true,
-  });
+  // const {
+  //   error,
+  //   interimResult,
+  //   isRecording,
+  //   results,
+  //   startSpeechToText,
+  //   stopSpeechToText,
+  // } = useSpeechToText({
+  //   continuous: true,
+  //   useLegacyResults: false,
+  // });
 
   const { currentUser } = useAuth();
 
-  useEffect(() => {
-    results.map((result) =>
-      dispatch({
-        type: actionTypes.SET_MESSAGE,
-        message: message + result.transcript,
-      })
-    );
-  }, [results]);
+  // useEffect(() => {
+  //   results.map((result) =>
+  //     dispatch({
+  //       type: actionTypes.SET_MESSAGE,
+  //       message: message + result.transcript,
+  //     })
+  //   );
+  //   console.log('dziala');
+  // }, [results]);
 
   const getCountString = (text) => text.length;
 
@@ -116,15 +117,16 @@ const MessageForm = ({ id }) => {
     });
   };
 
-  if (error) return <p>Web Speech API is not available in this browser 🤷‍</p>;
+  // if (error) return <p>Web Speech API is not available in this browser 🤷‍</p>;
   return (
     <Wrapper>
       <form>
-        <IconButton
+        {/* <IconButton
           onClick={isRecording ? stopSpeechToText : startSpeechToText}
         >
           <MicNoneIcon />
-        </IconButton>
+        </IconButton> */}
+        <SpeechToText />
         <input
           type="text"
           value={message}
