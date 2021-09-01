@@ -18,6 +18,7 @@ import { actionTypes } from './services/reducer';
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
   height: 100vh;
+  width: 100vw;
   /* display: grid;
   place-items: center; */
   display: flex;

@@ -39,6 +39,7 @@ const Body = styled.div`
   overflow-y: auto;
   padding: 30px;
   min-height: 100%;
+  max-width: 100vw;
 `;
 
 const Container = styled.div`

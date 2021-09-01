@@ -9,11 +9,11 @@ import { showFullDate } from '../utils/Date';
 const Wrapper = styled.div`
   display: flex;
   background-color: ${({ theme }) => theme.colors.primary};
-  height: 90vh;
-  width: 90vw;
+  height: 100vh;
+  width: 100vw;
   box-shadow: -1px 4px 20px -6px rgba(0, 0, 0, 0.7);
   ${({ theme }) => theme.media.tablet} {
-    height: 80vh;
+    /* height: 80vh; */
   }
 `;
 

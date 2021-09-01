@@ -11,7 +11,7 @@ import { actionTypes } from '../services/reducer';
 
 const useStyles = makeStyles({
   root: {
-    animation: `$recordButton 1.5s linear infinite`,
+    animation: `$recordButton .8s linear infinite alternate`,
   },
   '@keyframes recordButton': {
     from: {
@@ -23,38 +23,34 @@ const useStyles = makeStyles({
   },
 });
 
-const RecordButton = styled.div`
-  .record {
-    animation: recordButton 1.5s linear infinite;
-  }
-
-  @keyframes recordButton {
-    from {
-      background-color: transparent;
-    }
-    to {
-      background-color: lightgray;
-    }
-  }
-`;
-
 const SpeechToText = () => {
   const classes = useStyles();
   const [{ message }, dispatch] = useStateValue();
 
-  const {
-    error,
-    interimResult,
-    isRecording,
-    results,
-    startSpeechToText,
-    stopSpeechToText,
-  } = useSpeechToText({
-    continuous: true,
-    useLegacyResults: false,
-  });
+  const { error, isRecording, results, startSpeechToText, stopSpeechToText } =
+    useSpeechToText({
+      continuous: true,
+      useLegacyResults: false,
+    });
 
   useEffect(() => {
+    // const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+    //   // The standard secure default length for RSA keys is 2048 bits
+    //   modulusLength: 2048,
+    // });
+
+    // console.log(
+    //   publicKey.export({
+    //     type: 'pkcs1',
+    //     format: 'pem',
+    //   }),
+
+    //   privateKey.export({
+    //     type: 'pkcs1',
+    //     format: 'pem',
+    //   })
+    // );
+
     results.map((result) =>
       dispatch({
         type: actionTypes.SET_MESSAGE,
@@ -62,15 +58,6 @@ const SpeechToText = () => {
       })
     );
   }, [results]);
-
-  //   useEffect(() => {
-  //     // const msg = alertify.success('Mów teraz!', 0);
-  //     if (!isRecording) {
-  //       alertify.success('Mów teraz!', 0).dismiss();
-  //     }
-  //     console.log('cos');
-  //     // return null;
-  //   }, [isRecording]);
 
   const recordToText = () => {
     if (error.length === 0) {

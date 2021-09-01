@@ -28,7 +28,7 @@ const Wrapper = styled.div`
     transition: transform 0.35s ease-in-out;
     z-index: 2;
     width: 70%;
-    height: 80vh;
+    height: 100vh;
     max-width: 400px;
   }
 `;
