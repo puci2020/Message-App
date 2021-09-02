@@ -5,7 +5,6 @@ import { Email, Lock } from '@material-ui/icons';
 import alertify from 'alertifyjs';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import db, { auth } from '../../services/Firebase';
 import Input from '../Input';
 import { useAuth } from '../../services/AuthProvider';
 

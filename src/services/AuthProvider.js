@@ -1,7 +1,6 @@
 import alertify from 'alertifyjs';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import db, { auth, facebookProvider, provider } from './Firebase';
 import { actionTypes } from './reducer';
 import { useStateValue } from './StateProvider';
@@ -86,7 +85,9 @@ const AuthProvider = ({ children }) => {
       }
       setLoading(false);
     });
-    return unsubscribe;
+    return async () => {
+      await unsubscribe();
+    };
   }, []);
 
   const value = {

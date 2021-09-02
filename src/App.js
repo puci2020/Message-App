@@ -1,19 +1,19 @@
 /* eslint-disable react/prop-types */
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
-import React, { useEffect } from 'react';
+import React, { Suspense } from 'react';
 import { render } from 'react-dom';
-import Chat from './components/Chat';
+import Chat from './components/Chat/Chat';
 import Container from './components/Container';
-import Login from './components/Login';
-import Registration from './components/Registration';
+import Login from './pages/Login';
+import Registration from './pages/Registration';
 import ChatSettings from './pages/ChatSettings';
 import UserSettings from './pages/UserSettings';
 import AuthProvider from './services/AuthProvider';
 import ProtectedRouter from './utils/ProtectedRouter';
 import Loader from './components/Loader';
 import { useStateValue } from './services/StateProvider';
-import { actionTypes } from './services/reducer';
+import Sidebar from './components/Sidebar';
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
@@ -27,14 +27,11 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-const App = () => {
-  const [{ loader }, dispatch] = useStateValue();
-
-  return (
-    <AuthProvider>
-      <Wrapper>
-        {/* {loader && <Loader />} */}
-        <Router>
+const App = () => (
+  <AuthProvider>
+    <Wrapper>
+      <Router>
+        <Suspense fallback={<Loader />}>
           <Switch>
             <ProtectedRouter exact path="/" component={Chat} />
             <ProtectedRouter path="/room/:id" component={Chat} />
@@ -54,9 +51,9 @@ const App = () => {
               <Registration />
             </Route>
           </Switch>
-        </Router>
-      </Wrapper>
-    </AuthProvider>
-  );
-};
+        </Suspense>
+      </Router>
+    </Wrapper>
+  </AuthProvider>
+);
 export default App;

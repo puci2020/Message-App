@@ -39,7 +39,7 @@ const Info = styled.div`
   flex-direction: column;
   margin-left: 10px;
   p {
-    color: ${(props) => (props.chat ? 'black' : 'gray')};
+    color: ${(props) => (props.chat ? 'black' : 'darkslategray')};
   }
 `;
 // id w props
@@ -73,7 +73,7 @@ const ChatItem = ({ newChat, chat, avatar, name, info, user }) => {
 
   return !newChat ? (
     <Wrapper chat={chat}>
-      <Avatar src={avatar} />
+      <Avatar src={avatar} alt={name} />
       <Info>
         <h3>{name}</h3>
         <p>{info}</p>

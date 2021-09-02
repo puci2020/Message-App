@@ -1,22 +1,12 @@
-import { Button } from '@material-ui/core';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
-import { AttachFile } from '@material-ui/icons';
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import firebase from 'firebase';
-import alertify from 'alertifyjs';
-import { yupResolver } from '@hookform/resolvers/yup';
+import React from 'react';
 import Picker from 'emoji-picker-react';
 import styled from 'styled-components';
-import { useAuth } from '../services/AuthProvider';
-import db, { storage } from '../services/Firebase';
-import { actionTypes } from '../services/reducer';
-import { useStateValue } from '../services/StateProvider';
+import { actionTypes } from '../../services/reducer';
+import { useStateValue } from '../../services/StateProvider';
 
 const Div = styled.div`
   .emoji {
@@ -59,8 +49,6 @@ const EmojiPicker = () => {
       message: message + emojiObject.emoji,
     });
   };
-
-  const handleUpload = (data) => {};
 
   return (
     <div>

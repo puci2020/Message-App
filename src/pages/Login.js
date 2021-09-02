@@ -11,8 +11,8 @@ import * as yup from 'yup';
 import { useAuth } from '../services/AuthProvider';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
-import Input from './Input';
-import UpdateUserDataModal from './UpdateUserDataModal';
+import Input from '../components/Input';
+import UpdateUserDataModal from '../components/UpdateUserDataModal';
 
 const Wrapper = styled.div`
   width: 600px;

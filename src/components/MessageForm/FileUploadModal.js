@@ -11,11 +11,11 @@ import * as yup from 'yup';
 import firebase from 'firebase';
 import alertify from 'alertifyjs';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAuth } from '../services/AuthProvider';
-import db, { storage } from '../services/Firebase';
-import { actionTypes } from '../services/reducer';
-import { useStateValue } from '../services/StateProvider';
-import Input from './Input';
+import { useAuth } from '../../services/AuthProvider';
+import db, { storage } from '../../services/Firebase';
+import { actionTypes } from '../../services/reducer';
+import { useStateValue } from '../../services/StateProvider';
+import Input from '../Input';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 const schema = yup.object().shape({
   uploadFile: yup
     .mixed()
-
+    .required('Wybierz plik z urządzenia')
     .test(
       'fileSize',
       'Plik jest za duży',
@@ -52,8 +52,7 @@ const schema = yup.object().shape({
         (value && value[0].type === 'image/jpeg') ||
         (value && value[0].type === 'image/jpg') ||
         (value && value[0].type === 'application/pdf')
-    )
-    .required('Wybierz plik z urządzenia'),
+    ),
 });
 
 const FileUploadModal = ({ id }) => {
@@ -75,11 +74,11 @@ const FileUploadModal = ({ id }) => {
     });
   };
 
-  const handleUpload = (data) => {
+  const handleUpload = async (data) => {
     const storageRef = storage.ref();
     const fileRef = storageRef.child(data.uploadFile[0].name);
 
-    fileRef.put(data.uploadFile[0]).then(() => {
+    await fileRef.put(data.uploadFile[0]).then(() => {
       storage
         .ref()
         .child(data.uploadFile[0].name)

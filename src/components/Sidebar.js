@@ -1,23 +1,22 @@
 import { IconButton, Tooltip } from '@material-ui/core';
 import { ExitToApp, SearchOutlined } from '@material-ui/icons';
 import SettingsIcon from '@material-ui/icons/Settings';
-import alertify from 'alertifyjs';
-import React, { useEffect, useState } from 'react';
-import { Link, Switch, useHistory } from 'react-router-dom';
+import React from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAuth } from '../services/AuthProvider';
-import db, { auth } from '../services/Firebase';
-import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import ChatItem from './ChatItem';
 import Header from './Header';
 import Input from './Input';
+import SidebarBody from './SidebarBody';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 0.35;
   background-color: ${({ theme }) => theme.colors.primary};
+  border-right: 1px solid lightgray;
 
   ${({ theme }) => theme.media.tablet} {
     position: absolute;
@@ -74,34 +73,33 @@ const Chats = styled.div`
 const Sidebar = () => {
   const [{ sidebar }, dispatch] = useStateValue();
   const { currentUser, logOut } = useAuth();
-  const user = currentUser;
-  const [rooms, setRooms] = useState([]);
+  // const [rooms, setRooms] = useState([]);
   const history = useHistory();
 
-  useEffect(() => {
-    const unsubscribe = db
-      .collection('rooms')
-      .orderBy('lastSeen', 'desc')
-      .onSnapshot((snapshot) =>
-        setRooms(
-          snapshot.docs.map((doc) => ({
-            id: doc.id,
-            data: doc.data(),
-          }))
-        )
-      );
+  // useEffect(() => {
+  //   const unsubscribe = db
+  //     .collection('rooms')
+  //     .orderBy('lastSeen', 'desc')
+  //     .onSnapshot((snapshot) =>
+  //       setRooms(
+  //         snapshot.docs.map((doc) => ({
+  //           id: doc.id,
+  //           data: doc.data(),
+  //         }))
+  //       )
+  //     );
 
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, []);
 
-  const showHideSidebar = () => {
-    dispatch({
-      type: actionTypes.SET_SIDEBAR,
-      sidebar: !sidebar,
-    });
-  };
+  // const showHideSidebar = () => {
+  //   dispatch({
+  //     type: actionTypes.SET_SIDEBAR,
+  //     sidebar: !sidebar,
+  //   });
+  // };
   const handleLogOut = async () => {
     await logOut();
     history.push('/login');
@@ -110,10 +108,15 @@ const Sidebar = () => {
   return (
     <Wrapper mobile={sidebar}>
       <Header
-        left={<ChatItem avatar={user?.photoURL} name={user?.displayName} />}
+        left={
+          <ChatItem
+            avatar={currentUser?.photoURL}
+            name={currentUser?.displayName}
+          />
+        }
         right={
           <>
-            <Link to={`/settings/user/${user.uid}`}>
+            <Link to={`/settings/user/${currentUser.uid}`}>
               <Tooltip title="Ustawienia konta">
                 <IconButton>
                   <SettingsIcon />
@@ -129,16 +132,12 @@ const Sidebar = () => {
         }
       />
       <Search>
-        {/* <div className='inputField'>
-                    <SearchOutlined />
-                    <input type='text' placeholder='Wyszukaj czat!' />
-                </div> */}
         <Input icon={<SearchOutlined />}>
           <input type="text" placeholder="Wyszukaj czat" />
         </Input>
       </Search>
-      <Chats onClick={showHideSidebar}>
-        <ChatItem newChat chat user={user.uid} />
+      {/* <Chats onClick={showHideSidebar}>
+        <ChatItem newChat chat user={currentUser.uid} />
         {rooms.map((room) => (
           <Link
             key={room.id}
@@ -157,7 +156,8 @@ const Sidebar = () => {
             />
           </Link>
         ))}
-      </Chats>
+      </Chats> */}
+      <SidebarBody />
     </Wrapper>
   );
 };

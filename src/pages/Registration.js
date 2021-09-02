@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import * as yup from 'yup';
 import { useAuth } from '../services/AuthProvider';
-import Input from './Input';
+import Input from '../components/Input';
 
 const Wrapper = styled.div`
   width: 600px;

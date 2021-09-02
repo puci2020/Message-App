@@ -1,14 +1,12 @@
 import { Button, makeStyles } from '@material-ui/core';
 import React from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Fade from '@material-ui/core/Fade';
 import { Email } from '@material-ui/icons';
 import alertify from 'alertifyjs';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { auth } from '../../services/Firebase';
 import Input from '../Input';
-import { useStateValue } from '../../services/StateProvider';
 
 const useStyles = makeStyles((theme) => ({
   modal: {

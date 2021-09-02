@@ -1,17 +1,13 @@
 import { Button } from '@material-ui/core';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
-import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
 import { AttachFile } from '@material-ui/icons';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import firebase from 'firebase';
 import alertify from 'alertifyjs';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuth } from '../../services/AuthProvider';
-import db, { storage } from '../../services/Firebase';
+import { storage } from '../../services/Firebase';
 import { actionTypes } from '../../services/reducer';
 import { useStateValue } from '../../services/StateProvider';
 import Input from '../Input';

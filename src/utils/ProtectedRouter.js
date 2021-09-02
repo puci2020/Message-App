@@ -6,7 +6,6 @@ import { useAuth } from '../services/AuthProvider';
 // eslint-disable-next-line react/prop-types
 const ProtectedRouter = ({ component: Component, ...rest }) => {
   const { currentUser } = useAuth();
-
   return (
     <Route
       {...rest}

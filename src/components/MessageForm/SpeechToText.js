@@ -2,12 +2,10 @@ import { IconButton, makeStyles, Tooltip } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import MicNoneIcon from '@material-ui/icons/MicNone';
 import MicOffIcon from '@material-ui/icons/MicOff';
-import MicIcon from '@material-ui/icons/Mic';
 import useSpeechToText from 'react-hook-speech-to-text';
-import styled from 'styled-components';
 import alertify from 'alertifyjs';
-import { useStateValue } from '../services/StateProvider';
-import { actionTypes } from '../services/reducer';
+import { useStateValue } from '../../services/StateProvider';
+import { actionTypes } from '../../services/reducer';
 
 const useStyles = makeStyles({
   root: {
@@ -33,25 +31,8 @@ const SpeechToText = () => {
       useLegacyResults: false,
     });
 
-  useEffect(() => {
-    // const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
-    //   // The standard secure default length for RSA keys is 2048 bits
-    //   modulusLength: 2048,
-    // });
-
-    // console.log(
-    //   publicKey.export({
-    //     type: 'pkcs1',
-    //     format: 'pem',
-    //   }),
-
-    //   privateKey.export({
-    //     type: 'pkcs1',
-    //     format: 'pem',
-    //   })
-    // );
-
-    results.map((result) =>
+  useEffect(async () => {
+    await results.map((result) =>
       dispatch({
         type: actionTypes.SET_MESSAGE,
         message: message + result.transcript,

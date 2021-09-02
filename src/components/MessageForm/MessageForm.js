@@ -1,22 +1,19 @@
 import { IconButton, Tooltip } from '@material-ui/core';
 import { AttachFile } from '@material-ui/icons';
-import MicNoneIcon from '@material-ui/icons/MicNone';
 import SendIcon from '@material-ui/icons/Send';
 import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
 import firebase from 'firebase';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { lazy } from 'react';
 import styled from 'styled-components';
-import Picker from 'emoji-picker-react';
-import alertify from 'alertifyjs';
-import useSpeechToText from 'react-hook-speech-to-text';
-import { useAuth } from '../services/AuthProvider';
-import db from '../services/Firebase';
-import { actionTypes } from '../services/reducer';
-import { useStateValue } from '../services/StateProvider';
-import FileUploadModal from './FileUploadModal';
-import EmojiPicker from './EmojiPicker';
-import SpeechToText from './SpeechToText';
+import { useAuth } from '../../services/AuthProvider';
+import db from '../../services/Firebase';
+import { actionTypes } from '../../services/reducer';
+import { useStateValue } from '../../services/StateProvider';
+
+const EmojiPicker = lazy(() => import('./EmojiPicker'));
+const SpeechToText = lazy(() => import('./SpeechToText'));
+const FileUploadModal = lazy(() => import('./FileUploadModal'));
 
 const Wrapper = styled.div`
   width: 100%;
@@ -47,32 +44,8 @@ const Wrapper = styled.div`
 `;
 
 const MessageForm = ({ id }) => {
-  // const [message, setMessage] = useState('');
   const [{ message, fileUpload, emojiPicker }, dispatch] = useStateValue();
-
-  // const {
-  //   error,
-  //   interimResult,
-  //   isRecording,
-  //   results,
-  //   startSpeechToText,
-  //   stopSpeechToText,
-  // } = useSpeechToText({
-  //   continuous: true,
-  //   useLegacyResults: false,
-  // });
-
   const { currentUser } = useAuth();
-
-  // useEffect(() => {
-  //   results.map((result) =>
-  //     dispatch({
-  //       type: actionTypes.SET_MESSAGE,
-  //       message: message + result.transcript,
-  //     })
-  //   );
-  //   console.log('dziala');
-  // }, [results]);
 
   const getCountString = (text) => text.length;
 
@@ -83,15 +56,16 @@ const MessageForm = ({ id }) => {
     });
   };
 
-  const sendMessage = (e) => {
+  const sendMessage = async (e) => {
     e.preventDefault();
-    db.collection('rooms').doc(id).collection('messages').add({
+    await db.collection('rooms').doc(id).collection('messages').add({
       message,
       user: currentUser?.uid,
       type: 'text',
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
-    db.collection('rooms')
+    await db
+      .collection('rooms')
       .doc(id)
       .update({
         lastMessage:
@@ -100,32 +74,26 @@ const MessageForm = ({ id }) => {
             : message,
         lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
       });
-    setMessage('');
+    await setMessage('');
   };
 
-  const openFileUpload = () => {
-    dispatch({
+  const openFileUpload = async () => {
+    await dispatch({
       type: actionTypes.SET_FILE_UPLOAD,
       fileUpload: true,
     });
   };
 
-  const openEmojiPicker = () => {
-    dispatch({
+  const openEmojiPicker = async () => {
+    await dispatch({
       type: actionTypes.SET_EMOJI_PICKER,
       emojiPicker: true,
     });
   };
 
-  // if (error) return <p>Web Speech API is not available in this browser 🤷‍</p>;
   return (
     <Wrapper>
       <form>
-        {/* <IconButton
-          onClick={isRecording ? stopSpeechToText : startSpeechToText}
-        >
-          <MicNoneIcon />
-        </IconButton> */}
         <SpeechToText />
         <input
           type="text"

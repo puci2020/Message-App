@@ -22,7 +22,8 @@ const Wrapper = styled.div`
   position: absolute;
   top: 0;
   z-index: 1;
-  background-color: rgba(0, 0, 0, 0.5);
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  background: none;
 `;
 
 export default function Loader() {

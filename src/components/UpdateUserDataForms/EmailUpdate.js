@@ -6,7 +6,6 @@ import alertify from 'alertifyjs';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { useHistory } from 'react-router-dom';
-import db, { auth } from '../../services/Firebase';
 import Input from '../Input';
 import { useAuth } from '../../services/AuthProvider';
 import { actionTypes } from '../../services/reducer';

@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  Badge,
-  IconButton,
-  makeStyles,
-  Tooltip,
-  withStyles,
-} from '@material-ui/core';
+import { Avatar, IconButton, makeStyles, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import EditIcon from '@material-ui/icons/Edit';
@@ -18,7 +11,6 @@ import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import UpdateUserDataModal from '../components/UpdateUserDataModal';
 import { auth } from '../services/Firebase';
-import NameUpdate from '../components/UpdateUserDataForms/NameUpdate';
 
 const Wrapper = styled.div`
   display: flex;
@@ -118,7 +110,7 @@ const UserSettings = () => {
   const editImage = () => {
     setUpdateType('imageUpdate');
     openUpdate();
-  }
+  };
 
   return (
     <Wrapper>
@@ -148,10 +140,10 @@ const UserSettings = () => {
           className={classes.large}
         />
         <Tooltip title="Edytuj zdjęcie">
-            <IconButton id="menuButton" size="small" onClick={editImage}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
+          <IconButton id="menuButton" size="small" onClick={editImage}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
         <Field>
           <h3>{currentUser.displayName}</h3>
           <Tooltip title="Edytuj nazwę">

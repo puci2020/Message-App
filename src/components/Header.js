@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   align-items: center;
   min-height: 90px;
   padding: 20px;
-  border: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
   overflow: hidden;
   position: ${(props) => (props.fixed ? 'fixed' : 'static')};
   top: ${(props) => (props.fixed ? '0' : '')};

@@ -5,7 +5,6 @@ import PersonIcon from '@material-ui/icons/Person';
 import alertify from 'alertifyjs';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import db, { auth } from '../../services/Firebase';
 import Input from '../Input';
 import { useAuth } from '../../services/AuthProvider';
 

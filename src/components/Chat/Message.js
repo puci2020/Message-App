@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineFilePdf } from 'react-icons/ai';
-import { useAuth } from '../services/AuthProvider';
-import db from '../services/Firebase';
-import { showFullDate } from '../utils/Date';
+import { useAuth } from '../../services/AuthProvider';
+import db from '../../services/Firebase';
+import { showFullDate } from '../../utils/Date';
 import Like from './Like';
 
 const Wrapper = styled.div`
@@ -63,7 +63,7 @@ const Date = styled.div`
   min-width: fit-content;
   font-weight: ${({ theme }) => theme.font.weight.regular};
   font-size: ${({ theme }) => theme.font.size.xxs};
-  color: gray;
+  color: darkslategray;
   display: flex;
   align-items: flex-end;
   /* margin-left: 10px; */
@@ -75,7 +75,6 @@ const Author = styled.span`
   font-size: ${({ theme }) => theme.font.size.xxs};
 `;
 
-// eslint-disable-next-line react/prop-types
 const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
   const [loading, setLoading] = useState(true);
   const [like, setLike] = useState(null);
@@ -83,8 +82,9 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
   const [displayName, setDisplayName] = useState(null);
   const { currentUser } = useAuth();
 
-  const getUserName = (uid) => {
-    db.collection('users')
+  const getUserName = async (uid) => {
+    await db
+      .collection('users')
       .doc(uid)
       .get()
       .then((doc) => {
@@ -100,27 +100,31 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
       .doc(id)
       .collection('likes')
       .onSnapshot((snapshot) => {
-        setLikes(
-          snapshot.docs.map((doc) => ({
-            likeId: doc.id,
-            data: doc.data(),
-          }))
-        );
+        if (snapshot.docs.length !== likes.length)
+          setLikes(
+            snapshot.docs.map((doc) => ({
+              likeId: doc.id,
+              data: doc.data(),
+            }))
+          );
         setLoading(false);
       });
-    return unsubscribe;
+    return async () => {
+      await unsubscribe;
+    };
   }, [like]);
 
-  useEffect(() => {
-    likes.forEach((el) => {
+  useEffect(async () => {
+    await likes.forEach((el) => {
       if (el.data.user === currentUser.email) setLike(el);
     });
     if (user) getUserName(user);
   }, [loading]);
 
-  const handleLikeMessage = () => {
+  const handleLikeMessage = async () => {
     if (like) {
-      db.collection('rooms')
+      await db
+        .collection('rooms')
         .doc(roomId)
         .collection('messages')
         .doc(id)
@@ -129,7 +133,8 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
         .delete()
         .then(() => setLike(null));
     } else {
-      db.collection('rooms')
+      await db
+        .collection('rooms')
         .doc(roomId)
         .collection('messages')
         .doc(id)
@@ -155,17 +160,14 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
         </div>
       );
     }
-    if (fileType === 'application/pdf') {
-      return (
-        <div className="text">
-          <A href={message} target="_blank" rel="noreferrer">
-            <AiOutlineFilePdf />
-            {name}
-          </A>
-        </div>
-      );
-    }
-    return <div className="text">{message}</div>;
+    return (
+      <div className="text">
+        <A href={message} target="_blank" rel="noreferrer">
+          <AiOutlineFilePdf />
+          {name}
+        </A>
+      </div>
+    );
   };
 
   return (
@@ -181,7 +183,11 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
         <Author>{user ? displayName : null}</Author>
 
         <Text>
-          {handleCheckFileType(type, fileName, text)}
+          {type === 'text' ? (
+            <div className="text">{text}</div>
+          ) : (
+            handleCheckFileType(type, fileName, text)
+          )}
 
           <Date>{date ? showFullDate(date) : null}</Date>
         </Text>
@@ -196,6 +202,8 @@ Message.defaultProps = {
   own: false,
   user: null,
   date: null,
+  fileName: null,
+  type: null,
 };
 Message.propTypes = {
   id: PropTypes.string.isRequired,
@@ -207,4 +215,6 @@ Message.propTypes = {
     seconds: PropTypes.number,
     nanoseconds: PropTypes.number,
   }),
+  fileName: PropTypes.string,
+  type: PropTypes.string,
 };
