@@ -17,6 +17,8 @@ export const timeToString = (timestamp) => {
   if (hour < 10) hour = `0${hour}`;
   if (minutes < 10) minutes = `0${minutes}`;
 
+  const sd = 5;
+
   return `${hour}:${minutes}`;
 };
 
