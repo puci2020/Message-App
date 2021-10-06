@@ -69,9 +69,9 @@ const Registration = () => {
 
   const { signUpWithEmail } = useAuth();
 
-  const handleSignUp = (data) => {
+  const handleSignUp = async (data) => {
     // console.log(data);
-    signUpWithEmail(data.email, data.password)
+    await signUpWithEmail(data.email, data.password)
       .then((authUser) => {
         authUser.user.sendEmailVerification();
         alertify.alert(

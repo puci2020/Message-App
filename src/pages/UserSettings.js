@@ -81,11 +81,10 @@ const UserSettings = () => {
     return check;
   };
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+  useEffect(async () => {
+    await auth.onAuthStateChanged((user) => {
       getUserProvider();
     });
-    return unsubscribe;
   }, []);
 
   const openUpdate = () => {
@@ -138,6 +137,7 @@ const UserSettings = () => {
           alt={currentUser.displayName}
           src={currentUser.photoURL}
           className={classes.large}
+          sx={{ width: 24, height: 24 }}
         />
         <Tooltip title="Edytuj zdjęcie">
           <IconButton id="menuButton" size="small" onClick={editImage}>

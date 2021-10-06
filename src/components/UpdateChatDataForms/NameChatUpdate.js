@@ -40,8 +40,9 @@ const NameChatUpdate = ({ id }) => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(nameUpdateSchema) });
 
-  const handleUpdate = (data) => {
-    db.collection('rooms')
+  const handleUpdate = async (data) => {
+    await db
+      .collection('rooms')
       .doc(id)
       .update({
         name: data.name,

@@ -6,13 +6,33 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
-import PasswordReset from './UpdateUserDataForms/PasswordReset';
-import NameUpdate from './UpdateUserDataForms/NameUpdate';
-import EmailUpdate from './UpdateUserDataForms/EmailUpdate';
-import PasswordUpdate from './UpdateUserDataForms/PasswordUpdate';
-import ImageUpdate from './UpdateUserDataForms/ImageUpdate';
-import NameChatUpdate from './UpdateChatDataForms/NameChatUpdate';
-import ImageChatUpdate from './UpdateChatDataForms/ImageChatUpdate';
+// import PasswordReset from './UpdateUserDataForms/PasswordReset';
+// import NameUpdate from './UpdateUserDataForms/NameUpdate';
+// import EmailUpdate from './UpdateUserDataForms/EmailUpdate';
+// import PasswordUpdate from './UpdateUserDataForms/PasswordUpdate';
+// import ImageUpdate from './UpdateUserDataForms/ImageUpdate';
+// import NameChatUpdate from './UpdateChatDataForms/NameChatUpdate';
+// import ImageChatUpdate from './UpdateChatDataForms/ImageChatUpdate';
+
+const PasswordReset = React.lazy(() =>
+  import('./UpdateUserDataForms/PasswordReset')
+);
+const NameUpdate = React.lazy(() => import('./UpdateUserDataForms/NameUpdate'));
+const EmailUpdate = React.lazy(() =>
+  import('./UpdateUserDataForms/EmailUpdate')
+);
+const PasswordUpdate = React.lazy(() =>
+  import('./UpdateUserDataForms/PasswordUpdate')
+);
+const ImageUpdate = React.lazy(() =>
+  import('./UpdateUserDataForms/ImageUpdate')
+);
+const NameChatUpdate = React.lazy(() =>
+  import('./UpdateChatDataForms/NameChatUpdate')
+);
+const ImageChatUpdate = React.lazy(() =>
+  import('./UpdateChatDataForms/ImageChatUpdate')
+);
 
 const useStyles = makeStyles((theme) => ({
   modal: {

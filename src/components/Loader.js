@@ -26,6 +26,22 @@ const Wrapper = styled.div`
   background: none;
 `;
 
+const Spinner = styled.div`
+  width: 6rem;
+  height: 6rem;
+  display: inline-block;
+  border: 6px solid rgba(147, 137, 229, 0.3);
+  border-radius: 50%;
+  border-top-color: rgba(147, 137, 229, 1);
+  animation: 0.8s spin infinite ease-in-out;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
 export default function Loader() {
   const classes = useStyles();
 
@@ -33,7 +49,10 @@ export default function Loader() {
     <Wrapper>
       <div className={classes.root}>
         {/* <CircularProgress /> */}
-        <CircularProgress color="secondary" />
+        {/* <CircularProgress color="secondary" /> */}
+        {/* loading */}
+        {/* <div className="loader">Loading...</div> */}
+        <Spinner />
       </div>
     </Wrapper>
   );

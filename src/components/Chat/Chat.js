@@ -10,11 +10,15 @@ import db from '../../services/Firebase';
 import { actionTypes } from '../../services/reducer';
 import { useStateValue } from '../../services/StateProvider';
 import { showFullDate } from '../../utils/Date';
-import ChatItem from '../ChatItem';
-import Header from '../Header';
-import Message from './Message';
-import MessageForm from '../MessageForm/MessageForm';
-import ChatBody from './ChatBody';
+// import ChatItem from '../ChatItem';
+// import Header from '../Header';
+// import MessageForm from '../MessageForm/MessageForm';
+// import ChatBody from './ChatBody';
+
+const ChatBody = React.lazy(() => import('./ChatBody'));
+const MessageForm = React.lazy(() => import('../MessageForm/MessageForm'));
+const Header = React.lazy(() => import('../Header'));
+const ChatItem = React.lazy(() => import('../ChatItem'));
 
 const Wrapper = styled.div`
   flex: 0.65;
@@ -37,9 +41,10 @@ const Chat = () => {
   const [{ sidebar, loader }, dispatch] = useStateValue();
   const { currentUser } = useAuth();
 
-  useEffect(() => {
+  useEffect(async () => {
     if (id) {
-      db.collection('rooms')
+      await db
+        .collection('rooms')
         .doc(id)
         .onSnapshot((snapschot) => {
           setRoomData(snapschot.data());

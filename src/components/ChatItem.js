@@ -18,7 +18,7 @@ const Wrapper = styled.div`
   /* position: ${(props) => (props.chat ? 'static' : 'relative')}; */
   /* top: ${(props) => (props.chat ? '' : '0')}; */
   cursor: pointer;
-  margin-top: 5px;
+  /* margin-top: 5px; */
 
   &:hover {
     background-color: ${(props) => (props.chat ? '#f6f6f6' : '')};
@@ -44,9 +44,9 @@ const Info = styled.div`
 `;
 // id w props
 const ChatItem = ({ newChat, chat, avatar, name, info, user }) => {
-  const createNewChat = () => {
+  const createNewChat = async () => {
     // const roomName = prompt('Podaj nazwę czatu!');
-    alertify.prompt(
+    await alertify.prompt(
       'Nowy czat',
       'Podaj nazwę czatu',
       'Nazwa czatu',
@@ -73,7 +73,7 @@ const ChatItem = ({ newChat, chat, avatar, name, info, user }) => {
 
   return !newChat ? (
     <Wrapper chat={chat}>
-      <Avatar src={avatar} alt={name} />
+      <Avatar src={avatar} alt={name} sx={{ width: 40, height: 40 }} />
       <Info>
         <h3>{name}</h3>
         <p>{info}</p>

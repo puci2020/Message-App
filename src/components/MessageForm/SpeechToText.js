@@ -40,13 +40,13 @@ const SpeechToText = () => {
     );
   }, [results]);
 
-  const recordToText = () => {
+  const recordToText = async () => {
     if (error.length === 0) {
       if (isRecording) {
-        stopSpeechToText();
+        await stopSpeechToText();
         alertify.warning('Nagrywanie zakończone');
       } else {
-        startSpeechToText();
+        await startSpeechToText();
         alertify.success('Mów teraz!');
       }
     } else {

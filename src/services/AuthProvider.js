@@ -17,8 +17,9 @@ const AuthProvider = ({ children }) => {
   // eslint-disable-next-line no-empty-pattern
   const [{}, dispatch] = useStateValue();
 
-  const userDocExist = (uid) => {
-    db.collection('users')
+  const userDocExist = async (uid) => {
+    await db
+      .collection('users')
       .doc(uid)
       .get()
       .then((doc) => {
@@ -28,8 +29,8 @@ const AuthProvider = ({ children }) => {
       });
   };
 
-  const createUser = (uid, name) => {
-    db.collection('users').doc(uid).set({
+  const createUser = async (uid, name) => {
+    await db.collection('users').doc(uid).set({
       userName: name,
     });
   };
@@ -57,8 +58,8 @@ const AuthProvider = ({ children }) => {
       .catch((error) => alertify.alert('Błąd', error.message));
   };
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+  useEffect(async () => {
+    await auth.onAuthStateChanged((user) => {
       if (user) {
         userDocExist(user.uid);
         if (!userExist) {
@@ -85,9 +86,6 @@ const AuthProvider = ({ children }) => {
       }
       setLoading(false);
     });
-    return async () => {
-      await unsubscribe();
-    };
   }, []);
 
   const value = {

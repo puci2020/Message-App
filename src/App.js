@@ -2,18 +2,22 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import React, { Suspense } from 'react';
-import { render } from 'react-dom';
-import Chat from './components/Chat/Chat';
-import Container from './components/Container';
-import Login from './pages/Login';
-import Registration from './pages/Registration';
-import ChatSettings from './pages/ChatSettings';
-import UserSettings from './pages/UserSettings';
-import AuthProvider from './services/AuthProvider';
-import ProtectedRouter from './utils/ProtectedRouter';
+// import Chat from './components/Chat/Chat';
+// import Login from './pages/Login';
+// import Registration from './pages/Registration';
+// import ChatSettings from './pages/ChatSettings';
+// import UserSettings from './pages/UserSettings';
+// import AuthProvider from './services/AuthProvider';
+// import ProtectedRouter from './utils/ProtectedRouter';
 import Loader from './components/Loader';
-import { useStateValue } from './services/StateProvider';
-import Sidebar from './components/Sidebar';
+
+const Login = React.lazy(() => import('./pages/Login'));
+const Chat = React.lazy(() => import('./components/Chat/Chat'));
+const Registration = React.lazy(() => import('./pages/Registration'));
+const ChatSettings = React.lazy(() => import('./pages/ChatSettings'));
+const UserSettings = React.lazy(() => import('./pages/UserSettings'));
+const AuthProvider = React.lazy(() => import('./services/AuthProvider'));
+const ProtectedRouter = React.lazy(() => import('./utils/ProtectedRouter'));
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
@@ -28,10 +32,11 @@ const Wrapper = styled.div`
 `;
 
 const App = () => (
-  <AuthProvider>
-    <Wrapper>
-      <Router>
-        <Suspense fallback={<Loader />}>
+  <Suspense fallback={<Loader />}>
+    <AuthProvider>
+      {/* <Loader /> */}
+      <Wrapper>
+        <Router>
           <Switch>
             <ProtectedRouter exact path="/" component={Chat} />
             <ProtectedRouter path="/room/:id" component={Chat} />
@@ -51,9 +56,9 @@ const App = () => (
               <Registration />
             </Route>
           </Switch>
-        </Suspense>
-      </Router>
-    </Wrapper>
-  </AuthProvider>
+        </Router>
+      </Wrapper>
+    </AuthProvider>
+  </Suspense>
 );
 export default App;

@@ -37,8 +37,8 @@ const PasswordReset = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(passwordResetSchema) });
 
-  const handleReset = (data) => {
-    auth
+  const handleReset = async (data) => {
+    await auth
       .sendPasswordResetEmail(data.email)
       .then(() => {
         alertify.alert(`Reset hasła`, `Email został wysłany!`);

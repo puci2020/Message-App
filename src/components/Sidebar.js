@@ -6,10 +6,15 @@ import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAuth } from '../services/AuthProvider';
 import { useStateValue } from '../services/StateProvider';
-import ChatItem from './ChatItem';
-import Header from './Header';
-import Input from './Input';
-import SidebarBody from './SidebarBody';
+// import ChatItem from './ChatItem';
+// import Header from './Header';
+// import Input from './Input';
+// import SidebarBody from './SidebarBody';
+
+const ChatItem = React.lazy(() => import('./ChatItem'));
+const Header = React.lazy(() => import('./Header'));
+const Input = React.lazy(() => import('./Input'));
+const SidebarBody = React.lazy(() => import('./SidebarBody'));
 
 const Wrapper = styled.div`
   display: flex;

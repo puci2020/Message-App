@@ -68,11 +68,11 @@ const ImageChatUpdate = ({ id }) => {
     });
   };
 
-  const handleUpload = (data) => {
+  const handleUpload = async (data) => {
     const storageRef = storage.ref();
     const fileRef = storageRef.child(data.uploadFile[0].name);
 
-    fileRef.put(data.uploadFile[0]).then(() => {
+    await fileRef.put(data.uploadFile[0]).then(() => {
       storage
         .ref()
         .child(data.uploadFile[0].name)

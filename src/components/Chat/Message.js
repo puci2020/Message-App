@@ -92,8 +92,8 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
       });
   };
 
-  useEffect(() => {
-    const unsubscribe = db
+  useEffect(async () => {
+    await db
       .collection('rooms')
       .doc(roomId)
       .collection('messages')
@@ -109,9 +109,7 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
           );
         setLoading(false);
       });
-    return async () => {
-      await unsubscribe;
-    };
+    // return unsubscribe;
   }, [like]);
 
   useEffect(async () => {

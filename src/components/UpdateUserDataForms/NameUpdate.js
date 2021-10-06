@@ -38,8 +38,8 @@ const NameUpdate = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(nameUpdateSchema) });
 
-  const handleUpdate = (data) => {
-    currentUser
+  const handleUpdate = async (data) => {
+    await currentUser
       .updateProfile({
         displayName: data.displayName,
       })

@@ -11,9 +11,9 @@ import db from '../../services/Firebase';
 import { actionTypes } from '../../services/reducer';
 import { useStateValue } from '../../services/StateProvider';
 
-const EmojiPicker = lazy(() => import('./EmojiPicker'));
-const SpeechToText = lazy(() => import('./SpeechToText'));
-const FileUploadModal = lazy(() => import('./FileUploadModal'));
+const EmojiPicker = React.lazy(() => import('./EmojiPicker'));
+const SpeechToText = React.lazy(() => import('./SpeechToText'));
+const FileUploadModal = React.lazy(() => import('./FileUploadModal'));
 
 const Wrapper = styled.div`
   width: 100%;

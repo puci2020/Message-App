@@ -60,9 +60,10 @@ const ChatSettings = () => {
   const [roomName, setRoomName] = useState();
   const [roomPhoto, setRoomPhoto] = useState();
 
-  useEffect(() => {
+  useEffect(async () => {
     if (id) {
-      db.collection('rooms')
+      await db
+        .collection('rooms')
         .doc(id)
         .onSnapshot((snapschot) => {
           setRoomName(snapschot.data().name);

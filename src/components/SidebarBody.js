@@ -5,7 +5,9 @@ import { useAuth } from '../services/AuthProvider';
 import db from '../services/Firebase';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
-import ChatItem from './ChatItem';
+// import ChatItem from './ChatItem';
+
+const ChatItem = React.lazy(() => import('./ChatItem'));
 
 const Chats = styled.div`
   overflow-y: auto;
@@ -18,8 +20,8 @@ const SidebarBody = () => {
   const [{ sidebar }, dispatch] = useStateValue();
   const { currentUser } = useAuth();
 
-  useEffect(() => {
-    const unsubscribe = db
+  useEffect(async () => {
+    await db
       .collection('rooms')
       .orderBy('lastSeen', 'desc')
       .onSnapshot((snapshot) =>
@@ -30,10 +32,6 @@ const SidebarBody = () => {
           }))
         )
       );
-
-    return async () => {
-      await unsubscribe();
-    };
   }, []);
 
   const showHideSidebar = () => {
