@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FcLike, FcLikePlaceholder } from 'react-icons/fc';
 import styled from 'styled-components';
 
@@ -33,6 +33,7 @@ const Like = ({ own, liked, number, handleLike }) => (
         ) : (
           <FcLikePlaceholder onClick={handleLike} />
         )}
+
         <Number>{number > 0 ? number : null}</Number>
       </>
     )}

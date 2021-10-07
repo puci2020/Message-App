@@ -77,20 +77,10 @@ const Author = styled.span`
 
 const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
   const [loading, setLoading] = useState(true);
-  const [like, setLike] = useState(null);
+  // const [like, setLike] = useState(false);
   const [likes, setLikes] = useState([]);
   const [displayName, setDisplayName] = useState(null);
   const { currentUser } = useAuth();
-
-  const getUserName = async (uid) => {
-    await db
-      .collection('users')
-      .doc(uid)
-      .get()
-      .then((doc) => {
-        if (doc.exists) setDisplayName(doc.data().userName);
-      });
-  };
 
   useEffect(async () => {
     await db
@@ -109,27 +99,40 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
           );
         setLoading(false);
       });
-    // return unsubscribe;
-  }, [like]);
 
-  useEffect(async () => {
-    await likes.forEach((el) => {
-      if (el.data.user === currentUser.email) setLike(el);
-    });
-    if (user) getUserName(user);
+    // return unsubscribe;
   }, [loading]);
 
+  // useEffect(async () => {
+  //   console.log(like);
+  //   await likes.forEach((el) => {
+  //     if (el.data.user === currentUser.uid) setLike(true);
+  //   });
+
+  //   // setLike(false);
+  // }, [likes]);
+
+  const handleIsLiked = (arr) => {
+    if (arr?.find((el) => el.user !== currentUser.uid)) {
+      return true;
+    }
+    return false;
+  };
+
+  const getLikeId = (arr, owner) => arr.find((el) => el.user !== owner)?.likeId;
+
   const handleLikeMessage = async () => {
-    if (like) {
+    if (handleIsLiked(likes)) {
       await db
         .collection('rooms')
         .doc(roomId)
         .collection('messages')
         .doc(id)
         .collection('likes')
-        .doc(like.likeId)
-        .delete()
-        .then(() => setLike(null));
+        .doc(getLikeId(likes, currentUser.uid))
+        .delete();
+      // setLike(false);
+      // setLoading(true);
     } else {
       await db
         .collection('rooms')
@@ -138,12 +141,14 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
         .doc(id)
         .collection('likes')
         .add({
-          user: currentUser.email,
+          user: currentUser.uid,
           liked: true,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
-      setLoading(true);
+      // setLike(true);
+      // setLoading(true);
     }
+    setLoading(true);
   };
 
   const handleCheckFileType = (fileType, name, message) => {
@@ -173,10 +178,10 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
       <Like
         handleLike={handleLikeMessage}
         own={own}
-        liked={like?.data.liked}
+        liked={handleIsLiked(likes)}
         number={likes?.length}
       />
-
+      {/* {console.log(getLikeId(likes, currentUser.uid))} */}
       <Content>
         <Author>{user ? displayName : null}</Author>
 
