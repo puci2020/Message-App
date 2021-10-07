@@ -82,21 +82,20 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
   const [displayName, setDisplayName] = useState(null);
   const { currentUser } = useAuth();
 
-  useEffect(async () => {
-    await db
-      .collection('rooms')
+  useEffect(() => {
+    db.collection('rooms')
       .doc(roomId)
       .collection('messages')
       .doc(id)
       .collection('likes')
       .onSnapshot((snapshot) => {
-        if (snapshot.docs.length !== likes.length)
-          setLikes(
-            snapshot.docs.map((doc) => ({
-              likeId: doc.id,
-              data: doc.data(),
-            }))
-          );
+        // if (snapshot.docs.length !== likes.length)
+        setLikes(
+          snapshot.docs.map((doc) => ({
+            likeId: doc.id,
+            data: doc.data(),
+          }))
+        );
         setLoading(false);
       });
 
@@ -112,17 +111,27 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
   //   // setLike(false);
   // }, [likes]);
 
-  const handleIsLiked = (arr) => {
-    if (arr?.find((el) => el.user !== currentUser.uid)) {
+  const handleIsLiked = (arr, owner) => {
+    if (arr?.find((el) => el.data.user === owner)) {
       return true;
     }
     return false;
+    // arr?.forEach((el) => {
+    //   console.log(el);
+    //   if (el.data.user === owner) {
+    //     console.log(el.data.user === owner);
+    //     console.log(owner);
+    //     return true;
+    //   }
+    //   return false;
+    // });
   };
 
-  const getLikeId = (arr, owner) => arr.find((el) => el.user !== owner)?.likeId;
+  const getLikeId = (arr, owner) =>
+    arr.find((el) => el.data.user === owner)?.likeId;
 
   const handleLikeMessage = async () => {
-    if (handleIsLiked(likes)) {
+    if (handleIsLiked(likes, currentUser.uid)) {
       await db
         .collection('rooms')
         .doc(roomId)
@@ -178,7 +187,7 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
       <Like
         handleLike={handleLikeMessage}
         own={own}
-        liked={handleIsLiked(likes)}
+        liked={handleIsLiked(likes, currentUser.uid)}
         number={likes?.length}
       />
       {/* {console.log(getLikeId(likes, currentUser.uid))} */}
