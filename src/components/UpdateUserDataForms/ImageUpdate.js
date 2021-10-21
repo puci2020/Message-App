@@ -6,11 +6,13 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import alertify from 'alertifyjs';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch } from 'react-redux';
 import { useAuth } from '../../services/AuthProvider';
 import { storage } from '../../services/Firebase';
 import { actionTypes } from '../../services/reducer';
 import { useStateValue } from '../../services/StateProvider';
 import Input from '../Input';
+import toggleUpdateUserData from '../../actions/updateUserDataActions';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -53,7 +55,8 @@ const schema = yup.object().shape({
 const ImageUpdate = () => {
   const classes = useStyles();
   const { currentUser } = useAuth();
-  const [{ fileUpload }, dispatch] = useStateValue();
+  // const [{ fileUpload }, dispatch] = useStateValue();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -62,12 +65,12 @@ const ImageUpdate = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const handleClose = () => {
-    dispatch({
-      type: actionTypes.SET_UPDATE_USER_DATA,
-      updateUserData: false,
-    });
-  };
+  // const handleClose = () => {
+  //   dispatch({
+  //     type: actionTypes.SET_UPDATE_USER_DATA,
+  //     updateUserData: false,
+  //   });
+  // };
 
   const handleUpload = async (data) => {
     const storageRef = storage.ref();
@@ -90,7 +93,7 @@ const ImageUpdate = () => {
               alertify.alert(`Błąd`, error.message);
             });
           reset();
-          handleClose();
+          dispatch(toggleUpdateUserData());
         });
     });
   };

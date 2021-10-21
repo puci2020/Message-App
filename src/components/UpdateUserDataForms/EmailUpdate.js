@@ -6,10 +6,12 @@ import alertify from 'alertifyjs';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Input from '../Input';
 import { useAuth } from '../../services/AuthProvider';
 import { actionTypes } from '../../services/reducer';
 import { useStateValue } from '../../services/StateProvider';
+import toggleUpdateUserData from '../../actions/updateUserDataActions';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -42,8 +44,9 @@ const EmailUpdate = () => {
   const classes = useStyles();
   const { currentUser, signInWithEmail, logOut } = useAuth();
   // eslint-disable-next-line no-empty-pattern
-  const [{}, dispatch] = useStateValue();
+  // const [{}, dispatch] = useStateValue();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -52,12 +55,12 @@ const EmailUpdate = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(emailUpdateSchema) });
 
-  const handleCloseUpdate = () => {
-    dispatch({
-      type: actionTypes.SET_UPDATE_USER_DATA,
-      updateUserData: false,
-    });
-  };
+  // const handleCloseUpdate = () => {
+  //   dispatch({
+  //     type: actionTypes.SET_UPDATE_USER_DATA,
+  //     updateUserData: false,
+  //   });
+  // };
 
   const handleLogOut = async () => {
     await logOut();
@@ -68,7 +71,7 @@ const EmailUpdate = () => {
     try {
       await currentUser.updateEmail(newEmail);
       reset();
-      handleCloseUpdate();
+      dispatch(toggleUpdateUserData());
       handleLogOut();
       alertify.success('Zaktualizowano pomyślnie, zaloguj się ponownie');
     } catch (error) {

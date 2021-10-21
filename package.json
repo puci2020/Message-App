@@ -18,9 +18,11 @@
     "react-hook-form": "^7.6.0",
     "react-hook-speech-to-text": "^0.7.0",
     "react-icons": "^4.2.0",
+    "react-redux": "^7.2.5",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-scroll-to-bottom": "^4.1.2",
+    "redux": "^4.1.1",
     "styled-components": "^5.2.3",
     "web-vitals": "^1.0.1",
     "yup": "^0.32.9"

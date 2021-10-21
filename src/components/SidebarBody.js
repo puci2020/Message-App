@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import toggleSidebar from '../actions/sidebarActions';
 import { useAuth } from '../services/AuthProvider';
 import db from '../services/Firebase';
 import { actionTypes } from '../services/reducer';
@@ -17,7 +19,9 @@ const Chats = styled.div`
 
 const SidebarBody = () => {
   const [rooms, setRooms] = useState([]);
-  const [{ sidebar }, dispatch] = useStateValue();
+  // const [{ sidebar }, dispatch] = useStateValue();
+  // const sidebar = useSelector((state) => state.sidebar);
+  const dispatch = useDispatch();
   const { currentUser } = useAuth();
 
   useEffect(async () => {
@@ -34,15 +38,15 @@ const SidebarBody = () => {
       );
   }, []);
 
-  const showHideSidebar = () => {
-    dispatch({
-      type: actionTypes.SET_SIDEBAR,
-      sidebar: !sidebar,
-    });
-  };
+  // const showHideSidebar = () => {
+  //   dispatch({
+  //     type: actionTypes.SET_SIDEBAR,
+  //     sidebar: !sidebar,
+  //   });
+  // };
 
   return (
-    <Chats onClick={showHideSidebar}>
+    <Chats onClick={() => dispatch(toggleSidebar())}>
       <ChatItem newChat chat user={currentUser.uid} />
       {rooms.map((room) => (
         <Link

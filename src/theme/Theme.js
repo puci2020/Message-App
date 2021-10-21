@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
-export const theme = {
+const theme = {
   colors: {
     background: '#9a9090',
     // background: '#dadbd3',
@@ -48,3 +47,5 @@ export const theme = {
     tablet: '@media(max-width: 991px)',
   },
 };
+
+export default theme;

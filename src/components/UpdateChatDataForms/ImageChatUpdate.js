@@ -7,10 +7,12 @@ import * as yup from 'yup';
 import PropTypes from 'prop-types';
 import alertify from 'alertifyjs';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch } from 'react-redux';
 import db, { storage } from '../../services/Firebase';
 import { actionTypes } from '../../services/reducer';
 import { useStateValue } from '../../services/StateProvider';
 import Input from '../Input';
+import toggleUpdateUserData from '../../actions/updateUserDataActions';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -52,7 +54,8 @@ const schema = yup.object().shape({
 
 const ImageChatUpdate = ({ id }) => {
   const classes = useStyles();
-  const [{ fileUpload }, dispatch] = useStateValue();
+  // const [{ fileUpload }, dispatch] = useStateValue();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -62,10 +65,11 @@ const ImageChatUpdate = ({ id }) => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const handleClose = () => {
-    dispatch({
-      type: actionTypes.SET_UPDATE_USER_DATA,
-      updateUserData: false,
-    });
+    // dispatch({
+    //   type: actionTypes.SET_UPDATE_USER_DATA,
+    //   updateUserData: false,
+    // });
+    dispatch(toggleUpdateUserData());
   };
 
   const handleUpload = async (data) => {

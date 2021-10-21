@@ -5,6 +5,7 @@ import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import ChatItem from '../components/ChatItem';
 import Header from '../components/Header';
 import { useAuth } from '../services/AuthProvider';
@@ -12,6 +13,8 @@ import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import db from '../services/Firebase';
 import UpdateUserDataModal from '../components/UpdateUserDataModal';
+import toggleUpdateUserData from '../actions/updateUserDataActions';
+import toggleSidebar from '../actions/sidebarActions';
 
 const Wrapper = styled.div`
   display: flex;
@@ -54,11 +57,14 @@ const useStyles = makeStyles((theme) => ({
 const ChatSettings = () => {
   const { id } = useParams();
   const classes = useStyles();
-  const [{ sidebar, currentProvider }, dispatch] = useStateValue();
+  // const [{ sidebar, currentProvider }, dispatch] = useStateValue();
   const [updateType, setUpdateType] = useState(null);
   const { currentUser } = useAuth();
   const [roomName, setRoomName] = useState();
   const [roomPhoto, setRoomPhoto] = useState();
+
+  const sidebar = useSelector((state) => state.sidebar);
+  const dispatch = useDispatch();
 
   useEffect(async () => {
     if (id) {
@@ -72,28 +78,28 @@ const ChatSettings = () => {
     }
   }, []);
 
-  const openUpdate = () => {
-    dispatch({
-      type: actionTypes.SET_UPDATE_USER_DATA,
-      updateUserData: true,
-    });
-  };
+  // const openUpdate = () => {
+  //   dispatch({
+  //     type: actionTypes.SET_UPDATE_USER_DATA,
+  //     updateUserData: true,
+  //   });
+  // };
 
-  const showHideSidebar = () => {
-    dispatch({
-      type: actionTypes.SET_SIDEBAR,
-      sidebar: !sidebar,
-    });
-  };
+  // const showHideSidebar = () => {
+  //   dispatch({
+  //     type: actionTypes.SET_SIDEBAR,
+  //     sidebar: !sidebar,
+  //   });
+  // };
 
   const editNameChat = () => {
     setUpdateType('nameChatUpdate');
-    openUpdate();
+    dispatch(toggleUpdateUserData());
   };
 
   const editImageChat = () => {
     setUpdateType('imageChatUpdate');
-    openUpdate();
+    dispatch(toggleUpdateUserData());
   };
   return (
     <Wrapper>
@@ -111,7 +117,10 @@ const ChatSettings = () => {
         }
         right={
           <>
-            <IconButton id="menuButton" onClick={showHideSidebar}>
+            <IconButton
+              id="menuButton"
+              onClick={() => dispatch(toggleSidebar())}
+            >
               {sidebar ? <MenuOpenIcon /> : <MenuIcon />}
             </IconButton>
           </>

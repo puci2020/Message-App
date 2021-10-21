@@ -5,7 +5,11 @@ import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfie
 import firebase from 'firebase';
 import PropTypes from 'prop-types';
 import React, { lazy } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import toggleEmojiPicker from '../../actions/emojiPickerActions';
+import toggleFileUpload from '../../actions/fileUploadActions';
+import { removeMessage, setMessage } from '../../actions/messageActions';
 import { useAuth } from '../../services/AuthProvider';
 import db from '../../services/Firebase';
 import { actionTypes } from '../../services/reducer';
@@ -44,17 +48,21 @@ const Wrapper = styled.div`
 `;
 
 const MessageForm = ({ id }) => {
-  const [{ message, fileUpload, emojiPicker }, dispatch] = useStateValue();
+  // const [{ message, fileUpload, emojiPicker }, dispatch] = useStateValue();
   const { currentUser } = useAuth();
+  const message = useSelector((state) => state.message);
+  const fileUpload = useSelector((state) => state.fileUpload);
+  const emojiPicker = useSelector((state) => state.emojiPicker);
+  const dispatch = useDispatch();
 
   const getCountString = (text) => text.length;
 
-  const setMessage = (data) => {
-    dispatch({
-      type: actionTypes.SET_MESSAGE,
-      message: data,
-    });
-  };
+  // const setMessage = (data) => {
+  //   dispatch({
+  //     type: actionTypes.SET_MESSAGE,
+  //     message: data,
+  //   });
+  // };
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -74,22 +82,22 @@ const MessageForm = ({ id }) => {
             : message,
         lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
       });
-    await setMessage('');
+    await dispatch(removeMessage());
   };
 
-  const openFileUpload = async () => {
-    await dispatch({
-      type: actionTypes.SET_FILE_UPLOAD,
-      fileUpload: true,
-    });
-  };
+  // const openFileUpload = async () => {
+  //   await dispatch({
+  //     type: actionTypes.SET_FILE_UPLOAD,
+  //     fileUpload: true,
+  //   });
+  // };
 
-  const openEmojiPicker = async () => {
-    await dispatch({
-      type: actionTypes.SET_EMOJI_PICKER,
-      emojiPicker: true,
-    });
-  };
+  // const openEmojiPicker = async () => {
+  //   await dispatch({
+  //     type: actionTypes.SET_EMOJI_PICKER,
+  //     emojiPicker: true,
+  //   });
+  // };
 
   return (
     <Wrapper>
@@ -98,16 +106,22 @@ const MessageForm = ({ id }) => {
         <input
           type="text"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={(e) => dispatch(setMessage(e.target.value))}
           placeholder="Napisz wiadomość"
         />
         <Tooltip title="Dodaj załącznik">
-          <IconButton onClick={openFileUpload} onKeyDown={openFileUpload}>
+          <IconButton
+            onClick={() => dispatch(toggleFileUpload())}
+            onKeyDown={() => dispatch(toggleFileUpload())}
+          >
             <AttachFile />
           </IconButton>
         </Tooltip>
         <Tooltip title="Wstaw emoji">
-          <IconButton onClick={openEmojiPicker} onKeyDown={openEmojiPicker}>
+          <IconButton
+            onClick={() => dispatch(toggleEmojiPicker())}
+            onKeyDown={() => dispatch(toggleEmojiPicker())}
+          >
             <SentimentVerySatisfiedIcon />
           </IconButton>
         </Tooltip>

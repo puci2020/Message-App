@@ -2,8 +2,11 @@ import { IconButton, Tooltip } from '@material-ui/core';
 import { ExitToApp, SearchOutlined } from '@material-ui/icons';
 import SettingsIcon from '@material-ui/icons/Settings';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import toggleSidebar from '../actions/sidebarActions';
 import { useAuth } from '../services/AuthProvider';
 import { useStateValue } from '../services/StateProvider';
 // import ChatItem from './ChatItem';
@@ -76,7 +79,9 @@ const Chats = styled.div`
 `;
 
 const Sidebar = () => {
-  const [{ sidebar }, dispatch] = useStateValue();
+  // const [{ sidebar }, dispatch] = useStateValue();
+  const sidebar = useSelector((state) => state.sidebar);
+  const dispatch = useDispatch();
   const { currentUser, logOut } = useAuth();
   // const [rooms, setRooms] = useState([]);
   const history = useHistory();
@@ -122,7 +127,10 @@ const Sidebar = () => {
         right={
           <>
             <Link to={`/settings/user/${currentUser.uid}`}>
-              <Tooltip title="Ustawienia konta">
+              <Tooltip
+                title="Ustawienia konta"
+                onClick={() => dispatch(toggleSidebar())}
+              >
                 <IconButton>
                   <SettingsIcon />
                 </IconButton>

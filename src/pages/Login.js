@@ -8,11 +8,13 @@ import { FaFacebookF, FaGoogle } from 'react-icons/fa';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import * as yup from 'yup';
+import { useDispatch } from 'react-redux';
 import { useAuth } from '../services/AuthProvider';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import Input from '../components/Input';
 import UpdateUserDataModal from '../components/UpdateUserDataModal';
+import toggleUpdateUserData from '../actions/updateUserDataActions';
 
 const Wrapper = styled.div`
   width: 600px;
@@ -109,7 +111,7 @@ const schema = yup.object().shape({
 
 const Login = () => {
   // eslint-disable-next-line no-empty-pattern
-  const [{}, dispatch] = useStateValue();
+  // const [{}, dispatch] = useStateValue();
   const history = useHistory();
   const {
     register,
@@ -118,6 +120,7 @@ const Login = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
   const { signInWithEmail, signInWithGoogle, signInWithFacebook } = useAuth();
+  const dispatch = useDispatch();
 
   const google = async () => {
     try {
@@ -157,12 +160,12 @@ const Login = () => {
     }
   };
 
-  const openPasswordReset = () => {
-    dispatch({
-      type: actionTypes.SET_UPDATE_USER_DATA,
-      updateUserData: true,
-    });
-  };
+  // const openPasswordReset = () => {
+  //   dispatch({
+  //     type: actionTypes.SET_UPDATE_USER_DATA,
+  //     updateUserData: true,
+  //   });
+  // };
 
   return (
     <Wrapper>
@@ -182,8 +185,8 @@ const Login = () => {
           <span
             role="button"
             tabIndex={0}
-            onClick={openPasswordReset}
-            onKeyDown={openPasswordReset}
+            onClick={() => dispatch(toggleUpdateUserData())}
+            onKeyDown={() => dispatch(toggleUpdateUserData())}
           >
             Nie pamiętam hasła
           </span>

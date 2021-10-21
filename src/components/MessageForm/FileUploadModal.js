@@ -11,11 +11,13 @@ import * as yup from 'yup';
 import firebase from 'firebase';
 import alertify from 'alertifyjs';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch, useSelector } from 'react-redux';
 import { useAuth } from '../../services/AuthProvider';
 import db, { storage } from '../../services/Firebase';
 import { actionTypes } from '../../services/reducer';
 import { useStateValue } from '../../services/StateProvider';
 import Input from '../Input';
+import toggleFileUpload from '../../actions/fileUploadActions';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -58,7 +60,9 @@ const schema = yup.object().shape({
 const FileUploadModal = ({ id }) => {
   const classes = useStyles();
   const { currentUser } = useAuth();
-  const [{ fileUpload }, dispatch] = useStateValue();
+  // const [{ fileUpload }, dispatch] = useStateValue();
+  const fileUpload = useSelector((state) => state.fileUpload);
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -67,12 +71,12 @@ const FileUploadModal = ({ id }) => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const handleClose = () => {
-    dispatch({
-      type: actionTypes.SET_FILE_UPLOAD,
-      fileUpload: false,
-    });
-  };
+  // const handleClose = () => {
+  //   dispatch({
+  //     type: actionTypes.SET_FILE_UPLOAD,
+  //     fileUpload: false,
+  //   });
+  // };
 
   const handleUpload = async (data) => {
     const storageRef = storage.ref();
@@ -96,7 +100,7 @@ const FileUploadModal = ({ id }) => {
             lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
           });
           reset();
-          handleClose();
+          dispatch(toggleFileUpload());
           alertify.success('Plik wysłano');
         });
     });
@@ -108,7 +112,7 @@ const FileUploadModal = ({ id }) => {
       aria-describedby="transition-modal-description"
       className={classes.modal}
       open={fileUpload}
-      onClose={handleClose}
+      onClose={() => dispatch(toggleFileUpload())}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{

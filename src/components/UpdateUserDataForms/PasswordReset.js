@@ -5,8 +5,10 @@ import { Email } from '@material-ui/icons';
 import alertify from 'alertifyjs';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import { useDispatch } from 'react-redux';
 import { auth } from '../../services/Firebase';
 import Input from '../Input';
+import toggleUpdateUserData from '../../actions/updateUserDataActions';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -29,6 +31,7 @@ const passwordResetSchema = yup.object().shape({
 
 const PasswordReset = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -43,6 +46,7 @@ const PasswordReset = () => {
       .then(() => {
         alertify.alert(`Reset hasła`, `Email został wysłany!`);
         reset();
+        dispatch(toggleUpdateUserData());
       })
       .catch((error) => {
         alertify.alert(`Reset hasła`, error.message);

@@ -3,8 +3,10 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import SettingsIcon from '@material-ui/icons/Settings';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import toggleSidebar from '../../actions/sidebarActions';
 import { useAuth } from '../../services/AuthProvider';
 import db from '../../services/Firebase';
 import { actionTypes } from '../../services/reducer';
@@ -38,8 +40,9 @@ const Wrapper = styled.div`
 const Chat = () => {
   const { id } = useParams();
   const [roomData, setRoomData] = useState([]);
-  const [{ sidebar, loader }, dispatch] = useStateValue();
   const { currentUser } = useAuth();
+  const sidebar = useSelector((state) => state.sidebar);
+  const dispatch = useDispatch();
 
   useEffect(async () => {
     if (id) {
@@ -51,13 +54,6 @@ const Chat = () => {
         });
     }
   }, [id]);
-
-  const showHideSidebar = () => {
-    dispatch({
-      type: actionTypes.SET_SIDEBAR,
-      sidebar: !sidebar,
-    });
-  };
 
   const displayRoomInfo = (date) => {
     if (showFullDate(date).length > 1) {
@@ -93,7 +89,10 @@ const Chat = () => {
             ) : null}
 
             <Tooltip title={sidebar ? 'Schowaj menu' : 'Pokaż menu'}>
-              <IconButton id="menuButton" onClick={showHideSidebar}>
+              <IconButton
+                id="menuButton"
+                onClick={() => dispatch(toggleSidebar())}
+              >
                 {sidebar ? <MenuOpenIcon /> : <MenuIcon />}
               </IconButton>
             </Tooltip>

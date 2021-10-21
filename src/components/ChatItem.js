@@ -11,19 +11,19 @@ const Wrapper = styled.div`
   width: ${(props) => (props.chat ? '100%' : '80%')};
   height: ${(props) => (props.chat ? '70px' : 'auto')};
   border-bottom: ${(props) => (props.chat ? '1px solid #f6f6f6' : '')};
-  /* border-bottom: 1px solid ${({ theme }) => theme.colors.secondary}; */
+    //border-bottom: 1px solid ${({ theme }) => theme.colors.secondary}; 
   display: flex;
   align-items: center;
   padding: ${(props) => (props.chat ? '10px 20px' : '')};
-  /* position: ${(props) => (props.chat ? 'static' : 'relative')}; */
-  /* top: ${(props) => (props.chat ? '' : '0')}; */
+    /* position: ${(props) => (props.chat ? 'static' : 'relative')}; */
+    /* top: ${(props) => (props.chat ? '' : '0')}; */
   cursor: pointer;
   /* margin-top: 5px; */
 
   &:hover {
     background-color: ${(props) => (props.chat ? '#f6f6f6' : '')};
     cursor: ${(props) => (props.chat ? 'pointer' : 'default')};
-    /* background-color: ${({ theme }) => theme.colors.secondary}; */
+      /* background-color: ${({ theme }) => theme.colors.secondary}; */
   }
 
   .addButton {
@@ -38,6 +38,7 @@ const Info = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 10px;
+
   p {
     color: ${(props) => (props.chat ? 'black' : 'darkslategray')};
   }
@@ -67,7 +68,7 @@ const ChatItem = ({ newChat, chat, avatar, name, info, user }) => {
       },
       () => {
         alertify.error('Tworzenie czatu anulowano');
-      }
+      },
     );
   };
 
@@ -81,8 +82,8 @@ const ChatItem = ({ newChat, chat, avatar, name, info, user }) => {
     </Wrapper>
   ) : (
     <Wrapper chat={chat} onClick={createNewChat}>
-      <div className="addButton">
-        <AddCircleIcon fontSize="large" color="action" />
+      <div className='addButton'>
+        <AddCircleIcon fontSize='large' color='action' />
       </div>
       <h3>Stwórz czat</h3>
     </Wrapper>

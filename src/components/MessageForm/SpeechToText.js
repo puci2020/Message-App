@@ -4,8 +4,10 @@ import MicNoneIcon from '@material-ui/icons/MicNone';
 import MicOffIcon from '@material-ui/icons/MicOff';
 import useSpeechToText from 'react-hook-speech-to-text';
 import alertify from 'alertifyjs';
+import { useDispatch, useSelector } from 'react-redux';
 import { useStateValue } from '../../services/StateProvider';
 import { actionTypes } from '../../services/reducer';
+import { setMessage } from '../../actions/messageActions';
 
 const useStyles = makeStyles({
   root: {
@@ -23,7 +25,9 @@ const useStyles = makeStyles({
 
 const SpeechToText = () => {
   const classes = useStyles();
-  const [{ message }, dispatch] = useStateValue();
+  // const [{ message }, dispatch] = useStateValue();
+  const message = useSelector((state) => state.message);
+  const dispatch = useDispatch();
 
   const { error, isRecording, results, startSpeechToText, stopSpeechToText } =
     useSpeechToText({
@@ -33,10 +37,11 @@ const SpeechToText = () => {
 
   useEffect(async () => {
     await results.map((result) =>
-      dispatch({
-        type: actionTypes.SET_MESSAGE,
-        message: message + result.transcript,
-      })
+      // dispatch({
+      //   type: actionTypes.SET_MESSAGE,
+      //   message: message + result.transcript,
+      // })
+      dispatch(setMessage(message + result.transcript))
     );
   }, [results]);
 

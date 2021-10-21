@@ -5,8 +5,10 @@ import { Email, Lock } from '@material-ui/icons';
 import alertify from 'alertifyjs';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import { useDispatch } from 'react-redux';
 import Input from '../Input';
 import { useAuth } from '../../services/AuthProvider';
+import toggleUpdateUserData from '../../actions/updateUserDataActions';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -44,6 +46,7 @@ const emailUpdateSchema = yup.object().shape({
 const PasswordUpdate = () => {
   const classes = useStyles();
   const { currentUser, signInWithEmail } = useAuth();
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -56,6 +59,7 @@ const PasswordUpdate = () => {
     try {
       await currentUser.updatePassword(newPassword);
       reset();
+      dispatch(toggleUpdateUserData());
       alertify.success('Zaktualizowano pomyślnie');
     } catch (error) {
       alertify.alert(`Błąd`, error.message);

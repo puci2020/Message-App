@@ -1,6 +1,8 @@
 import alertify from 'alertifyjs';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeUser } from '../actions/userActions';
 import db, { auth, facebookProvider, provider } from './Firebase';
 import { actionTypes } from './reducer';
 import { useStateValue } from './StateProvider';
@@ -13,9 +15,11 @@ const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
   const [userExist, setUserExist] = useState(false);
+  // const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   // eslint-disable-next-line no-empty-pattern
-  const [{}, dispatch] = useStateValue();
+  // const [{}, dispatch] = useStateValue();
 
   const userDocExist = async (uid) => {
     await db
@@ -47,10 +51,11 @@ const AuthProvider = ({ children }) => {
     auth
       .signOut()
       .then(() => {
-        dispatch({
-          type: actionTypes.SET_USER,
-          user: null,
-        });
+        // dispatch({
+        //   type: actionTypes.SET_USER,
+        //   user: null,
+        // });
+        dispatch(removeUser());
         localStorage.removeItem('user');
 
         alertify.success(`Wylogowano pomyślnie!`);
@@ -59,14 +64,14 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(async () => {
-    await auth.onAuthStateChanged((user) => {
-      if (user) {
-        userDocExist(user.uid);
+    await auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        userDocExist(authUser.uid);
         if (!userExist) {
-          createUser(user.uid, user.displayName);
+          createUser(authUser.uid, authUser.displayName);
         }
-        if (user.emailVerified) {
-          setCurrentUser(user);
+        if (authUser.emailVerified) {
+          setCurrentUser(authUser);
           alertify.success('Zalogowano pomyślnie!');
         } else {
           auth.signOut();
@@ -75,7 +80,7 @@ const AuthProvider = ({ children }) => {
             'Weryfikacja adresu e-mail',
             'Zweryfikuj adres email. Jeśli nie dostałeś wiadomości kliknij OK, aby wysłać ponownie.',
             () => {
-              user.sendEmailVerification();
+              authUser.sendEmailVerification();
               alertify.success('Wiadomość wysłano');
             },
             () => {

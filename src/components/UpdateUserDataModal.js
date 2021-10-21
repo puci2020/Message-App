@@ -4,8 +4,10 @@ import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
+import toggleUpdateUserData from '../actions/updateUserDataActions';
 // import PasswordReset from './UpdateUserDataForms/PasswordReset';
 // import NameUpdate from './UpdateUserDataForms/NameUpdate';
 // import EmailUpdate from './UpdateUserDataForms/EmailUpdate';
@@ -52,14 +54,16 @@ const useStyles = makeStyles((theme) => ({
 
 const UpdateUserDataModal = ({ type, id }) => {
   const classes = useStyles();
-  const [{ updateUserData }, dispatch] = useStateValue();
+  const updateUserData = useSelector((state) => state.updateUserData);
+  const dispatch = useDispatch();
+  // const [{ updateUserData }, dispatch] = useStateValue();
 
-  const handleClose = () => {
-    dispatch({
-      type: actionTypes.SET_UPDATE_USER_DATA,
-      updateUserData: false,
-    });
-  };
+  // const handleClose = () => {
+  //   dispatch({
+  //     type: actionTypes.SET_UPDATE_USER_DATA,
+  //     updateUserData: false,
+  //   });
+  // };
 
   return (
     <Modal
@@ -67,7 +71,7 @@ const UpdateUserDataModal = ({ type, id }) => {
       aria-describedby="transition-modal-description"
       className={classes.modal}
       open={updateUserData}
-      onClose={handleClose}
+      onClose={() => dispatch(toggleUpdateUserData())}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{

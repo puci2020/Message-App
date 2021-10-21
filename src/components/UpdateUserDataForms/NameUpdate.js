@@ -5,8 +5,10 @@ import PersonIcon from '@material-ui/icons/Person';
 import alertify from 'alertifyjs';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import { useDispatch } from 'react-redux';
 import Input from '../Input';
 import { useAuth } from '../../services/AuthProvider';
+import toggleUpdateUserData from '../../actions/updateUserDataActions';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -30,6 +32,7 @@ const nameUpdateSchema = yup.object().shape({
 const NameUpdate = () => {
   const classes = useStyles();
   const { currentUser, createUser } = useAuth();
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -47,6 +50,7 @@ const NameUpdate = () => {
         createUser(currentUser.uid, data.displayName);
         alertify.success(`Nazwa użytkownika zmieniona`);
         reset();
+        dispatch(toggleUpdateUserData());
       })
       .catch((error) => {
         alertify.alert(`Zmiana nazwy użytkownika`, error.message);

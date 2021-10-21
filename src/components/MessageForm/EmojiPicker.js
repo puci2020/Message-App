@@ -5,8 +5,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import Picker from 'emoji-picker-react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import { actionTypes } from '../../services/reducer';
 import { useStateValue } from '../../services/StateProvider';
+import toggleEmojiPicker from '../../actions/emojiPickerActions';
+import { setMessage } from '../../actions/messageActions';
 
 const Div = styled.div`
   .emoji {
@@ -34,20 +37,25 @@ const useStyles = makeStyles((theme) => ({
 
 const EmojiPicker = () => {
   const classes = useStyles();
-  const [{ emojiPicker, message, loader }, dispatch] = useStateValue();
+  // const [{ emojiPicker, message, loader }, dispatch] = useStateValue();
+  const emojiPicker = useSelector((state) => state.emojiPicker);
+  const message = useSelector((state) => state.message);
+  const loader = useSelector((state) => state.loader);
+  const dispatch = useDispatch();
 
-  const handleClose = () => {
-    dispatch({
-      type: actionTypes.SET_EMOJI_PICKER,
-      emojiPicker: false,
-    });
-  };
+  // const handleClose = () => {
+  //   dispatch({
+  //     type: actionTypes.SET_EMOJI_PICKER,
+  //     emojiPicker: false,
+  //   });
+  // };
 
   const onEmojiClick = (event, emojiObject) => {
-    dispatch({
-      type: actionTypes.SET_MESSAGE,
-      message: message + emojiObject.emoji,
-    });
+    // dispatch({
+    //   type: actionTypes.SET_MESSAGE,
+    //   message: message + emojiObject.emoji,
+    // });
+    dispatch(setMessage(message + emojiObject.emoji));
   };
 
   return (
@@ -58,7 +66,7 @@ const EmojiPicker = () => {
           aria-describedby="transition-modal-description"
           className={classes.modal}
           open={emojiPicker}
-          onClose={handleClose}
+          onClose={() => dispatch(toggleEmojiPicker())}
           closeAfterTransition
           BackdropComponent={Backdrop}
           BackdropProps={{
