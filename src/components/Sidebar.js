@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import toggleSidebar from '../actions/sidebarActions';
+import toggleSidebar from '../state/actions/sidebarActions';
 import { useAuth } from '../services/AuthProvider';
 import { useStateValue } from '../services/StateProvider';
 // import ChatItem from './ChatItem';
@@ -72,44 +72,12 @@ const Search = styled.div`
   }
 `;
 
-const Chats = styled.div`
-  overflow-y: auto;
-  overflow-x: hidden;
-  background-color: white;
-`;
-
 const Sidebar = () => {
-  // const [{ sidebar }, dispatch] = useStateValue();
   const sidebar = useSelector((state) => state.sidebar);
   const dispatch = useDispatch();
   const { currentUser, logOut } = useAuth();
-  // const [rooms, setRooms] = useState([]);
   const history = useHistory();
 
-  // useEffect(() => {
-  //   const unsubscribe = db
-  //     .collection('rooms')
-  //     .orderBy('lastSeen', 'desc')
-  //     .onSnapshot((snapshot) =>
-  //       setRooms(
-  //         snapshot.docs.map((doc) => ({
-  //           id: doc.id,
-  //           data: doc.data(),
-  //         }))
-  //       )
-  //     );
-
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, []);
-
-  // const showHideSidebar = () => {
-  //   dispatch({
-  //     type: actionTypes.SET_SIDEBAR,
-  //     sidebar: !sidebar,
-  //   });
-  // };
   const handleLogOut = async () => {
     await logOut();
     history.push('/login');
@@ -144,32 +112,7 @@ const Sidebar = () => {
           </>
         }
       />
-      <Search>
-        <Input icon={<SearchOutlined />}>
-          <input type="text" placeholder="Wyszukaj czat" />
-        </Input>
-      </Search>
-      {/* <Chats onClick={showHideSidebar}>
-        <ChatItem newChat chat user={currentUser.uid} />
-        {rooms.map((room) => (
-          <Link
-            key={room.id}
-            to={`/room/${room.id}`}
-            style={{
-              textDecoration: 'none',
-              color: 'black',
-            }}
-          >
-            <ChatItem
-              chat
-              id={room.id}
-              name={room.data.name}
-              info={room.data.lastMessage}
-              avatar={room.data.photoURL}
-            />
-          </Link>
-        ))}
-      </Chats> */}
+
       <SidebarBody />
     </Wrapper>
   );

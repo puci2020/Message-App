@@ -83,23 +83,28 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
   const { currentUser } = useAuth();
 
   useEffect(() => {
+    let cancel = true;
+
     db.collection('rooms')
       .doc(roomId)
       .collection('messages')
       .doc(id)
       .collection('likes')
       .onSnapshot((snapshot) => {
-        // if (snapshot.docs.length !== likes.length)
-        setLikes(
-          snapshot.docs.map((doc) => ({
-            likeId: doc.id,
-            data: doc.data(),
-          }))
-        );
-        setLoading(false);
+        if (cancel) {
+          setLikes(
+            snapshot.docs.map((doc) => ({
+              likeId: doc.id,
+              data: doc.data(),
+            }))
+          );
+          setLoading(false);
+        }
       });
 
-    // return unsubscribe;
+    return () => {
+      cancel = false;
+    };
   }, [loading]);
 
   // useEffect(async () => {
@@ -192,7 +197,7 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
       />
       {/* {console.log(getLikeId(likes, currentUser.uid))} */}
       <Content>
-        <Author>{user ? displayName : null}</Author>
+        <Author>{user}</Author>
 
         <Text>
           {type === 'text' ? (

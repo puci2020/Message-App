@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import toggleSidebar from '../../actions/sidebarActions';
+import toggleSidebar from '../../state/actions/sidebarActions';
 import { useAuth } from '../../services/AuthProvider';
 import db from '../../services/Firebase';
 import { actionTypes } from '../../services/reducer';
@@ -44,15 +44,18 @@ const Chat = () => {
   const sidebar = useSelector((state) => state.sidebar);
   const dispatch = useDispatch();
 
-  useEffect(async () => {
+  useEffect(() => {
+    let cancel = true;
     if (id) {
-      await db
-        .collection('rooms')
+      db.collection('rooms')
         .doc(id)
         .onSnapshot((snapschot) => {
-          setRoomData(snapschot.data());
+          if (cancel) setRoomData(snapschot.data());
         });
     }
+    return () => {
+      cancel = false;
+    };
   }, [id]);
 
   const displayRoomInfo = (date) => {

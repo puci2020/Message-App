@@ -17,7 +17,7 @@ import db, { storage } from '../../services/Firebase';
 import { actionTypes } from '../../services/reducer';
 import { useStateValue } from '../../services/StateProvider';
 import Input from '../Input';
-import toggleFileUpload from '../../actions/fileUploadActions';
+import toggleFileUpload from '../../state/actions/fileUploadActions';
 
 const useStyles = makeStyles((theme) => ({
   modal: {

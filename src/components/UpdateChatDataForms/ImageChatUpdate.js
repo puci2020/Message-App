@@ -12,7 +12,7 @@ import db, { storage } from '../../services/Firebase';
 import { actionTypes } from '../../services/reducer';
 import { useStateValue } from '../../services/StateProvider';
 import Input from '../Input';
-import toggleUpdateUserData from '../../actions/updateUserDataActions';
+import toggleUpdateUserData from '../../state/actions/updateUserDataActions';
 
 const useStyles = makeStyles((theme) => ({
   modal: {

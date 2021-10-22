@@ -11,7 +11,7 @@ import Input from '../Input';
 import { useAuth } from '../../services/AuthProvider';
 import { actionTypes } from '../../services/reducer';
 import { useStateValue } from '../../services/StateProvider';
-import toggleUpdateUserData from '../../actions/updateUserDataActions';
+import toggleUpdateUserData from '../../state/actions/updateUserDataActions';
 
 const useStyles = makeStyles((theme) => ({
   modal: {

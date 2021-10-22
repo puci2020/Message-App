@@ -7,9 +7,9 @@ import PropTypes from 'prop-types';
 import React, { lazy } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import toggleEmojiPicker from '../../actions/emojiPickerActions';
-import toggleFileUpload from '../../actions/fileUploadActions';
-import { removeMessage, setMessage } from '../../actions/messageActions';
+import toggleEmojiPicker from '../../state/actions/emojiPickerActions';
+import toggleFileUpload from '../../state/actions/fileUploadActions';
+import { removeMessage, setMessage } from '../../state/actions/messageActions';
 import { useAuth } from '../../services/AuthProvider';
 import db from '../../services/Firebase';
 import { actionTypes } from '../../services/reducer';
@@ -69,6 +69,7 @@ const MessageForm = ({ id }) => {
     await db.collection('rooms').doc(id).collection('messages').add({
       message,
       user: currentUser?.uid,
+      userName: currentUser?.displayName,
       type: 'text',
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
@@ -126,9 +127,15 @@ const MessageForm = ({ id }) => {
           </IconButton>
         </Tooltip>
         <Tooltip title="Wyślij">
-          <IconButton type="submit" onClick={sendMessage}>
-            <SendIcon />
-          </IconButton>
+          <span>
+            <IconButton
+              disabled={message.length === 0}
+              type="submit"
+              onClick={sendMessage}
+            >
+              <SendIcon />
+            </IconButton>
+          </span>
         </Tooltip>
       </form>
       {fileUpload && <FileUploadModal id={id} />}

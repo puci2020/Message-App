@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ScrollToBottom from 'react-scroll-to-bottom';
 // import Message from './Message';
 import { useAuth } from '../../services/AuthProvider';
 import db from '../../services/Firebase';
+import Loader from '../Loader';
 
 const Message = React.lazy(() => import('./Message'));
 
@@ -23,6 +24,8 @@ const ChatBody = ({ id }) => {
   const { currentUser } = useAuth();
 
   useEffect(async () => {
+    let cancel = true;
+
     if (id) {
       await db
         .collection('rooms')
@@ -30,39 +33,46 @@ const ChatBody = ({ id }) => {
         .collection('messages')
         .orderBy('timestamp', 'asc')
         .onSnapshot((snapshot) => {
-          if (snapshot.docs.length !== messages.length)
-            setMessages(
-              snapshot.docs.map((doc) => ({
-                messageId: doc.id,
-                data: doc.data(),
-              }))
-            );
+          if (cancel)
+            if (snapshot.docs.length !== messages.length)
+              setMessages(
+                snapshot.docs.map((doc) => ({
+                  messageId: doc.id,
+                  data: doc.data(),
+                }))
+              );
         });
+      return () => {
+        cancel = false;
+      };
     }
+    return null;
   }, [id]);
 
   return (
     <ScrollToBottom className="scroll">
-      <Body>
-        {id &&
-          messages.map((message) => (
-            <Message
-              id={message.messageId}
-              roomId={id}
-              own={message.data.user === currentUser?.uid}
-              user={
-                message.data.user === currentUser?.uid
-                  ? null
-                  : message.data.user
-              }
-              date={message.data.timestamp}
-              text={message.data.message}
-              type={message.data.type}
-              fileName={message.data.fileName}
-              key={message.data.timestamp}
-            />
-          ))}
-      </Body>
+      <Suspense fallback={<Loader />}>
+        <Body>
+          {id &&
+            messages.map((message) => (
+              <Message
+                id={message.messageId}
+                roomId={id}
+                own={message.data.user === currentUser?.uid}
+                user={
+                  message.data.user === currentUser?.uid
+                    ? null
+                    : message.data.userName
+                }
+                date={message.data.timestamp}
+                text={message.data.message}
+                type={message.data.type}
+                fileName={message.data.fileName}
+                key={message.data.timestamp}
+              />
+            ))}
+        </Body>
+      </Suspense>
     </ScrollToBottom>
   );
 };

@@ -13,8 +13,8 @@ import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import db from '../services/Firebase';
 import UpdateUserDataModal from '../components/UpdateUserDataModal';
-import toggleUpdateUserData from '../actions/updateUserDataActions';
-import toggleSidebar from '../actions/sidebarActions';
+import toggleUpdateUserData from '../state/actions/updateUserDataActions';
+import toggleSidebar from '../state/actions/sidebarActions';
 
 const Wrapper = styled.div`
   display: flex;

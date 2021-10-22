@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
-import toggleUpdateUserData from '../actions/updateUserDataActions';
+import toggleUpdateUserData from '../state/actions/updateUserDataActions';
 // import PasswordReset from './UpdateUserDataForms/PasswordReset';
 // import NameUpdate from './UpdateUserDataForms/NameUpdate';
 // import EmailUpdate from './UpdateUserDataForms/EmailUpdate';

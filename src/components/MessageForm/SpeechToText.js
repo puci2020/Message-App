@@ -7,7 +7,7 @@ import alertify from 'alertifyjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStateValue } from '../../services/StateProvider';
 import { actionTypes } from '../../services/reducer';
-import { setMessage } from '../../actions/messageActions';
+import { setMessage } from '../../state/actions/messageActions';
 
 const useStyles = makeStyles({
   root: {

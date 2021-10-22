@@ -8,8 +8,8 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionTypes } from '../../services/reducer';
 import { useStateValue } from '../../services/StateProvider';
-import toggleEmojiPicker from '../../actions/emojiPickerActions';
-import { setMessage } from '../../actions/messageActions';
+import toggleEmojiPicker from '../../state/actions/emojiPickerActions';
+import { setMessage } from '../../state/actions/messageActions';
 
 const Div = styled.div`
   .emoji {

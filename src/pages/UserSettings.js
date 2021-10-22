@@ -12,9 +12,9 @@ import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import UpdateUserDataModal from '../components/UpdateUserDataModal';
 import { auth } from '../services/Firebase';
-import { setCurrentProvider } from '../actions/currentProviderActions';
-import toggleUpdateUserData from '../actions/updateUserDataActions';
-import toggleSidebar from '../actions/sidebarActions';
+import { setCurrentProvider } from '../state/actions/currentProviderActions';
+import toggleUpdateUserData from '../state/actions/updateUserDataActions';
+import toggleSidebar from '../state/actions/sidebarActions';
 
 const Wrapper = styled.div`
   display: flex;

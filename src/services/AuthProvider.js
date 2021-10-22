@@ -2,7 +2,7 @@ import alertify from 'alertifyjs';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeUser } from '../actions/userActions';
+import { removeUser } from '../state/actions/userActions';
 import db, { auth, facebookProvider, provider } from './Firebase';
 import { actionTypes } from './reducer';
 import { useStateValue } from './StateProvider';

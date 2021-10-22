@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import db, { auth } from '../../services/Firebase';
 import Input from '../Input';
 import { useAuth } from '../../services/AuthProvider';
-import toggleUpdateUserData from '../../actions/updateUserDataActions';
+import toggleUpdateUserData from '../../state/actions/updateUserDataActions';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
