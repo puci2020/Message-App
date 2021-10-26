@@ -34,7 +34,6 @@ const Wrapper = styled.div`
 const App = () => (
   <Suspense fallback={<Loader />}>
     <AuthProvider>
-      {/* <Loader /> */}
       <Wrapper>
         <Router>
           <Switch>

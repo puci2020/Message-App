@@ -64,33 +64,39 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(async () => {
+    let cancel = true;
     await auth.onAuthStateChanged((authUser) => {
-      if (authUser) {
-        userDocExist(authUser.uid);
-        if (!userExist) {
-          createUser(authUser.uid, authUser.displayName);
+      if (cancel)
+        if (authUser) {
+          userDocExist(authUser.uid);
+          if (!userExist) {
+            createUser(authUser.uid, authUser.displayName);
+          }
+          if (authUser.emailVerified) {
+            setCurrentUser(authUser);
+            alertify.success('Zalogowano pomyślnie!');
+          } else {
+            auth.signOut();
+            setCurrentUser();
+            alertify.confirm(
+              'Weryfikacja adresu e-mail',
+              'Zweryfikuj adres email. Jeśli nie dostałeś wiadomości kliknij OK, aby wysłać ponownie.',
+              () => {
+                authUser.sendEmailVerification();
+                alertify.success('Wiadomość wysłano');
+              },
+              () => {
+                alertify.error('Ponowna weryfikacja anulowana');
+              }
+            );
+          }
         }
-        if (authUser.emailVerified) {
-          setCurrentUser(authUser);
-          alertify.success('Zalogowano pomyślnie!');
-        } else {
-          auth.signOut();
-          setCurrentUser();
-          alertify.confirm(
-            'Weryfikacja adresu e-mail',
-            'Zweryfikuj adres email. Jeśli nie dostałeś wiadomości kliknij OK, aby wysłać ponownie.',
-            () => {
-              authUser.sendEmailVerification();
-              alertify.success('Wiadomość wysłano');
-            },
-            () => {
-              alertify.error('Ponowna weryfikacja anulowana');
-            }
-          );
-        }
-      }
       setLoading(false);
     });
+
+    return () => {
+      cancel = false;
+    };
   }, []);
 
   const value = {

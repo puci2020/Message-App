@@ -23,6 +23,7 @@ const Wrapper = styled.div`
   &:hover {
     background-color: ${(props) => (props.chat ? '#f6f6f6' : '')};
     cursor: ${(props) => (props.chat ? 'pointer' : 'default')};
+
       /* background-color: ${({ theme }) => theme.colors.secondary}; */
   }
 
@@ -33,7 +34,6 @@ const Wrapper = styled.div`
     margin-right: 10px;
   }
 `;
-
 const Info = styled.div`
   display: flex;
   flex-direction: column;
@@ -45,6 +45,7 @@ const Info = styled.div`
 `;
 // id w props
 const ChatItem = ({ newChat, chat, avatar, name, info, user }) => {
+
   const createNewChat = async () => {
     // const roomName = prompt('Podaj nazwę czatu!');
     await alertify.prompt(
@@ -60,7 +61,6 @@ const ChatItem = ({ newChat, chat, avatar, name, info, user }) => {
             photoURL: null,
             user: user.toString(),
           });
-
           alertify.success(`Czat o nazwie "${value}" utworzony pomyślnie!`);
         } else {
           alertify.warning(`Nazwa czatu nie może być pusta!`);
@@ -71,25 +71,28 @@ const ChatItem = ({ newChat, chat, avatar, name, info, user }) => {
       },
     );
   };
-
   return !newChat ? (
     <Wrapper chat={chat}>
-      <Avatar src={avatar} alt={name} sx={{ width: 40, height: 40 }} />
+      <Avatar src={avatar}
+              alt={name}
+              sx={{ width: 40, height: 40 }} />
       <Info>
         <h3>{name}</h3>
         <p>{info}</p>
       </Info>
     </Wrapper>
   ) : (
-    <Wrapper chat={chat} onClick={createNewChat}>
+
+    <Wrapper chat={chat}
+             onClick={createNewChat}>
       <div className='addButton'>
-        <AddCircleIcon fontSize='large' color='action' />
+        <AddCircleIcon fontSize='large'
+                       color='action' />
       </div>
       <h3>Stwórz czat</h3>
     </Wrapper>
   );
 };
-
 export default ChatItem;
 
 ChatItem.defaultProps = {
@@ -100,7 +103,6 @@ ChatItem.defaultProps = {
   info: null,
   user: null,
 };
-
 ChatItem.propTypes = {
   newChat: PropTypes.bool,
   chat: PropTypes.bool,

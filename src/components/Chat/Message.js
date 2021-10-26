@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineFilePdf } from 'react-icons/ai';
+import { logDOM } from '@testing-library/react';
 import { useAuth } from '../../services/AuthProvider';
 import db from '../../services/Firebase';
 import { showFullDate } from '../../utils/Date';
@@ -35,6 +36,7 @@ const Text = styled.div`
   /* justify-content: space-between; */
   flex-direction: column;
   max-width: 25vw;
+
   .text {
     margin-bottom: 10px;
 
@@ -96,10 +98,18 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
             snapshot.docs.map((doc) => ({
               likeId: doc.id,
               data: doc.data(),
-            }))
+            })),
           );
           setLoading(false);
         }
+      });
+
+    if (user)
+      db.collection('users').doc(user).onSnapshot(snapshot => {
+        if (cancel)
+          setDisplayName(
+            snapshot.data().userName,
+          );
       });
 
     return () => {
@@ -172,14 +182,18 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
       fileType === 'image/jpeg'
     ) {
       return (
-        <div className="text">
-          <img className="image" src={message} alt={message} />
+        <div className='text'>
+          <img className='image'
+               src={message}
+               alt={message} />
         </div>
       );
     }
     return (
-      <div className="text">
-        <A href={message} target="_blank" rel="noreferrer">
+      <div className='text'>
+        <A href={message}
+           target='_blank'
+           rel='noreferrer'>
           <AiOutlineFilePdf />
           {name}
         </A>
@@ -197,15 +211,13 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
       />
       {/* {console.log(getLikeId(likes, currentUser.uid))} */}
       <Content>
-        <Author>{user}</Author>
-
+        <Author>{displayName}</Author>
         <Text>
           {type === 'text' ? (
-            <div className="text">{text}</div>
+            <div className='text'>{text}</div>
           ) : (
             handleCheckFileType(type, fileName, text)
           )}
-
           <Date>{date ? showFullDate(date) : null}</Date>
         </Text>
       </Content>

@@ -25,8 +25,8 @@ const ChatBody = ({ id }) => {
 
   useEffect(async () => {
     let cancel = true;
-
-    if (id) {
+// cancel in first if
+    if (id && cancel) {
       await db
         .collection('rooms')
         .doc(id)
@@ -39,7 +39,7 @@ const ChatBody = ({ id }) => {
                 snapshot.docs.map((doc) => ({
                   messageId: doc.id,
                   data: doc.data(),
-                }))
+                })),
               );
         });
       return () => {
@@ -50,27 +50,27 @@ const ChatBody = ({ id }) => {
   }, [id]);
 
   return (
-    <ScrollToBottom className="scroll">
+    <ScrollToBottom className='scroll'>
       <Suspense fallback={<Loader />}>
         <Body>
           {id &&
-            messages.map((message) => (
-              <Message
-                id={message.messageId}
-                roomId={id}
-                own={message.data.user === currentUser?.uid}
-                user={
-                  message.data.user === currentUser?.uid
-                    ? null
-                    : message.data.userName
-                }
-                date={message.data.timestamp}
-                text={message.data.message}
-                type={message.data.type}
-                fileName={message.data.fileName}
-                key={message.data.timestamp}
-              />
-            ))}
+          messages.map((message) => (
+            <Message
+              id={message.messageId}
+              roomId={id}
+              own={message.data.user === currentUser?.uid}
+              user={
+                message.data.user === currentUser?.uid
+                  ? null
+                  : message.data.user
+              }
+              date={message.data.timestamp}
+              text={message.data.message}
+              type={message.data.type}
+              fileName={message.data.fileName}
+              key={message.data.timestamp}
+            />
+          ))}
         </Body>
       </Suspense>
     </ScrollToBottom>

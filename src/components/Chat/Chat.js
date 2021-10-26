@@ -46,7 +46,8 @@ const Chat = () => {
 
   useEffect(() => {
     let cancel = true;
-    if (id) {
+    // candel in first if
+    if (id && cancel) {
       db.collection('rooms')
         .doc(id)
         .onSnapshot((snapschot) => {
@@ -83,17 +84,16 @@ const Chat = () => {
           <>
             {roomData.name && roomData.user === currentUser.uid ? (
               <Link to={`/settings/room/${id}`}>
-                <Tooltip title="Ustawienia czatu">
+                <Tooltip title='Ustawienia czatu'>
                   <IconButton>
                     <SettingsIcon />
                   </IconButton>
                 </Tooltip>
               </Link>
             ) : null}
-
             <Tooltip title={sidebar ? 'Schowaj menu' : 'Pokaż menu'}>
               <IconButton
-                id="menuButton"
+                id='menuButton'
                 onClick={() => dispatch(toggleSidebar())}
               >
                 {sidebar ? <MenuOpenIcon /> : <MenuIcon />}
@@ -103,7 +103,6 @@ const Chat = () => {
         }
       />
       <ChatBody id={id} />
-
       {roomData.name ? <MessageForm id={id} /> : ''}
     </Wrapper>
   );
