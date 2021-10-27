@@ -21,17 +21,24 @@ const FileUploadModal = React.lazy(() => import('./FileUploadModal'));
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 100px;
-  background-color: ${({ theme }) => theme.colors.primary};
+  height: 75px;
+  background-color: ${({ theme }) => theme.colors.tertiary};
+  overflow: hidden;
   display: flex;
   align-items: center;
   padding: 10px 20px;
+
+  svg {
+    color: ${({ theme }) => theme.colors.font.secondary};
+  }
 
   form {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
+
+    //color: red;
   }
 
   input {
@@ -105,12 +112,12 @@ const MessageForm = ({ id }) => {
       <form>
         <SpeechToText />
         <input
-          type="text"
+          type='text'
           value={message}
           onChange={(e) => dispatch(setMessage(e.target.value))}
-          placeholder="Napisz wiadomość"
+          placeholder='Napisz wiadomość'
         />
-        <Tooltip title="Dodaj załącznik">
+        <Tooltip title='Dodaj załącznik'>
           <IconButton
             onClick={() => dispatch(toggleFileUpload())}
             onKeyDown={() => dispatch(toggleFileUpload())}
@@ -118,7 +125,7 @@ const MessageForm = ({ id }) => {
             <AttachFile />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Wstaw emoji">
+        <Tooltip title='Wstaw emoji'>
           <IconButton
             onClick={() => dispatch(toggleEmojiPicker())}
             onKeyDown={() => dispatch(toggleEmojiPicker())}
@@ -126,11 +133,11 @@ const MessageForm = ({ id }) => {
             <SentimentVerySatisfiedIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Wyślij">
+        <Tooltip title='Wyślij'>
           <span>
             <IconButton
               disabled={message.length === 0}
-              type="submit"
+              type='submit'
               onClick={sendMessage}
             >
               <SendIcon />

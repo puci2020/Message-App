@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
   text: {
     marginBottom: '10px',
+    color: '#d7d7d7',
   },
 }));
 
@@ -58,17 +59,20 @@ const NameUpdate = () => {
   };
   return (
     <div>
-      <h3 id="transition-modal-title" className={classes.text}>
+      <h3 id='transition-modal-title'
+          className={classes.text}>
         Zmiana nazwy użytkownika
       </h3>
-      <p id="transition-modal-description" className={classes.text}>
+      <p id='transition-modal-description'
+         className={classes.text}>
         Podaj nową nazwę użytkownika
       </p>
       <form onSubmit={handleSubmit(handleUpdate)}>
-        <Input icon={<PersonIcon />} error={errors.displayName?.message}>
+        <Input icon={<PersonIcon />}
+               error={errors.displayName?.message}>
           <input
-            type="text"
-            placeholder="Nazwa użytkownika"
+            type='text'
+            placeholder='Nazwa użytkownika'
             {...register('displayName')}
           />
         </Input>
@@ -76,9 +80,9 @@ const NameUpdate = () => {
           style={{
             marginTop: '10px',
           }}
-          color="primary"
-          variant="contained"
-          type="submit"
+          color='primary'
+          variant='contained'
+          type='submit'
         >
           Aktualizuj konto
         </Button>

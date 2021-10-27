@@ -1,11 +1,15 @@
-import { IconButton, Tooltip } from '@material-ui/core';
-import { ExitToApp, SearchOutlined } from '@material-ui/icons';
+import { Button, IconButton, Tooltip } from '@material-ui/core';
+import { AddCircle, ExitToApp, SearchOutlined } from '@material-ui/icons';
 import SettingsIcon from '@material-ui/icons/Settings';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import alertify from 'alertifyjs';
+// eslint-disable-next-line import/no-unresolved
+import db from '../services/Firebase';
+import firebase from '../../node_modules/firebase';
 import toggleSidebar from '../state/actions/sidebarActions';
 import { useAuth } from '../services/AuthProvider';
 import { useStateValue } from '../services/StateProvider';
@@ -24,19 +28,46 @@ const Wrapper = styled.div`
   flex-direction: column;
   flex: 0.35;
   background-color: ${({ theme }) => theme.colors.primary};
-  border-right: 1px solid lightgray;
+  border-right: 1px solid ${({ theme }) => theme.colors.border};
 
   ${({ theme }) => theme.media.tablet} {
     position: absolute;
     /* top: 0; */
     /* left: 0; */
     transform: ${(props) =>
-      props.mobile ? 'translateX(0)' : 'translateX(-120%)'};
+            props.mobile ? 'translateX(0)' : 'translateX(-120%)'};
     transition: transform 0.35s ease-in-out;
     z-index: 2;
-    width: 70%;
+    width: 80%;
     height: 100vh;
     max-width: 400px;
+  }
+`;
+
+const BottomButtons = styled.div`
+  height: 75px;
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.primary};
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+
+  Button {
+    width: 45%;
+    background-color: ${({ theme }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.colors.font.primary};
+    font-size: ${({ theme }) => theme.font.size.xxs};
+
+
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.menu.hoverLink};
+
+    }
+
+    svg {
+      margin-right: 10px;
+    }
   }
 `;
 
@@ -83,6 +114,32 @@ const Sidebar = () => {
     history.push('/login');
   };
 
+  const createNewChat = async () => {
+    // const roomName = prompt('Podaj nazwę czatu!');
+    await alertify.prompt(
+      'Nowy czat',
+      'Podaj nazwę czatu',
+      'Nazwa czatu',
+      (evt, value) => {
+        if (value) {
+          db.collection('rooms').add({
+            name: value,
+            lastMessage: null,
+            lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
+            photoURL: null,
+            user: currentUser.uid.toString(),
+          });
+          alertify.success(`Czat o nazwie "${value}" utworzony pomyślnie!`);
+        } else {
+          alertify.warning(`Nazwa czatu nie może być pusta!`);
+        }
+      },
+      () => {
+        alertify.error('Tworzenie czatu anulowano');
+      },
+    );
+  };
+
   return (
     <Wrapper mobile={sidebar}>
       <Header
@@ -94,17 +151,17 @@ const Sidebar = () => {
         }
         right={
           <>
-            <Link to={`/settings/user/${currentUser.uid}`}>
-              <Tooltip
-                title="Ustawienia konta"
-                onClick={() => dispatch(toggleSidebar())}
-              >
-                <IconButton>
-                  <SettingsIcon />
-                </IconButton>
-              </Tooltip>
-            </Link>
-            <Tooltip title="Wyloguj">
+            {/* <Link to={`/settings/user/${currentUser.uid}`}> */}
+            {/*  <Tooltip */}
+            {/*    title='Ustawienia konta' */}
+            {/*    onClick={() => dispatch(toggleSidebar())} */}
+            {/*  > */}
+            {/*    <IconButton> */}
+            {/*      <SettingsIcon /> */}
+            {/*    </IconButton> */}
+            {/*  </Tooltip> */}
+            {/* </Link> */}
+            <Tooltip title='Wyloguj'>
               <IconButton onClick={handleLogOut}>
                 <ExitToApp />
               </IconButton>
@@ -112,8 +169,26 @@ const Sidebar = () => {
           </>
         }
       />
-
       <SidebarBody />
+      <BottomButtons>
+        <Tooltip
+          title='Stwórz nowy czat'
+        >
+          <Button onClick={() => {
+            dispatch(toggleSidebar());
+            createNewChat();
+          }}>
+            <AddCircle />
+            Nowy czat</Button></Tooltip>
+        <Tooltip
+          title='Ustawienia konta'
+        >
+          <Button onClick={() => {
+            dispatch(toggleSidebar());
+            history.push(`/settings/user/${currentUser.uid}`);
+          }}>
+            <SettingsIcon />Ustawienia</Button></Tooltip>
+      </BottomButtons>
     </Wrapper>
   );
 };

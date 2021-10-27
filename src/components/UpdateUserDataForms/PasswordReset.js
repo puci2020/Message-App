@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
   text: {
     marginBottom: '10px',
+    color: '#d7d7d7',
   },
 }));
 
@@ -54,23 +55,27 @@ const PasswordReset = () => {
   };
   return (
     <div>
-      <h3 id="transition-modal-title" className={classes.text}>
+      <h3 id='transition-modal-title'
+          className={classes.text}>
         Resetowanie hasła
       </h3>
-      <p id="transition-modal-description" className={classes.text}>
+      <p id='transition-modal-description'
+         className={classes.text}>
         Podaj adres e-mail, do którego chcesz zresetować hasło.
       </p>
       <form onSubmit={handleSubmit(handleReset)}>
-        <Input icon={<Email />} error={errors.email?.message}>
-          <input type="text" placeholder="E-mail" {...register('email')} />
+        <Input icon={<Email />}
+               error={errors.email?.message}>
+          <input type='text'
+                 placeholder='E-mail' {...register('email')} />
         </Input>
         <Button
           style={{
             marginTop: '10px',
           }}
-          color="primary"
-          variant="contained"
-          type="submit"
+          color='primary'
+          variant='contained'
+          type='submit'
         >
           Resetuj
         </Button>

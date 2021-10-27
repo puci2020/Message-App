@@ -8,6 +8,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   width: fit-content;
+
   svg {
     width: 25px;
     height: 25px;
@@ -21,7 +22,7 @@ const Wrapper = styled.div`
 const Number = styled.div`
   padding: 2px;
   font-size: 14px;
-  color: black;
+  color: ${props => props.own ? props.theme.colors.font.primary : props.theme.colors.font.secondary};
 `;
 
 const Like = ({ own, liked, number, handleLike }) => (
@@ -33,14 +34,12 @@ const Like = ({ own, liked, number, handleLike }) => (
         ) : (
           <FcLikePlaceholder onClick={handleLike} />
         )}
-
         <Number>{number > 0 ? number : null}</Number>
       </>
     )}
-
     {own && number > 0 ? (
       <>
-        <FcLike /> <Number>{number > 0 ? number : null}</Number>
+        <Number own={own}>{number > 0 ? number : null}</Number><FcLike />
       </>
     ) : null}
   </Wrapper>

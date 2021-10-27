@@ -2,10 +2,23 @@ const theme = {
   colors: {
     background: '#9a9090',
     // background: '#dadbd3',
-    primary: '#ecefea',
+    // primary: '#ecefea',
+    primary: '#344353',
     // primary: '#ededed',
-    secondary: '#f6f6f6',
-    border: '#f6f6f6',
+    // secondary: '#f6f6f6',
+    secondary: '#4d6279',
+    // tertiary: '#cbcbcb',
+    tertiary: '#f5f5f5',
+
+    border: '#4d6279',
+    borderSecondary: '#d7d7d7',
+    // border: '#f6f6f6',
+
+    font: {
+      primary: '#f5f5f5',
+      // primary: '#d7d7d7',
+      secondary: '#32465a',
+    },
 
     message: {
       primary: 'white',

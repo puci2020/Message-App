@@ -14,6 +14,10 @@ import Loader from './Loader';
 
 const ChatItem = React.lazy(() => import('./ChatItem'));
 
+const Wrapper = styled.div`
+  height: 100%;
+`;
+
 const Chats = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
@@ -23,10 +27,10 @@ const Chats = styled.div`
 const Search = styled.div`
   display: flex;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.secondary};
-  height: 90px;
+  background-color: ${({ theme }) => theme.colors.primary};
+  height: 70px;
   padding: 20px;
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   overflow: hidden;
 
   input {
@@ -35,16 +39,18 @@ const Search = styled.div`
     margin-left: 10px;
     width: 100%;
     height: 100%;
+    background-color: ${({ theme }) => theme.colors.secondary};
   }
 
   .inputField {
     display: flex;
     align-items: center;
-    background-color: white;
+    //background-color: white;
     width: 100%;
     height: 35px;
     border-radius: 20px;
     padding-left: 10px;
+    background-color: ${({ theme }) => theme.colors.secondary};
 
     svg {
       color: gray;
@@ -70,13 +76,13 @@ const SidebarBody = () => {
           snapshot.docs.map((doc) => ({
             id: doc.id,
             data: doc.data(),
-          }))
+          })),
         );
         setFilteredRooms(
           snapshot.docs.map((doc) => ({
             id: doc.id,
             data: doc.data(),
-          }))
+          })),
         );
       });
   }, []);
@@ -85,26 +91,28 @@ const SidebarBody = () => {
     if (filter.length > 0)
       setFilteredRooms(
         rooms.filter((el) =>
-          el.data.name.toLowerCase().includes(filter.toLowerCase())
-        )
+          el.data.name.toLowerCase().includes(filter.toLowerCase()),
+        ),
       );
     else setFilteredRooms(rooms);
   }, [filter]);
 
   return (
-    <>
+    <Wrapper>
       <Search>
         <Input icon={<SearchOutlined />}>
           <input
-            type="text"
-            placeholder="Wyszukaj czat"
+            type='text'
+            placeholder='Wyszukaj czat'
             onChange={(e) => setFilter(e.target.value)}
           />
         </Input>
       </Search>
       <Suspense fallback={<Loader />}>
         <Chats onClick={() => dispatch(toggleSidebar())}>
-          <ChatItem newChat chat user={currentUser.uid} />
+          {/* <ChatItem newChat */}
+          {/*          chat */}
+          {/*          user={currentUser.uid} /> */}
           {filteredRooms.map((room) => (
             <Link
               key={room.id}
@@ -125,7 +133,7 @@ const SidebarBody = () => {
           ))}
         </Chats>
       </Suspense>
-    </>
+    </Wrapper>
   );
 };
 

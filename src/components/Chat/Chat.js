@@ -69,6 +69,7 @@ const Chat = () => {
   return (
     <Wrapper>
       <Header
+        isChatTitle
         left={
           <ChatItem
             name={roomData.name}

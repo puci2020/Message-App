@@ -23,6 +23,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  color: ${({ theme }) => theme.colors.font.primary};
 `;
 
 const Form = styled.form`
@@ -38,7 +39,8 @@ const Form = styled.form`
       display: flex;
       justify-content: center;
     }
-  } ;
+  }
+;
 `;
 
 const schema = yup.object().shape({
@@ -76,7 +78,7 @@ const Registration = () => {
         authUser.user.sendEmailVerification();
         alertify.alert(
           'Potwierdź rejestracje',
-          'Potwierdź rejestrację klikając w link aktywacyjny wysłany na Twoją skrzynkę'
+          'Potwierdź rejestrację klikając w link aktywacyjny wysłany na Twoją skrzynkę',
         );
         reset();
         return authUser.user.updateProfile({
@@ -88,45 +90,55 @@ const Registration = () => {
   return (
     <Wrapper>
       <h1>Zarejestruj się!</h1>
-      <Form key={1} onSubmit={handleSubmit(handleSignUp)}>
-        <Input icon={<Email />} error={errors.email?.message}>
-          <input type="text" placeholder="E-mail" {...register('email')} />
+      <Form key={1}
+            onSubmit={handleSubmit(handleSignUp)}>
+        <Input icon={<Email />}
+               error={errors.email?.message}>
+          <input type='text'
+                 placeholder='E-mail' {...register('email')} />
         </Input>
-        <Input icon={<PersonIcon />} error={errors.firstName?.message}>
-          <input type="text" placeholder="Imię" {...register('firstName')} />
+        <Input icon={<PersonIcon />}
+               error={errors.firstName?.message}>
+          <input type='text'
+                 placeholder='Imię' {...register('firstName')} />
         </Input>
-        <Input icon={<PersonIcon />} error={errors.lastName?.message}>
-          <input type="text" placeholder="Nazwisko" {...register('lastName')} />
+        <Input icon={<PersonIcon />}
+               error={errors.lastName?.message}>
+          <input type='text'
+                 placeholder='Nazwisko' {...register('lastName')} />
         </Input>
-        <Input icon={<Lock />} error={errors.password?.message}>
+        <Input icon={<Lock />}
+               error={errors.password?.message}>
           <input
-            type="password"
-            placeholder="Hasło"
+            type='password'
+            placeholder='Hasło'
             {...register('password')}
           />
         </Input>
-        <Input icon={<Lock />} error={errors.passwordConfirm?.message}>
+        <Input icon={<Lock />}
+               error={errors.passwordConfirm?.message}>
           <input
-            type="password"
-            placeholder="Powtórz hasło"
+            type='password'
+            placeholder='Powtórz hasło'
             {...register('passwordConfirm')}
           />
         </Input>
-        <div className="button__group">
+        <div className='button__group'>
           <Button
             style={{ marginTop: '10px', marginRight: '20px' }}
-            color="primary"
-            variant="contained"
-            type="submit"
+            color='primary'
+            variant='contained'
+            type='submit'
           >
             Zarejestruj się
           </Button>
-          <Link to="/" style={{ textDecoration: 'none' }}>
+          <Link to='/login'
+                style={{ textDecoration: 'none' }}>
             <Button
               style={{ marginTop: '10px' }}
-              color="primary"
-              variant="contained"
-              type="button"
+              color='primary'
+              variant='contained'
+              type='button'
               onClick={() => {
                 reset();
               }}

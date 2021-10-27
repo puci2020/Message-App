@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
   text: {
     marginBottom: '10px',
+    color: '#d7d7d7',
   },
 }));
 
@@ -76,34 +77,41 @@ const PasswordUpdate = () => {
   };
   return (
     <div>
-      <h3 id="transition-modal-title" className={classes.text}>
+      <h3 id='transition-modal-title'
+          className={classes.text}>
         Zmiana hasła
       </h3>
-      <p id="transition-modal-description" className={classes.text}>
+      <p id='transition-modal-description'
+         className={classes.text}>
         Podaj obecne dane oraz nowe hasło
       </p>
       <form onSubmit={handleSubmit(handleUpdate)}>
-        <Input icon={<Email />} error={errors.email?.message}>
-          <input type="text" placeholder="E-mail" {...register('email')} />
+        <Input icon={<Email />}
+               error={errors.email?.message}>
+          <input type='text'
+                 placeholder='E-mail' {...register('email')} />
         </Input>
-        <Input icon={<Lock />} error={errors.password?.message}>
+        <Input icon={<Lock />}
+               error={errors.password?.message}>
           <input
-            type="password"
-            placeholder="Stere hasło"
+            type='password'
+            placeholder='Stere hasło'
             {...register('password')}
           />
         </Input>
-        <Input icon={<Lock />} error={errors.newPassword?.message}>
+        <Input icon={<Lock />}
+               error={errors.newPassword?.message}>
           <input
-            type="password"
-            placeholder="Nowe hasło"
+            type='password'
+            placeholder='Nowe hasło'
             {...register('newPassword')}
           />
         </Input>
-        <Input icon={<Lock />} error={errors.newPasswordConfirm?.message}>
+        <Input icon={<Lock />}
+               error={errors.newPasswordConfirm?.message}>
           <input
-            type="password"
-            placeholder="Potwierdź nowe hasło"
+            type='password'
+            placeholder='Potwierdź nowe hasło'
             {...register('newPasswordConfirm')}
           />
         </Input>
@@ -111,11 +119,11 @@ const PasswordUpdate = () => {
           style={{
             marginTop: '10px',
           }}
-          color="primary"
-          variant="contained"
-          type="submit"
+          color='primary'
+          variant='contained'
+          type='submit'
         >
-          Zemiń hasło
+          Zmień hasło
         </Button>
       </form>
     </div>

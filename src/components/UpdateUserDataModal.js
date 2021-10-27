@@ -17,23 +17,23 @@ import toggleUpdateUserData from '../state/actions/updateUserDataActions';
 // import ImageChatUpdate from './UpdateChatDataForms/ImageChatUpdate';
 
 const PasswordReset = React.lazy(() =>
-  import('./UpdateUserDataForms/PasswordReset')
+  import('./UpdateUserDataForms/PasswordReset'),
 );
 const NameUpdate = React.lazy(() => import('./UpdateUserDataForms/NameUpdate'));
 const EmailUpdate = React.lazy(() =>
-  import('./UpdateUserDataForms/EmailUpdate')
+  import('./UpdateUserDataForms/EmailUpdate'),
 );
 const PasswordUpdate = React.lazy(() =>
-  import('./UpdateUserDataForms/PasswordUpdate')
+  import('./UpdateUserDataForms/PasswordUpdate'),
 );
 const ImageUpdate = React.lazy(() =>
-  import('./UpdateUserDataForms/ImageUpdate')
+  import('./UpdateUserDataForms/ImageUpdate'),
 );
 const NameChatUpdate = React.lazy(() =>
-  import('./UpdateChatDataForms/NameChatUpdate')
+  import('./UpdateChatDataForms/NameChatUpdate'),
 );
 const ImageChatUpdate = React.lazy(() =>
-  import('./UpdateChatDataForms/ImageChatUpdate')
+  import('./UpdateChatDataForms/ImageChatUpdate'),
 );
 
 const useStyles = makeStyles((theme) => ({
@@ -45,10 +45,11 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     maxWidth: '90vw',
     width: '400px',
-    backgroundColor: `#ededed`,
-    border: '2px solid #000',
+    backgroundColor: '#344353',
+    border: `2px solid #4d6279`,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
+
   },
 }));
 
@@ -67,8 +68,8 @@ const UpdateUserDataModal = ({ type, id }) => {
 
   return (
     <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
+      aria-labelledby='transition-modal-title'
+      aria-describedby='transition-modal-description'
       className={classes.modal}
       open={updateUserData}
       onClose={() => dispatch(toggleUpdateUserData())}

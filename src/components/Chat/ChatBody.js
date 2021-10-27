@@ -12,6 +12,7 @@ const Message = React.lazy(() => import('./Message'));
 const Body = styled.div`
   /* background-image: url('https://images.unsplash.com/photo-1533628635777-112b2239b1c7?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); */
   background-color: #d6d6d6;
+  border-top: ${({ theme }) => theme.colors.borderSecondaryr};
   flex: 1;
   overflow-y: auto;
   padding: 30px;

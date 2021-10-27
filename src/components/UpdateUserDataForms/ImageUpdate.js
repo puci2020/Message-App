@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   text: {
     marginBottom: '10px',
+    color: '#d7d7d7',
   },
 }));
 
@@ -39,7 +40,7 @@ const schema = yup.object().shape({
     .test(
       'fileSize',
       'Plik jest za duży',
-      (value) => value && value[0].size <= 2000000
+      (value) => value && value[0].size <= 2000000,
     )
     .test(
       'type',
@@ -47,7 +48,7 @@ const schema = yup.object().shape({
       (value) =>
         (value && value[0].type === 'image/png') ||
         (value && value[0].type === 'image/jpeg') ||
-        (value && value[0].type === 'image/jpg')
+        (value && value[0].type === 'image/jpg'),
     )
     .required('Wybierz plik z urządzenia'),
 });
@@ -100,17 +101,20 @@ const ImageUpdate = () => {
 
   return (
     <div>
-      <h3 id="transition-modal-title" className={classes.text}>
+      <h3 id='transition-modal-title'
+          className={classes.text}>
         Zmiana zdjęcia
       </h3>
-      <p id="transition-modal-description" className={classes.text}>
+      <p id='transition-modal-description'
+         className={classes.text}>
         Wybierz plik z komputera
       </p>
       <form onSubmit={handleSubmit(handleUpload)}>
-        <Input icon={<AttachFile />} error={errors.uploadFile?.message}>
+        <Input icon={<AttachFile />}
+               error={errors.uploadFile?.message}>
           <input
-            type="file"
-            placeholder="Plik"
+            type='file'
+            placeholder='Plik'
             // onChange={reset}
             {...register('uploadFile', { required: true })}
           />
@@ -119,9 +123,9 @@ const ImageUpdate = () => {
           style={{
             marginTop: '10px',
           }}
-          color="primary"
-          variant="contained"
-          type="submit"
+          color='primary'
+          variant='contained'
+          type='submit'
         >
           Wyślij
         </Button>

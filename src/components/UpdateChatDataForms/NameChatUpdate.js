@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
   text: {
     marginBottom: '10px',
+    color: '#d7d7d7',
   },
 }));
 
@@ -61,23 +62,27 @@ const NameChatUpdate = ({ id }) => {
   };
   return (
     <div>
-      <h3 id="transition-modal-title" className={classes.text}>
+      <h3 id='transition-modal-title'
+          className={classes.text}>
         Zmiana nazwy czatu
       </h3>
-      <p id="transition-modal-description" className={classes.text}>
+      <p id='transition-modal-description'
+         className={classes.text}>
         Podaj nową nazwę czatu
       </p>
       <form onSubmit={handleSubmit(handleUpdate)}>
-        <Input icon={<PersonIcon />} error={errors.name?.message}>
-          <input type="text" placeholder="Nazwa czatu" {...register('name')} />
+        <Input icon={<PersonIcon />}
+               error={errors.name?.message}>
+          <input type='text'
+                 placeholder='Nazwa czatu' {...register('name')} />
         </Input>
         <Button
           style={{
             marginTop: '10px',
           }}
-          color="primary"
-          variant="contained"
-          type="submit"
+          color='primary'
+          variant='contained'
+          type='submit'
         >
           Aktualizuj czat
         </Button>

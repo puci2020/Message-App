@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   span {
     padding-left: 10px;
     font-size: ${({ theme }) => theme.font.size.xs};
-    /* letter-spacing: ${({ theme }) => theme.font.space.s}; */
+      /* letter-spacing: ${({ theme }) => theme.font.space.s}; */
     color: red;
   }
 `;
@@ -17,22 +17,24 @@ const Wrapper = styled.div`
 const InputWrapper = styled.div`
   display: flex;
   align-items: center;
-  background-color: white;
+  //background-color: white;
+  background-color: ${({ theme }) => theme.colors.secondary};
   width: 100%;
   height: 35px;
   border-radius: 20px;
   padding-left: 10px;
   margin-bottom: 5px;
 
-  border: ${(props) => (props.error ? '1px solid red' : '')};
+  border: ${(props) => (props.error ? '2px solid red' : '')};
 
   svg {
-    color: gray;
+    color: ${({ theme }) => theme.colors.font.primary};
   }
 
   .error {
-    border: 1px solid red;
+    border: 2px solid red;
   }
+
   input {
     border: none;
     outline: none;
@@ -41,6 +43,12 @@ const InputWrapper = styled.div`
     height: 100%;
     display: flex;
     align-items: center;
+    color: ${({ theme }) => theme.colors.font.primary};
+    background-color: ${({ theme }) => theme.colors.secondary};
+
+    &::placeholder {
+      color: ${({ theme }) => theme.colors.font.primary};
+    }
   }
 `;
 

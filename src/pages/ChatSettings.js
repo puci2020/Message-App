@@ -34,6 +34,12 @@ const Body = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: #d6d6d6;
+  color: ${({ theme }) => theme.colors.font.secondary};
+
+  svg {
+    color: ${({ theme }) => theme.colors.font.secondary}
+  }
 `;
 
 const Field = styled.div`
@@ -42,6 +48,7 @@ const Field = styled.div`
   /* grid-template-rows: 1fr; */
   grid-template-columns: 2fr auto;
   grid-gap: 20px;
+
   h3 {
     display: flex;
     align-items: center;
@@ -104,9 +111,10 @@ const ChatSettings = () => {
   return (
     <Wrapper>
       <Header
+        isChatTitle
         left={
           <ChatItem
-            name="Ustawienia czatu"
+            name='Ustawienia czatu'
             avatar={roomPhoto}
             // info={
             //   roomName
@@ -118,7 +126,7 @@ const ChatSettings = () => {
         right={
           <>
             <IconButton
-              id="menuButton"
+              id='menuButton'
               onClick={() => dispatch(toggleSidebar())}
             >
               {sidebar ? <MenuOpenIcon /> : <MenuIcon />}
@@ -127,22 +135,29 @@ const ChatSettings = () => {
         }
       />
       <Body>
-        <Avatar alt={roomName} src={roomPhoto} className={classes.large} />
-        <Tooltip title="Edytuj zdjęcie">
-          <IconButton id="menuButton" size="small" onClick={editImageChat}>
+        <Avatar alt={roomName}
+                src={roomPhoto}
+                className={classes.large} />
+        <Tooltip title='Edytuj zdjęcie'>
+          <IconButton id='menuButton'
+                      size='small'
+                      onClick={editImageChat}>
             <EditIcon />
           </IconButton>
         </Tooltip>
         <Field>
           <h3>{roomName}</h3>
-          <Tooltip title="Edytuj nazwę">
-            <IconButton id="menuButton" size="small" onClick={editNameChat}>
+          <Tooltip title='Edytuj nazwę'>
+            <IconButton id='menuButton'
+                        size='small'
+                        onClick={editNameChat}>
               <EditIcon />
             </IconButton>
           </Tooltip>
         </Field>
       </Body>
-      <UpdateUserDataModal type={updateType} id={id} />
+      <UpdateUserDataModal type={updateType}
+                           id={id} />
     </Wrapper>
   );
 };

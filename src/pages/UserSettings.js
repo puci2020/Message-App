@@ -34,6 +34,12 @@ const Body = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: #d6d6d6;
+  color: ${({ theme }) => theme.colors.font.secondary};
+
+  svg {
+    color: ${({ theme }) => theme.colors.font.secondary}
+  }
 `;
 
 const Field = styled.div`
@@ -42,6 +48,7 @@ const Field = styled.div`
   /* grid-template-rows: 1fr; */
   grid-template-columns: 2fr auto;
   grid-gap: 20px;
+
   h3 {
     display: flex;
     align-items: center;
@@ -92,6 +99,7 @@ const UserSettings = () => {
     await auth.onAuthStateChanged((user) => {
       dispatch(setCurrentProvider(currentUser.providerData));
     });
+    // dispatch(setCurrentProvider(currentUser.providerData));
   }, []);
 
   // const openUpdate = () => {
@@ -121,9 +129,10 @@ const UserSettings = () => {
   return (
     <Wrapper>
       <Header
+        isChatTitle
         left={
           <ChatItem
-            name="Ustawienia użytkownika"
+            name='Ustawienia użytkownika'
             // info={
             //   roomName
             //     ? displayRoomInfo(lastSeen)
@@ -134,7 +143,7 @@ const UserSettings = () => {
         right={
           <>
             <IconButton
-              id="menuButton"
+              id='menuButton'
               onClick={() => dispatch(toggleSidebar())}
             >
               {sidebar ? <MenuOpenIcon /> : <MenuIcon />}
@@ -149,15 +158,19 @@ const UserSettings = () => {
           className={classes.large}
           sx={{ width: 24, height: 24 }}
         />
-        <Tooltip title="Edytuj zdjęcie">
-          <IconButton id="menuButton" size="small" onClick={editImage}>
+        <Tooltip title='Edytuj zdjęcie'>
+          <IconButton id='menuButton'
+                      size='small'
+                      onClick={editImage}>
             <EditIcon />
           </IconButton>
         </Tooltip>
         <Field>
           <h3>{currentUser.displayName}</h3>
-          <Tooltip title="Edytuj nazwę">
-            <IconButton id="menuButton" size="small" onClick={editName}>
+          <Tooltip title='Edytuj nazwę'>
+            <IconButton id='menuButton'
+                        size='small'
+                        onClick={editName}>
               <EditIcon />
             </IconButton>
           </Tooltip>
@@ -165,8 +178,10 @@ const UserSettings = () => {
         {currentProvider.length === 1 && checkProviderId('password') ? (
           <Field>
             <h3>{currentUser.email}</h3>
-            <Tooltip title="Edytuj e-mail">
-              <IconButton id="menuButton" size="small" onClick={editEmail}>
+            <Tooltip title='Edytuj e-mail'>
+              <IconButton id='menuButton'
+                          size='small'
+                          onClick={editEmail}>
                 <EditIcon />
               </IconButton>
             </Tooltip>
@@ -175,8 +190,10 @@ const UserSettings = () => {
         {checkProviderId('password') ? (
           <Field>
             <h3>Zmień hasło</h3>
-            <Tooltip title="Edytuj hasło">
-              <IconButton id="menuButton" size="small" onClick={editPassword}>
+            <Tooltip title='Edytuj hasło'>
+              <IconButton id='menuButton'
+                          size='small'
+                          onClick={editPassword}>
                 <EditIcon />
               </IconButton>
             </Tooltip>

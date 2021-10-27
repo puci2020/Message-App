@@ -16,7 +16,9 @@ const Wrapper = styled.div`
   border-radius: 20px;
   padding: 10px;
   max-width: 60%;
-  background-color: ${(props) => (props.own ? '#3aecdc7d' : 'white')};
+  background-color: ${(props) => (props.own ? props.theme.colors.secondary : props.theme.colors.tertiary)};
+  color: ${(props) => (props.own ? props.theme.colors.font.primary : 'black')};
+
   flex-direction: ${(props) => (props.own ? 'row' : 'row-reverse')};
   justify-content: ${(props) => (props.own ? 'flex-end' : 'flex-start')};
   display: flex;
@@ -65,9 +67,10 @@ const Date = styled.div`
   min-width: fit-content;
   font-weight: ${({ theme }) => theme.font.weight.regular};
   font-size: ${({ theme }) => theme.font.size.xxs};
-  color: darkslategray;
+  //color: darkslategray;
   display: flex;
   align-items: flex-end;
+  color: ${props => props.own ? 'loghtgray' : 'darkslategray'}
   /* margin-left: 10px; */
 `;
 
@@ -218,7 +221,7 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
           ) : (
             handleCheckFileType(type, fileName, text)
           )}
-          <Date>{date ? showFullDate(date) : null}</Date>
+          <Date own={own}>{date ? showFullDate(date) : null}</Date>
         </Text>
       </Content>
     </Wrapper>
