@@ -16,8 +16,8 @@ const Wrapper = styled.div`
   border-radius: 20px;
   padding: 10px;
   max-width: 60%;
-  background-color: ${(props) => (props.own ? props.theme.colors.secondary : props.theme.colors.tertiary)};
-  color: ${(props) => (props.own ? props.theme.colors.font.primary : 'black')};
+  background-color: ${(props) => (props.own ? props.theme.colors.message.secondary : props.theme.colors.message.primary)};
+  color: ${(props) => (props.own ? props.theme.colors.font.primary : props.theme.colors.font.secondary)};
 
   flex-direction: ${(props) => (props.own ? 'row' : 'row-reverse')};
   justify-content: ${(props) => (props.own ? 'flex-end' : 'flex-start')};
@@ -52,7 +52,7 @@ const Text = styled.div`
 const A = styled.a`
   display: flex;
   align-items: center;
-  color: black;
+  color: ${(props) => (props.own ? props.theme.colors.font.primary : 'black')};
 
   svg {
     margin-right: 5px;
@@ -70,7 +70,8 @@ const Date = styled.div`
   //color: darkslategray;
   display: flex;
   align-items: flex-end;
-  color: ${props => props.own ? 'loghtgray' : 'darkslategray'}
+    // color: ${props => props.own ? 'loghtgray' : 'darkslategray'}
+  color: ${(props) => (props.own ? props.theme.colors.font.primary : props.theme.colors.font.secondary)};
   /* margin-left: 10px; */
 `;
 
@@ -194,7 +195,8 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
     }
     return (
       <div className='text'>
-        <A href={message}
+        <A own={own}
+           href={message}
            target='_blank'
            rel='noreferrer'>
           <AiOutlineFilePdf />

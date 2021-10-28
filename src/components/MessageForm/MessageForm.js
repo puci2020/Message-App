@@ -22,14 +22,20 @@ const FileUploadModal = React.lazy(() => import('./FileUploadModal'));
 const Wrapper = styled.div`
   width: 100%;
   height: 75px;
-  background-color: ${({ theme }) => theme.colors.tertiary};
+  background-color: ${({ theme }) => theme.colors.primary};
   overflow: hidden;
   display: flex;
   align-items: center;
   padding: 10px 20px;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
 
   svg {
-    color: ${({ theme }) => theme.colors.font.secondary};
+    color: ${({ theme }) => theme.colors.font.primary};
+
+    ${({ theme }) => theme.media.phone} {
+      width: 20px;
+    }
+
   }
 
   form {
@@ -46,12 +52,31 @@ const Wrapper = styled.div`
     border: none;
     outline: none;
     margin: 0 10px;
-    background-color: white;
+    background-color: ${({ theme }) => theme.colors.secondary};
     width: 100%;
+
     height: 35px;
     border-radius: 20px;
     /* padding-left: 10px; */
+
+    &::placeholder {
+      color: ${({ theme }) => theme.colors.font.primary};
+    }
+
+    ${({ theme }) => theme.media.phone} {
+      max-width: 50%;
+    }
   }
+
+
+  ${({ theme }) => theme.media.phone} {
+    padding: 10px 0;
+
+    button {
+      padding: 7px;
+    }
+  }
+
 `;
 
 const MessageForm = ({ id }) => {
@@ -63,13 +88,6 @@ const MessageForm = ({ id }) => {
   const dispatch = useDispatch();
 
   const getCountString = (text) => text.length;
-
-  // const setMessage = (data) => {
-  //   dispatch({
-  //     type: actionTypes.SET_MESSAGE,
-  //     message: data,
-  //   });
-  // };
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -90,22 +108,8 @@ const MessageForm = ({ id }) => {
             : message,
         lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
       });
-    await dispatch(removeMessage());
+    dispatch(removeMessage());
   };
-
-  // const openFileUpload = async () => {
-  //   await dispatch({
-  //     type: actionTypes.SET_FILE_UPLOAD,
-  //     fileUpload: true,
-  //   });
-  // };
-
-  // const openEmojiPicker = async () => {
-  //   await dispatch({
-  //     type: actionTypes.SET_EMOJI_PICKER,
-  //     emojiPicker: true,
-  //   });
-  // };
 
   return (
     <Wrapper>

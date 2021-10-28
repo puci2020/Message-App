@@ -12,9 +12,7 @@ import toggleEmojiPicker from '../../state/actions/emojiPickerActions';
 import { setMessage } from '../../state/actions/messageActions';
 
 const Div = styled.div`
-  .emoji {
-    overflow: hidden;
-  }
+
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -25,8 +23,6 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     maxWidth: '90vw',
-    backgroundColor: `#ededed`,
-    border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -34,6 +30,19 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '10px',
   },
 }));
+
+const Paper = styled.div`
+  background-color: ${({ theme }) => theme.colors.primary};
+  border: 2px solid ${({ theme }) => theme.colors.secondary};
+
+  h3, p {
+    color: ${({ theme }) => theme.colors.font.primary}
+  }
+
+  .emoji {
+    overflow: hidden;
+  }
+`;
 
 const EmojiPicker = () => {
   const classes = useStyles();
@@ -62,8 +71,8 @@ const EmojiPicker = () => {
     <div>
       {loader ? null : (
         <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
+          aria-labelledby='transition-modal-title'
+          aria-describedby='transition-modal-description'
           className={classes.modal}
           open={emojiPicker}
           onClose={() => dispatch(toggleEmojiPicker())}
@@ -74,9 +83,10 @@ const EmojiPicker = () => {
           }}
         >
           <Fade in={emojiPicker}>
-            <Div className={classes.paper}>
-              <Picker onEmojiClick={onEmojiClick} disableAutoFocus />
-            </Div>
+            <Paper className={classes.paper}>
+              <Picker onEmojiClick={onEmojiClick}
+                      disableAutoFocus />
+            </Paper>
           </Fade>
         </Modal>
       )}

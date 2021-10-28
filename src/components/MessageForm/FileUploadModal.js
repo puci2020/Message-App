@@ -12,13 +12,12 @@ import firebase from 'firebase';
 import alertify from 'alertifyjs';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
+import { useAuth } from 'services/AuthProvider';
+import db, { storage } from 'services/Firebase';
+import toggleFileUpload from 'state/actions/fileUploadActions';
+import styled from 'styled-components';
 import Loader from '../Loader';
-import { useAuth } from '../../services/AuthProvider';
-import db, { storage } from '../../services/Firebase';
-import { actionTypes } from '../../services/reducer';
-import { useStateValue } from '../../services/StateProvider';
 import Input from '../Input';
-import toggleFileUpload from '../../state/actions/fileUploadActions';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -28,17 +27,22 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     maxWidth: '90vw',
-    backgroundColor: '#344353',
-    border: `2px solid #4d6279`,
-    // border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
   text: {
     marginBottom: '10px',
-    color: '#d7d7d7',
   },
 }));
+
+const Paper = styled.div`
+  background-color: ${({ theme }) => theme.colors.primary};
+  border: 2px solid ${({ theme }) => theme.colors.secondary};
+
+  h3, p {
+    color: ${({ theme }) => theme.colors.font.primary}
+  }
+`;
 
 const schema = yup.object().shape({
   uploadFile: yup
@@ -63,7 +67,6 @@ const schema = yup.object().shape({
 const FileUploadModal = ({ id }) => {
   const classes = useStyles();
   const { currentUser } = useAuth();
-  // const [{ fileUpload }, dispatch] = useStateValue();
   const fileUpload = useSelector((state) => state.fileUpload);
   const [loader, setLoader] = useState(false);
   const dispatch = useDispatch();
@@ -74,13 +77,6 @@ const FileUploadModal = ({ id }) => {
     unregister,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
-
-  // const handleClose = () => {
-  //   dispatch({
-  //     type: actionTypes.SET_FILE_UPLOAD,
-  //     fileUpload: false,
-  //   });
-  // };
 
   const handleUpload = async (data) => {
     const storageRef = storage.ref();
@@ -127,7 +123,7 @@ const FileUploadModal = ({ id }) => {
           }}
         >
           <Fade in={fileUpload}>
-            <div className={classes.paper}>
+            <Paper className={classes.paper}>
               <h3 id='transition-modal-title'
                   className={classes.text}>
                 Wyślij załącznik
@@ -157,7 +153,7 @@ const FileUploadModal = ({ id }) => {
                   Wyślij
                 </Button>
               </form>
-            </div>
+            </Paper>
           </Fade>
         </Modal>
       }

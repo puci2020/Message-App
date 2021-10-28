@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import toggleUpdateUserData from '../state/actions/updateUserDataActions';
@@ -45,13 +46,20 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     maxWidth: '90vw',
     width: '400px',
-    backgroundColor: '#344353',
-    border: `2px solid #4d6279`,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
 
   },
 }));
+
+const Paper = styled.div`
+  background-color: ${({ theme }) => theme.colors.primary};
+  border: 2px solid ${({ theme }) => theme.colors.secondary};
+
+  h3, p {
+    color: ${({ theme }) => theme.colors.font.primary}
+  }
+`;
 
 const UpdateUserDataModal = ({ type, id }) => {
   const classes = useStyles();
@@ -80,7 +88,7 @@ const UpdateUserDataModal = ({ type, id }) => {
       }}
     >
       <Fade in={updateUserData}>
-        <div className={classes.paper}>
+        <Paper className={classes.paper}>
           {type === 'passwordReset' ? <PasswordReset /> : null}
           {type === 'nameUpdate' ? <NameUpdate /> : null}
           {type === 'emailUpdate' ? <EmailUpdate /> : null}
@@ -88,7 +96,7 @@ const UpdateUserDataModal = ({ type, id }) => {
           {type === 'imageUpdate' ? <ImageUpdate /> : null}
           {type === 'nameChatUpdate' ? <NameChatUpdate id={id} /> : null}
           {type === 'imageChatUpdate' ? <ImageChatUpdate id={id} /> : null}
-        </div>
+        </Paper>
       </Fade>
     </Modal>
   );

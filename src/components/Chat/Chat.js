@@ -2,25 +2,20 @@ import { IconButton, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import SettingsIcon from '@material-ui/icons/Settings';
-import React, { useEffect, useState } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import toggleSidebar from '../../state/actions/sidebarActions';
-import { useAuth } from '../../services/AuthProvider';
+import toggleSidebar from 'state/actions/sidebarActions';
+import { useAuth } from 'services/AuthProvider';
+import { showFullDate } from 'utils/Date';
+import ThemeSwitch from 'components/ThemeSwitch';
 import db from '../../services/Firebase';
-import { actionTypes } from '../../services/reducer';
-import { useStateValue } from '../../services/StateProvider';
-import { showFullDate } from '../../utils/Date';
-// import ChatItem from '../ChatItem';
-// import Header from '../Header';
-// import MessageForm from '../MessageForm/MessageForm';
-// import ChatBody from './ChatBody';
 
-const ChatBody = React.lazy(() => import('./ChatBody'));
-const MessageForm = React.lazy(() => import('../MessageForm/MessageForm'));
-const Header = React.lazy(() => import('../Header'));
-const ChatItem = React.lazy(() => import('../ChatItem'));
+const ChatBody = lazy(() => import('./ChatBody'));
+const MessageForm = lazy(() => import('../MessageForm/MessageForm'));
+const Header = lazy(() => import('../Header'));
+const ChatItem = lazy(() => import('../ChatItem'));
 
 const Wrapper = styled.div`
   flex: 0.65;
@@ -69,7 +64,6 @@ const Chat = () => {
   return (
     <Wrapper>
       <Header
-        isChatTitle
         left={
           <ChatItem
             name={roomData.name}

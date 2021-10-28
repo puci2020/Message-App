@@ -8,7 +8,8 @@ import firebase from '../../node_modules/firebase';
 import db from '../services/Firebase';
 
 const Wrapper = styled.div`
-  width: ${(props) => (props.chat ? '100%' : '80%')};
+  width: ${(props) => (props.chat ? '100%' : '70%')};
+    //max-width: ${(props) => (props.chat ? '100%' : '140px')};
   height: ${(props) => (props.chat ? '70px' : 'auto')};
   border-bottom: 1px solid ${(props) => (props.chat ? props.theme.colors.border : 'none')};
     //border-bottom: 1px solid ${({ theme }) => theme.colors.secondary}; 
@@ -16,7 +17,7 @@ const Wrapper = styled.div`
   align-items: center;
   padding: ${(props) => (props.chat ? '10px 20px' : '')};
   cursor: pointer;
-  background-color: ${(props) => (props.chat ? props.theme.colors.primary : '')};;
+  background-color: ${(props) => (props.chat ? props.theme.colors.chatBackground : '')};;
 
   &:hover {
       //background-color: ${(props) => (props.chat ? '#f6f6f6' : '')};
@@ -39,7 +40,7 @@ const Info = styled.div`
   margin-left: 10px;
 
   p {
-    color: ${(props) => (props.chat ? props.theme.colors.font.primary : 'darkslategray')};
+    color: ${(props) => (props.chat ? props.theme.colors.font.primary : props.theme.colors.font.primary)};
   }
 
   h3 {

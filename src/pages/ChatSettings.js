@@ -34,11 +34,11 @@ const Body = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #d6d6d6;
-  color: ${({ theme }) => theme.colors.font.secondary};
+  background-color: ${({ theme }) => theme.colors.chatBackground};
+  color: ${({ theme }) => theme.colors.font.primary};
 
   svg {
-    color: ${({ theme }) => theme.colors.font.secondary}
+    color: ${({ theme }) => theme.colors.font.primary}
   }
 `;
 
@@ -111,7 +111,6 @@ const ChatSettings = () => {
   return (
     <Wrapper>
       <Header
-        isChatTitle
         left={
           <ChatItem
             name='Ustawienia czatu'
