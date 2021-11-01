@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { SearchOutlined } from '@material-ui/icons';
 import toggleSidebar from 'state/actions/sidebarActions';
@@ -22,6 +22,12 @@ const Chats = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   background-color: white;
+
+  .is-active > div {
+
+    background-color: ${({ theme }) => theme.colors.menu.isActive};
+
+  }
 `;
 
 const Search = styled.div`
@@ -114,13 +120,14 @@ const SidebarBody = () => {
           {/*          chat */}
           {/*          user={currentUser.uid} /> */}
           {filteredRooms.map((room) => (
-            <Link
+            <NavLink
               key={room.id}
               to={`/room/${room.id}`}
               style={{
                 textDecoration: 'none',
                 color: 'black',
               }}
+              activeClassName='is-active'
             >
               <ChatItem
                 chat
@@ -128,8 +135,9 @@ const SidebarBody = () => {
                 name={room.data.name}
                 info={room.data.lastMessage}
                 avatar={room.data.photoURL}
+                className='is-active'
               />
-            </Link>
+            </NavLink>
           ))}
         </Chats>
       </Suspense>

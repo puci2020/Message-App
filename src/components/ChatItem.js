@@ -17,7 +17,7 @@ const Wrapper = styled.div`
   align-items: center;
   padding: ${(props) => (props.chat ? '10px 20px' : '')};
   cursor: pointer;
-  background-color: ${(props) => (props.chat ? props.theme.colors.chatBackground : '')};;
+  background-color: ${(props) => (props.chat ? props.theme.colors.primary : '')};;
 
   &:hover {
       //background-color: ${(props) => (props.chat ? '#f6f6f6' : '')};
@@ -26,6 +26,10 @@ const Wrapper = styled.div`
 
       /* background-color: ${({ theme }) => theme.colors.secondary}; */
   }
+
+  // &:active {
+    //   background-color: ${(props) => (props.chat ? props.theme.colors.secondary : '')};
+  // }
 
   .addButton {
     height: 100%;

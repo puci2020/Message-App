@@ -29,7 +29,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 0.35;
-  background-color: ${({ theme }) => theme.colors.chatBackground};
+  background-color: ${({ theme }) => theme.colors.primary};
   border-right: 1px solid ${({ theme }) => theme.colors.border};
 
   ${({ theme }) => theme.media.tablet} {

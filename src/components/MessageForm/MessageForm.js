@@ -44,6 +44,10 @@ const Wrapper = styled.div`
     justify-content: space-between;
     width: 100%;
 
+    span:hover {
+      cursor: pointer;
+    }
+
     //color: red;
   }
 
