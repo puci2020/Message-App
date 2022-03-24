@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import themeStyleReducer from 'state/reducers/themeStyleReducer';
+import searchMessageReducer from 'state/reducers/searchMessageReducer';
 import currentProviderReducer from './currentProviderReducer';
 import emojiPickerReducer from './emojiPickerReducer';
 import fileUploadReducer from './fileUploadReducer';
@@ -19,6 +20,7 @@ const allReducers = combineReducers({
   message: messageReducer,
   loader: loaderReducer,
   themeStyle: themeStyleReducer,
+  searchMessage: searchMessageReducer,
 });
 
 export default allReducers;

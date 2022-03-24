@@ -6,6 +6,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import SearchMessageForm from 'components/SearchMessagesForm/SearchMessagesForm';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import toggleUpdateUserData from '../state/actions/updateUserDataActions';

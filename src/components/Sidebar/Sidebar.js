@@ -39,7 +39,7 @@ const Wrapper = styled.div`
     transform: ${(props) =>
             props.mobile ? 'translateX(0)' : 'translateX(-120%)'};
     transition: transform 0.35s ease-in-out;
-    z-index: 2;
+    z-index: 3;
     width: 80%;
     height: 100vh;
     max-width: 400px;

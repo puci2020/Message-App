@@ -11,7 +11,7 @@ import React, { Suspense } from 'react';
 // import ProtectedRouter from './utils/ProtectedRouter';
 import Loader from './components/Loader';
 
-const Login = React.lazy(() => import('./pages/Login'));
+const Login = React.lazy(() => import('pages/Login/Login'));
 const Chat = React.lazy(() => import('./components/Chat/Chat'));
 const Registration = React.lazy(() => import('./pages/Registration'));
 const ChatSettings = React.lazy(() => import('./pages/ChatSettings'));
@@ -37,21 +37,23 @@ const App = () => (
       <Wrapper>
         <Router>
           <Switch>
-            <ProtectedRouter exact path="/" component={Chat} />
-            <ProtectedRouter path="/room/:id" component={Chat} />
+            <ProtectedRouter exact
+                             path='/'
+                             component={Chat} />
+            <ProtectedRouter path='/room/:id'
+                             component={Chat} />
             <ProtectedRouter
-              path="/settings/user/:id"
+              path='/settings/user/:id'
               component={UserSettings}
             />
             <ProtectedRouter
-              path="/settings/room/:id"
+              path='/settings/room/:id'
               component={ChatSettings}
             />
-
-            <Route path="/login">
+            <Route path='/login'>
               <Login />
             </Route>
-            <Route path="/registration">
+            <Route path='/registration'>
               <Registration />
             </Route>
           </Switch>

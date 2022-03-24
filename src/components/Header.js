@@ -8,6 +8,7 @@ const Wrapper = styled.div`
   align-items: center;
   min-height: 90px;
   padding: 20px;
+  z-index: 2;
   border-bottom: 1px solid ${(props) => (props.isChatTitle ? `${props.theme.colors.borderSecondary}` : `${props.theme.colors.border}`)};;
   overflow: hidden;
   position: ${(props) => (props.fixed ? 'fixed' : 'static')};

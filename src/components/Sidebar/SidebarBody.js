@@ -73,6 +73,12 @@ const SidebarBody = () => {
   const [filteredRooms, setFilteredRooms] = useState([]);
   const { currentUser } = useAuth();
 
+  const [name, setName] = useState('');
+
+  useEffect(() => {
+    setName('Admin');
+  }, []);
+
   useEffect(async () => {
     await db
       .collection('rooms')

@@ -10,10 +10,15 @@ import toggleSidebar from 'state/actions/sidebarActions';
 import { useAuth } from 'services/AuthProvider';
 import { showFullDate } from 'utils/Date';
 import ThemeSwitch from 'components/ThemeSwitch';
+import toggleEmojiPicker from 'state/actions/emojiPickerActions';
+import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
+import SearchMessageForm from 'components/SearchMessagesForm/SearchMessagesForm';
+import toggleSearchMessage from 'state/actions/searchMessageActions';
+import { SearchOutlined } from '@material-ui/icons';
 import db from '../../services/Firebase';
 
 const ChatBody = lazy(() => import('./ChatBody'));
-const MessageForm = lazy(() => import('../MessageForm/MessageForm'));
+const MessageForm = lazy(() => import('components/SendMessageForm/MessageForm/MessageForm'));
 const Header = lazy(() => import('../Header'));
 const ChatItem = lazy(() => import('../ChatItem'));
 
@@ -22,6 +27,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  //position: relative;
 
   .scroll {
     height: 100%;
@@ -77,6 +83,16 @@ const Chat = () => {
         }
         right={
           <>
+            {roomData.name ? (
+              <Tooltip title='Wyszukaj w czacie'>
+                <IconButton
+                  onClick={() => dispatch(toggleSearchMessage())}
+                  onKeyDown={() => dispatch(toggleSearchMessage())}
+                >
+                  <SearchOutlined />
+                </IconButton>
+              </Tooltip>
+            ) : null}
             {roomData.name && roomData.user === currentUser.uid ? (
               <Link to={`/settings/room/${id}`}>
                 <Tooltip title='Ustawienia czatu'>
@@ -97,6 +113,7 @@ const Chat = () => {
           </>
         }
       />
+      <SearchMessageForm />
       <ChatBody id={id} />
       {roomData.name ? <MessageForm id={id} /> : ''}
     </Wrapper>
