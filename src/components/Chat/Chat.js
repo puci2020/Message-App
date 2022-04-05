@@ -43,9 +43,11 @@ const Chat = () => {
   const [roomData, setRoomData] = useState([]);
   const { currentUser } = useAuth();
   const sidebar = useSelector((state) => state.sidebar);
+  const showSearchMessage = useSelector((state) => state.searchMessage);
   const dispatch = useDispatch();
 
   useEffect(() => {
+
     let cancel = true;
     // candel in first if
     if (id && cancel) {
@@ -54,6 +56,8 @@ const Chat = () => {
         .onSnapshot((snapschot) => {
           if (cancel) setRoomData(snapschot.data());
         });
+      // if (showSearchMessage)
+      //   dispatch(toggleSearchMessage());
     }
     return () => {
       cancel = false;

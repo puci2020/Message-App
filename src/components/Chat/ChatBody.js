@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ScrollToBottom from 'react-scroll-to-bottom';
 // import Message from './Message';
+import { useDispatch, useSelector } from 'react-redux';
+import { setMessages } from 'state/actions/messagesAction';
 import { useAuth } from '../../services/AuthProvider';
 import db from '../../services/Firebase';
 import Loader from '../Loader';
@@ -21,8 +23,11 @@ const Body = styled.div`
 `;
 
 const ChatBody = ({ id }) => {
-  const [messages, setMessages] = useState([]);
+  const [filteredMessages, setFilteredMessages] = useState([]);
   const { currentUser } = useAuth();
+  const messages = useSelector((state) => state.messages);
+  const filter = useSelector((state) => state.filterMessage);
+  const dispatch = useDispatch();
 
   useEffect(async () => {
     let cancel = true;
@@ -35,13 +40,15 @@ const ChatBody = ({ id }) => {
         .orderBy('timestamp', 'asc')
         .onSnapshot((snapshot) => {
           if (cancel)
-            if (snapshot.docs.length !== messages.length)
-              setMessages(
+            if (snapshot.docs.length !== messages.length) {
+              dispatch(setMessages(
                 snapshot.docs.map((doc) => ({
                   messageId: doc.id,
                   data: doc.data(),
                 })),
-              );
+              ));
+              setFilteredMessages(messages);
+            }
         });
       return () => {
         cancel = false;
@@ -50,12 +57,34 @@ const ChatBody = ({ id }) => {
     return null;
   }, [id]);
 
+  useEffect(() => {
+      if (filter.length > 0) {
+        const result = messages.findIndex((message) =>
+          message.data.message.toLowerCase().includes(filter.toLowerCase()),
+        );
+        console.log(result);
+        if (result !== -1)
+          setFilteredMessages(messages.filter((_, index) => index >= result));
+        else {
+          console.log('brak');
+          setFilteredMessages([]);
+
+        }
+      } else {
+        setFilteredMessages(messages);
+      }
+    }
+    ,
+    [filter],
+  )
+  ;
+
   return (
     <ScrollToBottom className='scroll'>
       <Suspense fallback={<Loader />}>
         <Body>
           {id &&
-          messages.map((message) => (
+          filteredMessages.map((message) => (
             <Message
               id={message.messageId}
               roomId={id}

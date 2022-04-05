@@ -9,6 +9,10 @@ import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { SearchOutlined } from '@material-ui/icons';
+import { useHistory, useParams } from 'react-router-dom';
+import { logDOM } from '@testing-library/react';
+import toggleSearchMessage from 'state/actions/searchMessageActions';
+import { setFilterMessage } from 'state/actions/filterMessageAction';
 import db, { auth } from '../../services/Firebase';
 import Input from '../Input';
 import { useAuth } from '../../services/AuthProvider';
@@ -54,23 +58,46 @@ const Wrapper = styled.div`
     }
 `;
 
-const SearchMessageForm = ({ id }) => {
-  const { currentUser, createUser } = useAuth();
+const SearchMessageForm = () => {
+  const history = useHistory();
+  const { id } = useParams();
   const showSearchMessage = useSelector((state) => state.searchMessage);
-  const [filter, setFilter] = useState('');
-  const [filteredRooms, setFilteredRooms] = useState([]);
+  const filter = useSelector((state) => state.filterMessage);
+  // const messages = useSelector((state) => state.messages);
+  // const [filter, setFilter] = useState('');
+  // const [filteredMessages, setFilteredMessages] = useState(messages);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(filter);
-    // if (filter.length > 0)
-    // setFilteredRooms(
-    // rooms.filter((el) =>
-    //   el.data.name.toLowerCase().includes(filter.toLowerCase()),
-    // ),
-    // );
-    // else setFilteredRooms(rooms);
-  }, [filter]);
+      // setFilteredMessages(messages);
+      if (showSearchMessage) {
+        dispatch(toggleSearchMessage());
+      }
+      dispatch(setFilterMessage(''));
+    }
+    ,
+    [id],
+  )
+  ;
+
+  // useEffect(() => {
+
+  // const result = messages.findIndex((message) =>
+  //   message.data.message.startsWith(filter),
+  // );
+  // console.log(id);
+  //
+  // console.log(result);
+  // setFilteredMessages(messages);
+  //
+  // if (filter.length > 0)
+  //   setFilteredMessages(filteredMessages.filter((_, index) => index >= result));
+  // else
+  //   setFilteredMessages(messages);
+  //
+  // console.log(filteredMessages);
+
+  // }, [filter]);
 
   return (
     <Wrapper showSearch={showSearchMessage}>
@@ -78,7 +105,9 @@ const SearchMessageForm = ({ id }) => {
       <Input icon={<SearchOutlined />}>
         <input type='text'
                placeholder='Szukaj'
-               onChange={(e) => setFilter(e.target.value)}
+               value={filter}
+          // onChange={(e) => setFilter(e.target.value)}
+               onChange={(e) => dispatch(setFilterMessage(e.target.value))}
         />
       </Input>
       {/* </form> */}
@@ -88,10 +117,3 @@ const SearchMessageForm = ({ id }) => {
 
 export default SearchMessageForm;
 
-SearchMessageForm.defaultProps = {
-  id: null,
-};
-
-SearchMessageForm.propTypes = {
-  id: PropTypes.string,
-};
