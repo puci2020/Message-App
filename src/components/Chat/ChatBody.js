@@ -2,7 +2,6 @@ import React, { useState, useEffect, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ScrollToBottom from 'react-scroll-to-bottom';
-// import Message from './Message';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMessages } from 'state/actions/messagesAction';
 import { useAuth } from '../../services/AuthProvider';
@@ -12,7 +11,6 @@ import Loader from '../Loader';
 const Message = React.lazy(() => import('./Message'));
 
 const Body = styled.div`
-  /* background-image: url('https://images.unsplash.com/photo-1533628635777-112b2239b1c7?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); */
   background-color: ${({ theme }) => theme.colors.chatBackground};
   border-top: ${({ theme }) => theme.colors.borderSecondaryr};
   flex: 1;
@@ -47,7 +45,10 @@ const ChatBody = ({ id }) => {
                   data: doc.data(),
                 })),
               ));
-              setFilteredMessages(messages);
+              setFilteredMessages(snapshot.docs.map((doc) => ({
+                messageId: doc.id,
+                data: doc.data(),
+              })));
             }
         });
       return () => {
