@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button } from '@material-ui/core';
+import { Button, Tooltip } from '@material-ui/core';
 import { Email, Lock } from '@material-ui/icons';
 import alertify from 'alertifyjs';
 import React from 'react';
@@ -227,14 +227,18 @@ const Login = () => {
         </div>
       </Form>
       <ButtonsWraper>
-        <RoundButton color='red'
-                     onClick={google}>
-          <FaGoogle />
-        </RoundButton>
-        <RoundButton color='#4267B2'
-                     onClick={facebook}>
-          <FaFacebookF />
-        </RoundButton>
+        <Tooltip title='Zaloguj się z Google'>
+          <RoundButton color='red'
+                       onClick={google}>
+            <FaGoogle />
+          </RoundButton>
+        </Tooltip>
+        <Tooltip title='Zaloguj się z Facebook'>
+          <RoundButton color='#4267B2'
+                       onClick={facebook}>
+            <FaFacebookF />
+          </RoundButton>
+        </Tooltip>
         {/* <RoundButton color={'#24292e'} onClick={github}>
                     <FaGithub />
                 </RoundButton> */}

@@ -9,6 +9,7 @@ import React, { Suspense } from 'react';
 // import UserSettings from './pages/UserSettings';
 // import AuthProvider from './services/AuthProvider';
 // import ProtectedRouter from './utils/ProtectedRouter';
+import Offline from 'pages/Offline';
 import Loader from './components/Loader';
 
 const Login = React.lazy(() => import('pages/Login/Login'));
@@ -55,6 +56,9 @@ const App = () => (
             </Route>
             <Route path='/registration'>
               <Registration />
+            </Route>
+            <Route path='/offline'>
+              <Offline />
             </Route>
           </Switch>
         </Router>
