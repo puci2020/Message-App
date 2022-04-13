@@ -3,6 +3,7 @@ import themeStyleReducer from 'state/reducers/themeStyleReducer';
 import searchMessageReducer from 'state/reducers/searchMessageReducer';
 import messagesReducer from 'state/reducers/messagesReducer';
 import filterMessageReducer from 'state/reducers/filterMessageReducer';
+import roomReducer from 'state/reducers/roomReducer';
 import currentProviderReducer from './currentProviderReducer';
 import emojiPickerReducer from './emojiPickerReducer';
 import fileUploadReducer from './fileUploadReducer';
@@ -25,6 +26,7 @@ const allReducers = combineReducers({
   searchMessage: searchMessageReducer,
   messages: messagesReducer,
   filterMessage: filterMessageReducer,
+  room: roomReducer,
 });
 
 export default allReducers;

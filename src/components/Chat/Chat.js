@@ -15,6 +15,7 @@ import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfie
 import SearchMessageForm from 'components/SearchMessagesForm/SearchMessagesForm';
 import toggleSearchMessage from 'state/actions/searchMessageActions';
 import { SearchOutlined } from '@material-ui/icons';
+import { setRoom } from 'state/actions/roomActions';
 import db from '../../services/Firebase';
 
 const ChatBody = lazy(() => import('./ChatBody'));
@@ -40,10 +41,10 @@ const Wrapper = styled.div`
 
 const Chat = () => {
   const { id } = useParams();
-  const [roomData, setRoomData] = useState([]);
+  // const [roomData, setRoomData] = useState([]);
   const { currentUser } = useAuth();
   const sidebar = useSelector((state) => state.sidebar);
-  const showSearchMessage = useSelector((state) => state.searchMessage);
+  const room = useSelector((state) => state.room);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -54,10 +55,8 @@ const Chat = () => {
       db.collection('rooms')
         .doc(id)
         .onSnapshot((snapschot) => {
-          if (cancel) setRoomData(snapschot.data());
+          if (cancel) dispatch(setRoom(snapschot.data()));
         });
-      // if (showSearchMessage)
-      //   dispatch(toggleSearchMessage());
     }
     return () => {
       cancel = false;
@@ -76,18 +75,18 @@ const Chat = () => {
       <Header
         left={
           <ChatItem
-            name={roomData.name}
+            name={room.name}
             info={
-              roomData.name
-                ? displayRoomInfo(roomData.lastSeen)
+              room.name
+                ? displayRoomInfo(room.lastSeen)
                 : 'Wybierz czat z menu aby rozmawiać'
             }
-            avatar={roomData.photoURL}
+            avatar={room.photoURL}
           />
         }
         right={
           <>
-            {roomData.name ? (
+            {room.name ? (
               <Tooltip title='Wyszukaj w czacie'>
                 <IconButton
                   onClick={() => dispatch(toggleSearchMessage())}
@@ -97,7 +96,7 @@ const Chat = () => {
                 </IconButton>
               </Tooltip>
             ) : null}
-            {roomData.name && roomData.user === currentUser.uid ? (
+            {room.name ?
               <Link to={`/settings/room/${id}`}>
                 <Tooltip title='Ustawienia czatu'>
                   <IconButton>
@@ -105,7 +104,7 @@ const Chat = () => {
                   </IconButton>
                 </Tooltip>
               </Link>
-            ) : null}
+              : null}
             <Tooltip title={sidebar ? 'Schowaj menu' : 'Pokaż menu'}>
               <IconButton
                 id='menuButton'
@@ -119,7 +118,7 @@ const Chat = () => {
       />
       <SearchMessageForm />
       <ChatBody id={id} />
-      {roomData.name ? <MessageForm id={id} /> : ''}
+      {room.name ? <MessageForm id={id} /> : ''}
     </Wrapper>
   );
 };

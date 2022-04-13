@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import SearchMessageForm from 'components/SearchMessagesForm/SearchMessagesForm';
+import NewChatForm from 'components/NewChatForm/NewChatForm';
 import { actionTypes } from '../services/reducer';
 import { useStateValue } from '../services/StateProvider';
 import toggleUpdateUserData from '../state/actions/updateUserDataActions';
@@ -66,14 +67,6 @@ const UpdateUserDataModal = ({ type, id }) => {
   const classes = useStyles();
   const updateUserData = useSelector((state) => state.updateUserData);
   const dispatch = useDispatch();
-  // const [{ updateUserData }, dispatch] = useStateValue();
-
-  // const handleClose = () => {
-  //   dispatch({
-  //     type: actionTypes.SET_UPDATE_USER_DATA,
-  //     updateUserData: false,
-  //   });
-  // };
 
   return (
     <Modal
@@ -97,6 +90,7 @@ const UpdateUserDataModal = ({ type, id }) => {
           {type === 'imageUpdate' ? <ImageUpdate /> : null}
           {type === 'nameChatUpdate' ? <NameChatUpdate id={id} /> : null}
           {type === 'imageChatUpdate' ? <ImageChatUpdate id={id} /> : null}
+          {type === 'newChat' ? <NewChatForm /> : null}
         </Paper>
       </Fade>
     </Modal>

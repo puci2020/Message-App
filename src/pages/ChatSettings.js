@@ -1,7 +1,5 @@
 import { Avatar, Button, IconButton, makeStyles, Tooltip } from '@material-ui/core';
-import { gapi } from 'gapi-script';
-import ObjectToCsv from 'objects-to-csv';
-import { CSVLink, CSVDownload } from 'react-csv';
+import { CSVLink } from 'react-csv';
 import MenuIcon from '@material-ui/icons/Menu';
 import EditIcon from '@material-ui/icons/Edit';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
@@ -10,30 +8,18 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { dateToString, timeToString } from 'utils/Date';
-import { logDOM } from '@testing-library/react';
 import ChatItem from '../components/ChatItem';
 import Header from '../components/Header';
 import { useAuth } from '../services/AuthProvider';
-import { actionTypes } from '../services/reducer';
-import { useStateValue } from '../services/StateProvider';
 import db from '../services/Firebase';
 import UpdateUserDataModal from '../components/UpdateUserDataModal';
 import toggleUpdateUserData from '../state/actions/updateUserDataActions';
 import toggleSidebar from '../state/actions/sidebarActions';
 
-// Array of API discovery doc URLs for APIs
-const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
-
-// Authorization scopes required by the API; multiple scopes can be
-// included, separated by spaces.
-const SCOPES = 'https://www.googleapis.com/auth/drive.metadata.readonly';
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 0.65;
-  /* align-items: center; */
-  /* justify-content: center; */
 
   ${({ theme }) => theme.media.tablet} {
     flex: 1;
@@ -86,7 +72,7 @@ const ChatSettings = () => {
     const { currentUser } = useAuth();
     const [roomName, setRoomName] = useState();
     const [roomPhoto, setRoomPhoto] = useState();
-
+    const room = useSelector((state) => state.room);
     const sidebar = useSelector((state) => state.sidebar);
     const messages = useSelector((state) => state.messages);
     const [dataCSV, setDataCSV] = useState([]);
@@ -160,34 +146,41 @@ const ChatSettings = () => {
           <Avatar alt={roomName}
                   src={roomPhoto}
                   className={classes.large} />
-          <Tooltip title='Edytuj zdjęcie'>
-            <IconButton id='menuButton'
-                        size='small'
-                        onClick={editImageChat}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
+          {room.name && room.user === currentUser.uid ?
+            <Tooltip title='Edytuj zdjęcie'>
+              <IconButton id='menuButton'
+                          size='small'
+                          onClick={editImageChat}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+            : null}
           <Field>
             <h3>{roomName}</h3>
-            <Tooltip title='Edytuj nazwę'>
-              <IconButton id='menuButton'
-                          size='small'
-                          onClick={editNameChat}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-          </Field>
-          <Field>
-            <Tooltip title='Eksportuj do google'>
-              <IconButton id='menuButton'
-                          size='small'
-              >
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
+            {room.name && room.user === currentUser.uid ?
+              <Tooltip title='Edytuj nazwę'>
+                <IconButton id='menuButton'
+                            size='small'
+                            onClick={editNameChat}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+              : null}
           </Field>
           <CSVLink
-            data={dataCSV}><Button variant='contained'>Pobierz CSV</Button></CSVLink>
+            data={dataCSV}
+            filename={`${roomName}_history_${new Date().toISOString()}.csv`}>
+            <Tooltip title='Pobierz historię wiadomości'>
+              <Button
+                style={{ marginTop: '10px' }}
+                color='primary'
+                variant='contained'
+                type='button'
+              >
+                Pobierz CSV
+              </Button>
+            </Tooltip>
+          </CSVLink>
         </Body>
         <UpdateUserDataModal type={updateType}
                              id={id} />;

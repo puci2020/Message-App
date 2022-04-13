@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button, Tooltip } from '@material-ui/core';
 import toggleSidebar from 'state/actions/sidebarActions';
@@ -8,8 +8,10 @@ import alertify from 'alertifyjs';
 import db from 'services/Firebase';
 import firebase from 'firebase';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useAuth } from 'services/AuthProvider';
+import UpdateUserDataModal from 'components/UpdateUserDataModal';
+import toggleUpdateUserData from 'state/actions/updateUserDataActions';
 
 const Wrapper = styled.div`
   height: 75px;
@@ -40,32 +42,13 @@ const BottomButtons = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { currentUser } = useAuth();
+  const [updateType, setUpdateType] = useState(null);
 
-  const createNewChat = async () => {
-
-    await alertify.prompt(
-      'Nowy czat',
-      'Podaj nazwę czatu',
-      'Nazwa czatu',
-      (evt, value) => {
-        if (value) {
-          db.collection('rooms').add({
-            name: value,
-            lastMessage: null,
-            lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
-            photoURL: null,
-            user: currentUser.uid.toString(),
-          });
-          alertify.success(`Czat o nazwie "${value}" utworzony pomyślnie!`);
-        } else {
-          alertify.warning(`Nazwa czatu nie może być pusta!`);
-        }
-      },
-      () => {
-        alertify.error('Tworzenie czatu anulowano');
-      },
-    );
+  const createChat = () => {
+    setUpdateType('newChat');
+    dispatch(toggleUpdateUserData());
   };
+
   return (
     <Wrapper>
       <Tooltip
@@ -73,7 +56,7 @@ const BottomButtons = () => {
       >
         <Button onClick={() => {
           dispatch(toggleSidebar());
-          createNewChat();
+          createChat();
         }}>
           <AddCircle />
           Nowy czat</Button></Tooltip>
@@ -85,6 +68,7 @@ const BottomButtons = () => {
           history.push(`/settings/user/${currentUser.uid}`);
         }}>
           <SettingsIcon />Ustawienia</Button></Tooltip>
+      <UpdateUserDataModal type={updateType} />;
     </Wrapper>
   );
 };
