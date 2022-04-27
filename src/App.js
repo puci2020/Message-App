@@ -43,14 +43,10 @@ const App = () => (
                              component={Chat} />
             <ProtectedRouter path='/room/:id'
                              component={Chat} />
-            <ProtectedRouter
-              path='/settings/user/:id'
-              component={UserSettings}
-            />
-            <ProtectedRouter
-              path='/settings/room/:id'
-              component={ChatSettings}
-            />
+            <ProtectedRouter path='/settings/user/:id'
+                             component={UserSettings} />
+            <ProtectedRouter path='/settings/room/:id'
+                             component={ChatSettings} />
             <Route path='/login'>
               <Login />
             </Route>

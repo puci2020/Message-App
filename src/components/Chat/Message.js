@@ -214,7 +214,6 @@ const Message = ({ id, roomId, own, user, text, type, fileName, date }) => {
         liked={handleIsLiked(likes, currentUser.uid)}
         number={likes?.length}
       />
-      {/* {console.log(getLikeId(likes, currentUser.uid))} */}
       <Content>
         <Author>{displayName}</Author>
         <Text>

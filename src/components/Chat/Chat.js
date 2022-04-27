@@ -41,16 +41,12 @@ const Wrapper = styled.div`
 
 const Chat = () => {
   const { id } = useParams();
-  // const [roomData, setRoomData] = useState([]);
-  const { currentUser } = useAuth();
   const sidebar = useSelector((state) => state.sidebar);
   const room = useSelector((state) => state.room);
   const dispatch = useDispatch();
 
   useEffect(() => {
-
     let cancel = true;
-    // candel in first if
     if (id && cancel) {
       db.collection('rooms')
         .doc(id)

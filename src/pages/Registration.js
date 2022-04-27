@@ -25,7 +25,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   color: ${({ theme }) => theme.colors.font.primary};
 `;
-
 const Form = styled.form`
   margin: 20px;
   width: 60%;
@@ -72,7 +71,6 @@ const Registration = () => {
   const { signUpWithEmail } = useAuth();
 
   const handleSignUp = async (data) => {
-    // console.log(data);
     await signUpWithEmail(data.email, data.password)
       .then((authUser) => {
         authUser.user.sendEmailVerification();
@@ -109,40 +107,30 @@ const Registration = () => {
         </Input>
         <Input icon={<Lock />}
                error={errors.password?.message}>
-          <input
-            type='password'
-            placeholder='Hasło'
-            {...register('password')}
-          />
+          <input type='password'
+                 placeholder='Hasło'{...register('password')} />
         </Input>
         <Input icon={<Lock />}
                error={errors.passwordConfirm?.message}>
-          <input
-            type='password'
-            placeholder='Powtórz hasło'
-            {...register('passwordConfirm')}
-          />
+          <input type='password'
+                 placeholder='Powtórz hasło'{...register('passwordConfirm')} />
         </Input>
         <div className='button__group'>
-          <Button
-            style={{ marginTop: '10px', marginRight: '20px' }}
-            color='primary'
-            variant='contained'
-            type='submit'
-          >
+          <Button style={{ marginTop: '10px', marginRight: '20px' }}
+                  color='primary'
+                  variant='contained'
+                  type='submit'>
             Zarejestruj się
           </Button>
           <Link to='/login'
                 style={{ textDecoration: 'none' }}>
-            <Button
-              style={{ marginTop: '10px' }}
-              color='primary'
-              variant='contained'
-              type='button'
-              onClick={() => {
-                reset();
-              }}
-            >
+            <Button style={{ marginTop: '10px' }}
+                    color='primary'
+                    variant='contained'
+                    type='button'
+                    onClick={() => {
+                      reset();
+                    }}>
               Zaloguj się
             </Button>
           </Link>

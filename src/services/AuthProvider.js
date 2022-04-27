@@ -15,11 +15,7 @@ const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
   const [userExist, setUserExist] = useState(false);
-  // const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
-  // eslint-disable-next-line no-empty-pattern
-  // const [{}, dispatch] = useStateValue();
 
   const userDocExist = async (uid) => {
     await db
@@ -51,13 +47,8 @@ const AuthProvider = ({ children }) => {
     auth
       .signOut()
       .then(() => {
-        // dispatch({
-        //   type: actionTypes.SET_USER,
-        //   user: null,
-        // });
         dispatch(removeUser());
         localStorage.removeItem('user');
-
         alertify.success(`Wylogowano pomyślnie!`);
       })
       .catch((error) => alertify.alert('Błąd', error.message));
@@ -87,7 +78,7 @@ const AuthProvider = ({ children }) => {
               },
               () => {
                 alertify.error('Ponowna weryfikacja anulowana');
-              }
+              },
             );
           }
         }

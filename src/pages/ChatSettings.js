@@ -92,18 +92,13 @@ const ChatSettings = () => {
       const tab = [];
 
       for (let i = 0; i < messages.length; i += 1) {
-
-        // db.collection('users').doc(messages[i].data.user).onSnapshot(snapshot => {
         tab.push({
           'wiadomość': messages[i].data.message,
           'data': dateToString(messages[i].data.timestamp),
           'godzina': timeToString(messages[i].data.timestamp),
           'użytkownik': messages[i].data.userName,
-          // 'user': snapshot.data().userName,
         });
-        // });
       }
-      // console.log(tab);
       setDataCSV(tab);
     }, []);
 
@@ -183,7 +178,7 @@ const ChatSettings = () => {
           </CSVLink>
         </Body>
         <UpdateUserDataModal type={updateType}
-                             id={id} />;
+                             id={id} />
       </Wrapper>
     )
       ;

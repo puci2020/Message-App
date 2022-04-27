@@ -68,7 +68,7 @@ const BottomButtons = () => {
           history.push(`/settings/user/${currentUser.uid}`);
         }}>
           <SettingsIcon />Ustawienia</Button></Tooltip>
-      <UpdateUserDataModal type={updateType} />;
+      <UpdateUserDataModal type={updateType} />
     </Wrapper>
   );
 };

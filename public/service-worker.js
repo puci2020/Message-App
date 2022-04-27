@@ -9,7 +9,7 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME).then((cache) => {
       console.log('Opened cache');
       return cache.addAll(urlsToCache);
-    })
+    }),
   );
 });
 
@@ -23,10 +23,9 @@ self.addEventListener('fetch', (event) => {
         return response;
       }
       return fetch(event.request);
-    })
+    }),
   );
 });
-
 // Update a service worker
 // eslint-disable-next-line no-restricted-globals
 self.addEventListener('activate', (event) => {
@@ -39,8 +38,8 @@ self.addEventListener('activate', (event) => {
             return caches.delete(cacheName);
           }
           return null;
-        })
-      )
-    )
+        }),
+      ),
+    ),
   );
 });
